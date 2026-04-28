@@ -1,14 +1,15 @@
 {
   "name": "FitTrack",
   "short_name": "FitTrack",
-  "description": "Track workouts, exercises and nutrition",
-  "start_url": "/index.html",
+  "description": "Track workouts, cardio and nutrition",
+  "start_url": "/WORK-/index.html",
+  "scope": "/WORK-/",
   "display": "standalone",
   "background_color": "#0a0a0a",
   "theme_color": "#0a0a0a",
   "orientation": "portrait",
   "icons": [
-    { "src": "icons/icon-192.png", "sizes": "192x192", "type": "image/png" },
-    { "src": "icons/icon-512.png", "sizes": "512x512", "type": "image/png" }
+    { "src": "/WORK-/icon-192.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "/WORK-/icon-512.png", "sizes": "512x512", "type": "image/png" }
   ]
 }
