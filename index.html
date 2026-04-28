@@ -1586,18 +1586,24 @@ function adjTimer(n){tLeft=Math.max(0,tLeft+n);updTimer();}
 function closeTimer(){clearInterval(tInt);document.getElementById('rest-ov').classList.remove('open');}
 
 // ============ INIT ============
-document.addEventListener('DOMContentLoaded',()=>{
+function initApp(){
   const d=new Date();
   const dateEl=document.getElementById('hdr-date');
   if(dateEl)dateEl.textContent=DS[d.getDay()]+', '+MS[d.getMonth()]+' '+d.getDate();
   const s=document.getElementById('sw');s.classList.remove('gone');s.style.display='flex';
   renderWorkout();renderEx();renderNut();
+}
+document.addEventListener('DOMContentLoaded',()=>{
   if('serviceWorker' in navigator)navigator.serviceWorker.register('sw.js').catch(()=>{});
+  // App will be shown by splash dismiss — see INK SPLASH section
 });
 
 // ============ INK SPLASH ============
 (function(){
+  // Wait for DOM before starting canvas animation
+  function startSplash(){
   const canvas = document.getElementById('ink-canvas');
+  if(!canvas){initApp();return;} // fallback if no canvas
   const ctx = canvas.getContext('2d');
   let W, H;
   function resize(){W=canvas.width=window.innerWidth;H=canvas.height=window.innerHeight;}
@@ -1678,11 +1684,21 @@ document.addEventListener('DOMContentLoaded',()=>{
     }
   }
   animate();
+  } // end startSplash
 
   function dismissSplash(){
+    // First show the app
+    initApp();
+    // Then fade out splash on top
     const splash = document.getElementById('splash');
     splash.classList.add('hide');
     setTimeout(()=>{ splash.style.display='none'; }, 700);
+  }
+
+  if(document.readyState==='loading'){
+    document.addEventListener('DOMContentLoaded', startSplash);
+  } else {
+    startSplash();
   }
 })();
 
