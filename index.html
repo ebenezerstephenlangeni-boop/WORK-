@@ -307,20 +307,238 @@ select option{background:#1e1e1e;}
 .hi-info{flex:1;min-width:0;}
 .hi-title{font-family:var(--fd);font-size:15px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
 .hi-meta{font-size:11px;color:var(--text2);margin-top:2px;}
+
+/* ========== SPLASH SCREEN ========== */
+#splash{
+  position:fixed;inset:0;z-index:9999;
+  background:#0a0a0a;
+  display:flex;align-items:center;justify-content:center;
+  flex-direction:column;
+  transition:opacity 0.6s ease, transform 0.6s ease;
+}
+#splash.hide{opacity:0;transform:scale(1.05);pointer-events:none;}
+#ink-canvas{position:absolute;inset:0;width:100%;height:100%;}
+#splash-logo{
+  position:relative;z-index:2;
+  display:flex;flex-direction:column;align-items:center;gap:6px;
+  opacity:0;transform:translateY(20px);
+  transition:opacity 0.5s ease 0.8s, transform 0.5s ease 0.8s;
+}
+#splash-logo.show{opacity:1;transform:translateY(0);}
+#logo-ft{
+  font-family:-apple-system,"SF Pro Display","Helvetica Neue",Arial,sans-serif;
+  font-size:72px;font-weight:900;letter-spacing:-2px;
+  background:linear-gradient(135deg,#c8f542 0%,#6bcc00 50%,#0a0a0a 100%);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+  background-clip:text;
+  filter:drop-shadow(0 0 20px rgba(200,245,66,0.5));
+}
+#logo-name{
+  font-family:-apple-system,"SF Pro Display","Helvetica Neue",Arial,sans-serif;
+  font-size:14px;font-weight:800;letter-spacing:0.25em;
+  color:#c8f542;text-transform:uppercase;
+}
+#logo-tag{
+  font-size:10px;font-weight:500;letter-spacing:0.2em;
+  color:#555;text-transform:uppercase;margin-top:2px;
+}
+
+/* ========== TAB TRANSITION ========== */
+.screen{
+  animation:none;
+}
+.screen.slide-in-right{animation:slideInRight 0.28s cubic-bezier(0.32,0.72,0,1) both;}
+.screen.slide-in-left{animation:slideInLeft 0.28s cubic-bezier(0.32,0.72,0,1) both;}
+@keyframes slideInRight{from{transform:translateX(40px);opacity:0;}to{transform:translateX(0);opacity:1;}}
+@keyframes slideInLeft{from{transform:translateX(-40px);opacity:0;}to{transform:translateX(0);opacity:1;}}
+
+/* ========== CARD STAGGER ANIMATION ========== */
+.anim-card{
+  opacity:0;transform:translateY(18px);
+  animation:cardIn 0.35s cubic-bezier(0.32,0.72,0,1) forwards;
+}
+@keyframes cardIn{to{opacity:1;transform:translateY(0);}}
+
+/* ========== SET DONE BURST ========== */
+@keyframes setDonePop{
+  0%{transform:scale(1);}
+  40%{transform:scale(1.18);}
+  70%{transform:scale(0.94);}
+  100%{transform:scale(1);}
+}
+.done-btn.ticked{animation:setDonePop 0.35s cubic-bezier(0.32,0.72,0,1);}
+
+/* ========== RIPPLE ========== */
+.ripple-host{position:relative;overflow:hidden;}
+.ripple{
+  position:absolute;border-radius:50%;
+  background:rgba(255,255,255,0.25);
+  transform:scale(0);animation:rippleAnim 0.5s linear;
+  pointer-events:none;
+}
+@keyframes rippleAnim{to{transform:scale(4);opacity:0;}}
+
+/* ========== TAB ACTIVE BOUNCE ========== */
+.tb.active svg{animation:tabBounce 0.3s cubic-bezier(0.32,0.72,0,1);}
+@keyframes tabBounce{0%{transform:scale(1);}50%{transform:scale(1.25);}100%{transform:scale(1);}}
+
+/* ========== PULSE ACCENT ========== */
+@keyframes accentPulse{0%,100%{box-shadow:0 0 0 0 rgba(200,245,66,0.4);}50%{box-shadow:0 0 0 8px rgba(200,245,66,0);}}
+.btn-accent:focus-visible{animation:accentPulse 1.5s infinite;}
+
+/* ========== STREAK BANNER ========== */
+.streak-banner{
+  margin:12px 20px 0;
+  background:linear-gradient(135deg,#1a2a0a,#0a1a00);
+  border:1px solid #3a5a1a;border-radius:14px;
+  padding:12px 16px;
+  display:flex;align-items:center;gap:12px;
+  animation:cardIn 0.4s cubic-bezier(0.32,0.72,0,1) both;
+}
+.streak-flame{font-size:28px;animation:flamePulse 1.5s ease-in-out infinite;}
+@keyframes flamePulse{0%,100%{transform:scale(1) rotate(-3deg);}50%{transform:scale(1.12) rotate(3deg);}}
+.streak-info{flex:1;}
+.streak-num{font-family:-apple-system,"SF Pro Display","Helvetica Neue",Arial,sans-serif;font-size:22px;font-weight:800;color:#c8f542;}
+.streak-lbl{font-size:11px;color:#9dbf2e;font-weight:600;text-transform:uppercase;letter-spacing:0.06em;}
+
+/* ========== WORKOUT COMPLETE OVERLAY ========== */
+#wod-complete{
+  position:fixed;inset:0;z-index:350;
+  background:rgba(0,0,0,0.92);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  gap:16px;opacity:0;pointer-events:none;transition:opacity 0.3s;
+}
+#wod-complete.show{opacity:1;pointer-events:all;}
+.wc-trophy{font-size:64px;animation:trophyBounce 0.6s cubic-bezier(0.32,0.72,0,1) both 0.1s;}
+@keyframes trophyBounce{from{transform:scale(0) rotate(-15deg);}80%{transform:scale(1.1) rotate(5deg);}to{transform:scale(1) rotate(0deg);}}
+.wc-title{font-family:-apple-system,"SF Pro Display","Helvetica Neue",Arial,sans-serif;font-size:28px;font-weight:800;color:#c8f542;text-align:center;}
+.wc-sub{font-size:14px;color:#888;text-align:center;}
+.wc-stats{display:flex;gap:24px;margin-top:4px;}
+.wc-stat{text-align:center;}
+.wc-stat-val{font-family:-apple-system,"SF Pro Display","Helvetica Neue",Arial,sans-serif;font-size:26px;font-weight:700;color:#f0f0f0;}
+.wc-stat-lbl{font-size:10px;color:#555;text-transform:uppercase;letter-spacing:0.07em;font-weight:600;margin-top:2px;}
+.wc-btn{background:#c8f542;color:#0a0a0a;border:none;border-radius:12px;padding:14px 40px;font-size:17px;font-weight:800;cursor:pointer;margin-top:8px;font-family:-apple-system,"SF Pro Display","Helvetica Neue",Arial,sans-serif;letter-spacing:0.04em;transition:transform 0.15s;}
+.wc-btn:active{transform:scale(0.96);}
+
+/* ========== HOME DASHBOARD ========== */
+.today-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:12px 20px 0;}
+.today-card{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:13px;position:relative;overflow:hidden;animation:cardIn 0.4s cubic-bezier(0.32,0.72,0,1) both;}
+.today-card::before{content:'';position:absolute;top:-20px;right:-20px;width:70px;height:70px;border-radius:50%;opacity:0.07;}
+.today-card.c1::before{background:var(--accent);}
+.today-card.c2::before{background:var(--orange);}
+.today-card.c3::before{background:var(--blue);}
+.today-card.c4::before{background:var(--purple);}
+.tc-icon{font-size:20px;margin-bottom:6px;}
+.tc-val{font-family:var(--fd);font-size:22px;font-weight:800;}
+.tc-lbl{font-size:10px;color:var(--text2);font-weight:600;text-transform:uppercase;letter-spacing:0.05em;margin-top:2px;}
+.tc-bar{height:3px;border-radius:2px;background:var(--border);margin-top:8px;overflow:hidden;}
+.tc-bar-fill{height:100%;border-radius:2px;transition:width 0.8s cubic-bezier(0.32,0.72,0,1);}
+.quote-card{margin:14px 20px 0;background:var(--surface2);border-radius:14px;padding:14px 16px;border-left:3px solid var(--accent);animation:cardIn 0.4s cubic-bezier(0.32,0.72,0,1) both 0.1s;}
+.quote-text{font-size:13px;color:var(--text);line-height:1.6;font-style:italic;}
+.quote-author{font-size:11px;color:var(--text3);font-weight:600;margin-top:6px;text-transform:uppercase;letter-spacing:0.06em;}
+.wod-section{margin:14px 20px 0;}
+.wod-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;}
+.wod-title{font-family:var(--fd);font-size:16px;font-weight:700;}
+.wod-refresh{background:transparent;border:none;color:var(--text3);cursor:pointer;font-size:11px;font-weight:600;font-family:var(--fb);display:flex;align-items:center;gap:4px;transition:color 0.15s;}
+.wod-refresh:active{color:var(--accent);}
+.wod-scroll{display:flex;gap:10px;overflow-x:auto;scrollbar-width:none;padding-bottom:4px;}
+.wod-scroll::-webkit-scrollbar{display:none;}
+.wod-card{flex-shrink:0;width:155px;background:var(--surface);border:1px solid var(--border);border-radius:14px;overflow:hidden;cursor:pointer;transition:all 0.18s;}
+.wod-card:active{transform:scale(0.96);border-color:var(--accent);}
+.wod-card-img{width:100%;height:85px;display:flex;align-items:center;justify-content:center;font-size:42px;position:relative;}
+.wod-card-body{padding:9px 10px 0;}
+.wod-card-name{font-family:var(--fd);font-size:13px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.wod-card-meta{font-size:10px;color:var(--text2);margin-top:2px;}
+.wod-tag{font-size:9px;font-weight:700;padding:2px 6px;border-radius:5px;background:var(--surface2);color:var(--text3);display:inline-block;margin:4px 2px 0 0;}
+.wod-add-btn{width:100%;border:none;padding:8px;font-size:11px;font-weight:700;cursor:pointer;font-family:var(--fd);letter-spacing:0.04em;background:var(--accent);color:#0a0a0a;margin-top:8px;border-radius:0 0 12px 12px;transition:opacity 0.15s;}
+.wod-add-btn:active{opacity:0.8;}
+.streak-banner{margin:12px 20px 0;background:linear-gradient(135deg,#1a2a0a,#0a1a00);border:1px solid #3a5a1a;border-radius:14px;padding:12px 16px;display:flex;align-items:center;gap:12px;animation:cardIn 0.4s cubic-bezier(0.32,0.72,0,1) both;}
+.streak-flame{font-size:28px;animation:flamePulse 1.5s ease-in-out infinite;}
+.streak-info{flex:1;}
+.streak-num{font-family:var(--fd);font-size:22px;font-weight:800;color:var(--accent);}
+.streak-lbl{font-size:11px;color:var(--accent-dim);font-weight:600;text-transform:uppercase;letter-spacing:0.06em;}
+.streak-dots{display:flex;gap:4px;margin-top:6px;}
+.streak-dot{width:10px;height:10px;border-radius:50%;background:var(--border);transition:background 0.3s;}
+.streak-dot.lit{background:var(--accent);box-shadow:0 0 6px rgba(200,245,66,0.5);}
+.wod-section-head{font-family:var(--fd);font-size:14px;font-weight:700;padding:14px 20px 0;color:var(--text2);text-transform:uppercase;letter-spacing:0.06em;}
+/* ========== HOME DASHBOARD END ========== */
+/* ========== SKELETON LOADING ========== */
+.skel{background:linear-gradient(90deg,#1e1e1e 25%,#2a2a2a 50%,#1e1e1e 75%);background-size:200% 100%;animation:skelShimmer 1.2s infinite;border-radius:8px;}
+@keyframes skelShimmer{0%{background-position:200% 0;}100%{background-position:-200% 0;}}
+
+/* ========== NUMBER COUNT-UP ========== */
+.count-up{display:inline-block;transition:transform 0.1s;}
+
+/* ========== GLOWING ACTIVE TAB INDICATOR ========== */
+.tb.active .tb-lbl{color:var(--accent);}
+.tb-indicator{
+  position:absolute;bottom:0;height:2px;background:var(--accent);
+  border-radius:1px;transition:left 0.3s cubic-bezier(0.32,0.72,0,1),width 0.3s;
+  box-shadow:0 0 8px rgba(200,245,66,0.6);
+}
+
+/* ========== SWIPE DELETE ========== */
+.swipe-wrap{position:relative;overflow:hidden;border-radius:12px;margin-bottom:7px;}
+.swipe-del-bg{
+  position:absolute;right:0;top:0;bottom:0;width:70px;
+  background:var(--red);display:flex;align-items:center;justify-content:center;
+  color:#fff;font-size:13px;font-weight:700;border-radius:0 12px 12px 0;
+}
+.swipe-content{position:relative;transition:transform 0.2s;touch-action:pan-y;}
+.swipe-content.swiped{transform:translateX(-70px);}
+
 </style>
 </head>
 <body>
+<!-- ========== INK SPLASH INTRO ========== -->
+<div id="splash">
+  <canvas id="ink-canvas"></canvas>
+  <div id="splash-logo">
+    <div id="logo-ft">FT</div>
+    <div id="logo-name">FITTRACK</div>
+    <div id="logo-tag">TRAIN. TRACK. TRANSFORM.</div>
+  </div>
+</div>
+
 <div class="status-bar"></div>
 <div class="app-shell">
 
-<!-- WORKOUT -->
+<!-- WORKOUT / HOME -->
 <div id="sw" class="screen gone" style="display:flex;flex-direction:column;">
-  <div class="ph"><div class="ph-title">WORKOUT</div><div class="ph-sub" id="hdr-date"></div></div>
-  <div id="day-strip" style="flex-shrink:0;"></div>
+  <!-- Dynamic header -->
+  <div class="ph" style="padding-bottom:10px;">
+    <div style="display:flex;align-items:center;justify-content:space-between;">
+      <div>
+        <div class="ph-title" id="hdr-greeting">GOOD MORNING</div>
+        <div class="ph-sub" id="hdr-date"></div>
+      </div>
+      <div id="hdr-avatar" style="width:38px;height:38px;border-radius:50%;background:linear-gradient(135deg,#c8f542,#6bcc00);display:flex;align-items:center;justify-content:center;font-size:18px;font-weight:800;color:#0a0a0a;flex-shrink:0;">👤</div>
+    </div>
+  </div>
+
   <div style="flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding-bottom:20px;">
+
+    <!-- Streak + quick stats banner -->
+    <div id="streak-section"></div>
+
+    <!-- Day strip -->
+    <div id="day-strip" style="flex-shrink:0;"></div>
+
+    <!-- Today's summary cards -->
+    <div id="today-summary"></div>
+
+    <!-- Motivational quote -->
+    <div id="quote-card"></div>
+
+    <!-- Workout suggestion -->
+    <div id="wod-suggest"></div>
+
+    <!-- Active workout or empty state -->
     <div id="exc-list"></div>
+
+    <!-- Action buttons -->
     <div style="padding:4px 20px 20px;">
-      <button class="btn-accent" onclick="openPicker()">
+      <button class="btn-accent ripple-host" onclick="openPicker();addRipple(event,this)">
         <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>ADD EXERCISE
       </button>
       <button class="btn-ghost" style="margin-top:8px;" onclick="finishWorkout()">✓ Finish &amp; Save Workout</button>
@@ -575,7 +793,20 @@ select option{background:#1e1e1e;}
   </div>
 </div>
 
+
+<!-- WORKOUT COMPLETE OVERLAY -->
+<div id="wod-complete">
+  <div class="wc-trophy">🏆</div>
+  <div class="wc-title">WORKOUT COMPLETE!</div>
+  <div class="wc-sub" id="wc-sub-text">You crushed it today.</div>
+  <div class="wc-stats" id="wc-stats-row"></div>
+  <button class="wc-btn" onclick="closeWOD()">DONE 💪</button>
+</div>
+
 <div class="toast" id="toast"></div>
+<!-- CONFETTI CANVAS -->
+<canvas id="confetti-canvas" style="position:fixed;inset:0;pointer-events:none;z-index:500;display:none;"></canvas>
+
 
 <script>
 // ============ EXERCISE DATA ============
@@ -697,57 +928,239 @@ function go(k,el){
 }
 
 // ============ WORKOUT ============
+function calcStreak(){
+  // Count consecutive days with workout in history
+  let streak=0;
+  const tn=new Date();
+  for(let i=0;i<365;i++){
+    const d=new Date(tn);d.setDate(tn.getDate()-i);
+    const iso=d.toISOString().slice(0,10);
+    const hasW=S.hist.some(h=>h.date===iso&&h.type==='workout');
+    if(hasW)streak++;
+    else if(i>0)break; // only break after day 0 (today might not have workout yet)
+  }
+  return streak;
+}
+
+function getGreeting(){
+  const h=new Date().getHours();
+  if(h<12)return'GOOD MORNING';
+  if(h<17)return'GOOD AFTERNOON';
+  return'GOOD EVENING';
+}
+
+const QUOTES=[
+  {text:"The only bad workout is the one that didn't happen.",author:"Unknown"},
+  {text:"Your body can stand almost anything. It's your mind that you have to convince.",author:"Unknown"},
+  {text:"Success isn't given. It's earned in the gym, on the track, on the field.",author:"Unknown"},
+  {text:"Strength does not come from the body. It comes from the will of the soul.",author:"Gandhi"},
+  {text:"Wake up. Work out. Look hot. Kick ass.",author:"Unknown"},
+  {text:"Train insane or remain the same.",author:"Unknown"},
+  {text:"You don't have to be great to start, but you have to start to be great.",author:"Zig Ziglar"},
+  {text:"Push yourself because no one else is going to do it for you.",author:"Unknown"},
+  {text:"No pain, no gain. Shut up and train.",author:"Unknown"},
+  {text:"The pain you feel today will be the strength you feel tomorrow.",author:"Unknown"},
+  {text:"It never gets easier — you just get stronger.",author:"Unknown"},
+  {text:"The harder you work for something, the greater you'll feel when you achieve it.",author:"Unknown"},
+];
+
+const WOD_PLANS=[
+  {name:"Upper Power",muscle:"Chest & Back",icon:"🏋️",color:"#1a2a0a",ids:[1,7,21,26],tags:["Push","Pull","Compound"]},
+  {name:"Leg Day",muscle:"Legs & Glutes",icon:"🦵",color:"#1e1a08",ids:[13,14,19,20],tags:["Quads","Glutes","Hamstrings"]},
+  {name:"Push Day",muscle:"Chest, Shoulders & Triceps",icon:"💥",color:"#12122a",ids:[1,2,21,31,32],tags:["Push","Press","Isolation"]},
+  {name:"Pull Day",muscle:"Back & Biceps",icon:"💪",color:"#0a1520",ids:[6,7,10,26,27],tags:["Pull","Rows","Curls"]},
+  {name:"Core Blast",muscle:"Core & Stability",icon:"🔥",color:"#0a201a",ids:[35,36,37,38,40],tags:["Core","Abs","Obliques"]},
+  {name:"Full Body",muscle:"All Muscle Groups",icon:"⚡",color:"#1a0a0a",ids:[1,13,7,21,35],tags:["Compound","Full Body"]},
+  {name:"Arm Day",muscle:"Biceps & Triceps",icon:"💪",color:"#2a0a18",ids:[26,27,29,31,32,34],tags:["Arms","Isolation","Pump"]},
+  {name:"Mobility Flow",muscle:"Flexibility & Recovery",icon:"🧘",color:"#2a1a0a",ids:[41,42,43,44],tags:["Stretch","Recovery","Mobility"]},
+];
+
+let todayWOD=null;
+function getTodayWOD(){
+  if(todayWOD)return todayWOD;
+  // Pick based on day of week so it's consistent per day
+  const dayIdx=new Date().getDay();
+  const planIdx=dayIdx%WOD_PLANS.length;
+  todayWOD=WOD_PLANS[planIdx];
+  return todayWOD;
+}
+function shuffleWOD(){
+  todayWOD=WOD_PLANS[Math.floor(Math.random()*WOD_PLANS.length)];
+  renderWorkout();
+}
+function addWODToWorkout(planIdx){
+  const plan=WOD_PLANS[planIdx];
+  plan.ids.forEach(id=>{
+    const ex=EXS.find(e=>e.id===id);
+    if(ex&&!S.wex.find(w=>w.id===ex.id)){
+      S.wex.push({...ex,uid:uid2(),sets:[{reps:'',weight:'',done:false}]});
+    }
+  });
+  save();renderWorkout();
+  toast(`${plan.name} added to workout! 💪`);
+}
+
 function renderWorkout(){
+  // Greeting
+  const greetEl=document.getElementById('hdr-greeting');
+  if(greetEl)greetEl.textContent=getGreeting();
+
+  // Day strip
   const tnow=new Date();
   let strip='';
   for(let i=6;i>=0;i--){
     const d=new Date(tnow);d.setDate(tnow.getDate()-i);
     const iso=d.toISOString().slice(0,10);
     const isT=iso===today();
-    const hasDot=S.hist.some(h=>h.date===iso&&h.type==='workout');
+    const hasDot=S.hist.some(h=>h.date===iso&&(h.type==='workout'||h.type==='cardio'));
     strip+=`<div class="dp ${isT?'today':''}"><span class="dpd">${DS[d.getDay()]}</span><span class="dpn">${d.getDate()}</span>${hasDot?'<div class="dp-dot"></div>':'<div style="height:4px;"></div>'}</div>`;
   }
   document.getElementById('day-strip').innerHTML=`<div class="day-strip">${strip}</div>`;
 
-  const el=document.getElementById('exc-list');
-  if(!S.wex.length){
-    el.innerHTML=`<div class="empty-st"><div class="empty-ico">🏋️</div><p>No exercises yet.<br>Tap <strong>Add Exercise</strong> to begin.</p></div>`;
-    return;
-  }
-  el.innerHTML=S.wex.map(ex=>{
-    // Progressive overload hint
-    const po=S.poLog[ex.name];
-    let hint='';
-    if(po&&po.length>=1){
-      const last=po[po.length-1];
-      hint=`<div class="po-hint">↑ Last session: ${last.weight}kg × ${last.reps} reps — beat it!</div>`;
-    }
-    return`<div class="exc-card">
-      <div class="ech">
-        <div><div class="ec-name">${ex.icon} ${ex.name}</div><div class="ec-muscle">${ex.muscle}</div></div>
-        <div class="ec-acts">
-          <button class="rest-btn" onclick="startTimer(90)">⏱ Rest</button>
-          <button class="ico-btn" onclick="delEx('${ex.uid}')"><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/></svg></button>
+  // Streak banner
+  const streak=calcStreak();
+  const streakEl=document.getElementById('streak-section');
+  if(streakEl){
+    const days7=[];
+    for(let i=6;i>=0;i--){const d=new Date(tnow);d.setDate(tnow.getDate()-i);days7.push(d.toISOString().slice(0,10));}
+    const dots=days7.map(iso=>{
+      const has=S.hist.some(h=>h.date===iso&&(h.type==='workout'||h.type==='cardio'));
+      return`<div class="streak-dot ${has?'lit':''}"></div>`;
+    }).join('');
+    streakEl.innerHTML=`
+      <div class="streak-banner">
+        <div class="streak-flame">${streak>=7?'🔥':streak>=3?'⚡':'💪'}</div>
+        <div class="streak-info">
+          <div class="streak-num">${streak} Day${streak!==1?'s':''} Streak</div>
+          <div class="streak-lbl">${streak===0?'Start your streak today!':streak>=7?'Unstoppable! Keep it up!':streak>=3?'Building momentum!':'Keep going!'}</div>
+          <div class="streak-dots">${dots}</div>
         </div>
+      </div>`;
+  }
+
+  // Today summary cards
+  const todayKcal=S.food.reduce((a,f)=>a+(f.kcal||0),0);
+  const todayBurned=S.clog.filter(c=>c.date===today()).reduce((a,c)=>a+c.kcal,0);
+  const todayWater=Math.max(0,Math.min(8,S.water));
+  const todaySets=S.wex.reduce((a,e)=>a+e.sets.filter(s=>s.done).length,0);
+  const sumEl=document.getElementById('today-summary');
+  if(sumEl){
+    sumEl.innerHTML=`<div class="today-grid">
+      <div class="today-card c1" style="animation-delay:0s;">
+        <div class="tc-icon">🏋️</div>
+        <div class="tc-val" style="color:var(--accent);">${todaySets}</div>
+        <div class="tc-lbl">Sets Done</div>
+        <div class="tc-bar"><div class="tc-bar-fill" style="width:${Math.min(100,(todaySets/20)*100)}%;background:var(--accent);"></div></div>
       </div>
-      ${hint}
-      <table class="sets-tbl">
-        <thead><tr><th style="width:36px;">Set</th><th>Reps</th><th>Weight kg</th><th style="text-align:right;padding-right:14px;">Done</th></tr></thead>
-        <tbody>
-          ${ex.sets.map((s,si)=>`<tr class="${s.done?'sdone':''}">
-            <td><span class="snum">${si+1}</span></td>
-            <td><input class="ninp" type="number" min="0" value="${s.reps||''}" placeholder="—" oninput="updSet('${ex.uid}',${si},'reps',this.value)"/></td>
-            <td><input class="ninp" type="number" min="0" step="0.5" value="${s.weight||''}" placeholder="—" oninput="updSet('${ex.uid}',${si},'weight',this.value)" style="width:66px;"/></td>
-            <td style="text-align:right;padding-right:14px;"><button class="done-btn ${s.done?'ticked':''}" onclick="tickSet('${ex.uid}',${si})">${s.done?'✓':'Mark'}</button></td>
-          </tr>`).join('')}
-        </tbody>
-      </table>
-      <div class="set-foot">
-        <button class="add-set-btn" onclick="addSet('${ex.uid}')"><svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg> Add Set</button>
-        <span class="set-prog">${ex.sets.filter(s=>s.done).length}/${ex.sets.length} sets done</span>
+      <div class="today-card c2" style="animation-delay:0.05s;">
+        <div class="tc-icon">🔥</div>
+        <div class="tc-val" style="color:var(--orange);">${todayBurned}</div>
+        <div class="tc-lbl">kcal Burned</div>
+        <div class="tc-bar"><div class="tc-bar-fill" style="width:${Math.min(100,(todayBurned/600)*100)}%;background:var(--orange);"></div></div>
+      </div>
+      <div class="today-card c3" style="animation-delay:0.1s;">
+        <div class="tc-icon">🍽️</div>
+        <div class="tc-val" style="color:var(--blue);">${todayKcal}</div>
+        <div class="tc-lbl">kcal Eaten</div>
+        <div class="tc-bar"><div class="tc-bar-fill" style="width:${Math.min(100,(todayKcal/2000)*100)}%;background:var(--blue);"></div></div>
+      </div>
+      <div class="today-card c4" style="animation-delay:0.15s;">
+        <div class="tc-icon">💧</div>
+        <div class="tc-val" style="color:var(--purple);">${todayWater}<span style="font-size:13px;color:var(--text3);">/8</span></div>
+        <div class="tc-lbl">Glasses Water</div>
+        <div class="tc-bar"><div class="tc-bar-fill" style="width:${(todayWater/8)*100}%;background:var(--purple);"></div></div>
       </div>
     </div>`;
-  }).join('');
+  }
+
+  // Motivational quote — changes daily
+  const qEl=document.getElementById('quote-card');
+  if(qEl){
+    const qIdx=new Date().getDate()%QUOTES.length;
+    const q=QUOTES[qIdx];
+    qEl.innerHTML=`<div class="quote-card"><div class="quote-text">"${q.text}"</div><div class="quote-author">— ${q.author}</div></div>`;
+  }
+
+  // Workout suggestions
+  const wodEl=document.getElementById('wod-suggest');
+  if(wodEl){
+    const suggestions=WOD_PLANS.slice().sort(()=>Math.random()-0.5).slice(0,5);
+    const planColors=[['#1a2a0a','#0a1a00'],['#0a1520','#0a0a20'],['#1e1a08','#0a0a00'],['#1a0a1a','#0a0010'],['#2a1a0a','#1a0a00']];
+    wodEl.innerHTML=`
+      <div class="wod-section">
+        <div class="wod-header">
+          <span class="wod-title">💡 Suggested Workouts</span>
+          <button class="wod-refresh" onclick="shuffleWOD()">
+            <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="1 4 1 10 7 10"/><polyline points="23 20 23 14 17 14"/><path d="M20.49 9A9 9 0 005.64 5.64L1 10m22 4l-4.64 4.36A9 9 0 013.51 15"/></svg>
+            Shuffle
+          </button>
+        </div>
+        <div class="wod-scroll">
+          ${WOD_PLANS.map((plan,i)=>{
+            const c=planColors[i%planColors.length];
+            return`<div class="wod-card">
+              <div class="wod-card-img" style="background:linear-gradient(135deg,${c[0]},${c[1]});">
+                <span style="font-size:44px;">${plan.icon}</span>
+              </div>
+              <div class="wod-card-body">
+                <div class="wod-card-name">${plan.name}</div>
+                <div class="wod-card-meta">${plan.muscle}</div>
+                <div>${plan.tags.map(t=>`<span class="wod-tag">${t}</span>`).join('')}</div>
+              </div>
+              <button class="wod-add-btn" onclick="addWODToWorkout(${i})">+ ADD TO WORKOUT</button>
+            </div>`;
+          }).join('')}
+        </div>
+      </div>`;
+  }
+
+  // Active exercise list
+  const el=document.getElementById('exc-list');
+  if(!S.wex.length){
+    el.innerHTML=`<div class="empty-st" style="padding:30px 20px;">
+      <div class="empty-ico">🎯</div>
+      <p>Pick a suggested workout above<br>or tap <strong>Add Exercise</strong> to build your own.</p>
+    </div>`;
+    return;
+  }
+  // Show active workout header
+  const doneSets=S.wex.reduce((a,e)=>a+e.sets.filter(s=>s.done).length,0);
+  const totalSets=S.wex.reduce((a,e)=>a+e.sets.length,0);
+  el.innerHTML=`
+    <div style="padding:14px 20px 6px;display:flex;align-items:center;justify-content:space-between;">
+      <span style="font-family:var(--fd);font-size:15px;font-weight:700;color:var(--text);">TODAY'S WORKOUT</span>
+      <span style="font-size:11px;font-weight:700;color:var(--accent);">${doneSets}/${totalSets} SETS</span>
+    </div>
+    ${S.wex.map(ex=>{
+      const po=S.poLog[ex.name];
+      let hint='';
+      if(po&&po.length>=1){const last=po[po.length-1];hint=`<div class="po-hint">↑ Last: ${last.weight}kg × ${last.reps} — beat it!</div>`;}
+      return`<div class="exc-card">
+        <div class="ech">
+          <div><div class="ec-name">${ex.icon} ${ex.name}</div><div class="ec-muscle">${ex.muscle}</div></div>
+          <div class="ec-acts">
+            <button class="rest-btn" onclick="startTimer(90)">⏱ Rest</button>
+            <button class="ico-btn" onclick="delEx('${ex.uid}')"><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/></svg></button>
+          </div>
+        </div>
+        ${hint}
+        <table class="sets-tbl">
+          <thead><tr><th style="width:36px;">Set</th><th>Reps</th><th>Weight kg</th><th style="text-align:right;padding-right:14px;">Done</th></tr></thead>
+          <tbody>
+            ${ex.sets.map((s,si)=>`<tr class="${s.done?'sdone':''}">
+              <td><span class="snum">${si+1}</span></td>
+              <td><input class="ninp" type="number" min="0" value="${s.reps||''}" placeholder="—" oninput="updSet('${ex.uid}',${si},'reps',this.value)"/></td>
+              <td><input class="ninp" type="number" min="0" step="0.5" value="${s.weight||''}" placeholder="—" oninput="updSet('${ex.uid}',${si},'weight',this.value)" style="width:66px;"/></td>
+              <td style="text-align:right;padding-right:14px;"><button class="done-btn ${s.done?'ticked':''}" onclick="tickSet('${ex.uid}',${si})">${s.done?'✓':'Mark'}</button></td>
+            </tr>`).join('')}
+          </tbody>
+        </table>
+        <div class="set-foot">
+          <button class="add-set-btn" onclick="addSet('${ex.uid}')"><svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg> Add Set</button>
+          <span class="set-prog">${ex.sets.filter(s=>s.done).length}/${ex.sets.length} sets done</span>
+        </div>
+      </div>`;
+    }).join('')}`;
 }
 
 function addSet(uid){const ex=S.wex.find(e=>e.uid===uid);if(!ex)return;const l=ex.sets[ex.sets.length-1]||{};ex.sets.push({reps:l.reps||'',weight:l.weight||'',done:false});save();renderWorkout();}
@@ -1175,11 +1588,335 @@ function closeTimer(){clearInterval(tInt);document.getElementById('rest-ov').cla
 // ============ INIT ============
 document.addEventListener('DOMContentLoaded',()=>{
   const d=new Date();
-  document.getElementById('hdr-date').textContent=DS[d.getDay()]+', '+MS[d.getMonth()]+' '+d.getDate();
+  const dateEl=document.getElementById('hdr-date');
+  if(dateEl)dateEl.textContent=DS[d.getDay()]+', '+MS[d.getMonth()]+' '+d.getDate();
   const s=document.getElementById('sw');s.classList.remove('gone');s.style.display='flex';
   renderWorkout();renderEx();renderNut();
   if('serviceWorker' in navigator)navigator.serviceWorker.register('sw.js').catch(()=>{});
 });
+
+// ============ INK SPLASH ============
+(function(){
+  const canvas = document.getElementById('ink-canvas');
+  const ctx = canvas.getContext('2d');
+  let W, H;
+  function resize(){W=canvas.width=window.innerWidth;H=canvas.height=window.innerHeight;}
+  resize();
+
+  // Ink drop class
+  class Ink {
+    constructor(x,y,color,maxR){
+      this.x=x;this.y=y;this.r=0;this.maxR=maxR;
+      this.color=color;this.alpha=0.85;this.speed=maxR/38;
+      this.blobs=[];
+      for(let i=0;i<12;i++){
+        const a=Math.random()*Math.PI*2;
+        const d=Math.random()*maxR*0.6;
+        this.blobs.push({ox:Math.cos(a)*d,oy:Math.sin(a)*d,r:0,maxR:maxR*(0.2+Math.random()*0.5),speed:(maxR/38)*(0.5+Math.random()*0.8)});
+      }
+    }
+    draw(){
+      ctx.save();
+      ctx.globalAlpha=this.alpha;
+      // main drop
+      ctx.beginPath();
+      ctx.arc(this.x,this.y,this.r,0,Math.PI*2);
+      ctx.fillStyle=this.color;
+      ctx.fill();
+      // blobs
+      this.blobs.forEach(b=>{
+        ctx.beginPath();
+        ctx.arc(this.x+b.ox*(this.r/this.maxR),this.y+b.oy*(this.r/this.maxR),b.r,0,Math.PI*2);
+        ctx.fill();
+      });
+      ctx.restore();
+    }
+    update(){
+      if(this.r<this.maxR) this.r+=this.speed;
+      this.blobs.forEach(b=>{ if(b.r<b.maxR) b.r+=b.speed; });
+    }
+    done(){return this.r>=this.maxR;}
+  }
+
+  const drops = [];
+  let frame = 0;
+  // Schedule drops: black first, then green mixing
+  const schedule = [
+    {t:0, x:()=>W*0.3, y:()=>H*0.35, color:'#111111', maxR:()=>W*0.8},
+    {t:8, x:()=>W*0.7, y:()=>H*0.6, color:'#0a0a0a', maxR:()=>W*0.9},
+    {t:16,x:()=>W*0.5, y:()=>H*0.45, color:'#1a2a00', maxR:()=>W*0.7},
+    {t:24,x:()=>W*0.2, y:()=>H*0.7, color:'#c8f542', maxR:()=>W*0.6},
+    {t:30,x:()=>W*0.8, y:()=>H*0.25, color:'#9dbf2e', maxR:()=>W*0.55},
+    {t:38,x:()=>W*0.5, y:()=>H*0.5, color:'#c8f542', maxR:()=>W*0.4},
+  ];
+
+  let logoShown = false;
+  function animate(){
+    ctx.clearRect(0,0,W,H);
+    ctx.fillStyle='#0a0a0a';
+    ctx.fillRect(0,0,W,H);
+
+    // Spawn scheduled drops
+    schedule.forEach(s=>{
+      if(frame===s.t) drops.push(new Ink(s.x(),s.y(),s.color,s.maxR()));
+    });
+
+    drops.forEach(d=>{d.update();d.draw();});
+    frame++;
+
+    // Show logo after drops start filling
+    if(frame===30 && !logoShown){
+      logoShown=true;
+      document.getElementById('splash-logo').classList.add('show');
+    }
+
+    if(frame < 90){
+      requestAnimationFrame(animate);
+    } else {
+      // Hold 0.6s then dismiss
+      setTimeout(dismissSplash, 600);
+    }
+  }
+  animate();
+
+  function dismissSplash(){
+    const splash = document.getElementById('splash');
+    splash.classList.add('hide');
+    setTimeout(()=>{ splash.style.display='none'; }, 700);
+  }
+})();
+
+// ============ RIPPLE EFFECT ============
+function addRipple(el, e){
+  const rect = el.getBoundingClientRect();
+  const x = (e.touches?e.touches[0].clientX:e.clientX) - rect.left;
+  const y = (e.touches?e.touches[0].clientY:e.clientY) - rect.top;
+  const r = document.createElement('span');
+  r.className='ripple';
+  r.style.cssText=`left:${x}px;top:${y}px;width:10px;height:10px;margin:-5px;`;
+  el.appendChild(r);
+  r.addEventListener('animationend',()=>r.remove());
+}
+document.addEventListener('touchstart', e=>{
+  const btn = e.target.closest('.btn-accent,.btn-ghost,.tb,.done-btn,.rest-btn');
+  if(btn){ btn.classList.add('ripple-host'); addRipple(btn,e); }
+},{passive:true});
+
+// ============ TAB SLIDE TRANSITIONS ============
+const TAB_ORDER = ['w','e','c','n','p','h'];
+let currentTabIdx = 0;
+const origGo = go; // save reference after script loads
+function goWithAnim(k, el){
+  const newIdx = TAB_ORDER.indexOf(k);
+  const dir = newIdx > currentTabIdx ? 'right' : 'left';
+  currentTabIdx = newIdx;
+  // Hide all
+  Object.values(SM).forEach(id=>{
+    const s=document.getElementById(id);
+    s.classList.add('gone');s.style.display='';
+    s.classList.remove('slide-in-right','slide-in-left');
+  });
+  const s=document.getElementById(SM[k]);
+  s.classList.remove('gone');
+  s.style.display='flex';
+  s.classList.add(dir==='right'?'slide-in-right':'slide-in-left');
+  document.querySelectorAll('.tb').forEach(b=>b.classList.remove('active'));
+  el.classList.add('active');
+  if(k==='e')renderEx();
+  if(k==='c')renderCardio();
+  if(k==='n')renderNut();
+  if(k==='p')renderProgress();
+  if(k==='h')renderHist();
+  if(k==='w')renderWorkout();
+  updateTabIndicator(el);
+}
+// Override go after DOMContentLoaded
+window.go = function(k,el){ goWithAnim(k,el); };
+
+// Tab indicator
+function updateTabIndicator(activeBtn){
+  let ind = document.querySelector('.tb-indicator');
+  if(!ind){ ind=document.createElement('div');ind.className='tb-indicator';document.querySelector('.tab-bar').appendChild(ind); }
+  const rect = activeBtn.getBoundingClientRect();
+  const barRect = document.querySelector('.tab-bar').getBoundingClientRect();
+  ind.style.left = (rect.left - barRect.left) + 'px';
+  ind.style.width = rect.width + 'px';
+}
+
+// ============ CARD STAGGER ============
+function animateCards(parentId){
+  const parent = document.getElementById(parentId);
+  if(!parent) return;
+  const cards = parent.querySelectorAll('.exc-card,.ex-row,.clog-item,.food-row,.weight-log-item,.hi,.po-card,.cstat,.ps-card');
+  cards.forEach((c,i)=>{
+    c.classList.remove('anim-card');
+    void c.offsetWidth; // reflow
+    c.classList.add('anim-card');
+    c.style.animationDelay = (i*0.05)+'s';
+  });
+}
+
+// ============ CONFETTI ============
+function launchConfetti(){
+  const canvas = document.getElementById('confetti-canvas');
+  canvas.style.display='block';
+  const ctx = canvas.getContext('2d');
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+  const pieces = [];
+  const colors = ['#c8f542','#ff4d4d','#4d9fff','#ff8c42','#b87fff','#42f5c8','#fff'];
+  for(let i=0;i<120;i++){
+    pieces.push({
+      x: Math.random()*canvas.width,
+      y: -10 - Math.random()*200,
+      w: 6+Math.random()*8,
+      h: 10+Math.random()*14,
+      r: Math.random()*Math.PI*2,
+      vx: (Math.random()-0.5)*4,
+      vy: 3+Math.random()*4,
+      vr: (Math.random()-0.5)*0.2,
+      color: colors[Math.floor(Math.random()*colors.length)],
+      alpha: 1
+    });
+  }
+  let cf = 0;
+  function drawConf(){
+    ctx.clearRect(0,0,canvas.width,canvas.height);
+    pieces.forEach(p=>{
+      ctx.save();
+      ctx.globalAlpha=p.alpha;
+      ctx.translate(p.x,p.y);
+      ctx.rotate(p.r);
+      ctx.fillStyle=p.color;
+      ctx.fillRect(-p.w/2,-p.h/2,p.w,p.h);
+      ctx.restore();
+      p.x+=p.vx; p.y+=p.vy; p.r+=p.vr;
+      if(p.y>canvas.height*0.7) p.alpha-=0.02;
+    });
+    cf++;
+    if(cf<120) requestAnimationFrame(drawConf);
+    else{ ctx.clearRect(0,0,canvas.width,canvas.height); canvas.style.display='none'; }
+  }
+  drawConf();
+}
+
+// ============ STREAK COUNTER ============
+function calcStreak(){
+  const workoutDates=[...new Set(S.hist.filter(h=>h.type==='workout').map(h=>h.date))].sort((a,b)=>b.localeCompare(a));
+  if(!workoutDates.length) return 0;
+  let streak=0, check=new Date();
+  check.setHours(0,0,0,0);
+  for(let i=0;i<workoutDates.length;i++){
+    const d=new Date(workoutDates[i]+'T12:00:00');
+    const diff=Math.round((check-d)/(1000*60*60*24));
+    if(diff===0||diff===1){ streak++; check=d; }
+    else break;
+  }
+  return streak;
+}
+
+// ============ COUNT-UP NUMBERS ============
+function countUp(el, target, duration=600){
+  const start=performance.now();
+  const from=parseInt(el.textContent)||0;
+  function step(now){
+    const p=Math.min((now-start)/duration,1);
+    const ease=p<0.5?2*p*p:(1-(2-2*p)*(2*p-1)*0.5);
+    el.textContent=Math.round(from+(target-from)*ease);
+    if(p<1) requestAnimationFrame(step);
+  }
+  requestAnimationFrame(step);
+}
+
+// ============ SWIPE TO DELETE ============
+function initSwipe(el, onDelete){
+  let startX=0, dx=0, swiped=false;
+  const content=el.querySelector('.swipe-content');
+  if(!content) return;
+  el.addEventListener('touchstart',e=>{startX=e.touches[0].clientX;swiped=false;},{passive:true});
+  el.addEventListener('touchmove',e=>{
+    dx=e.touches[0].clientX-startX;
+    if(dx<-10&&dx>-80){ content.style.transform=`translateX(${dx}px)`; }
+  },{passive:true});
+  el.addEventListener('touchend',()=>{
+    if(dx<-50){ content.classList.add('swiped'); swiped=true; }
+    else { content.style.transform=''; }
+    dx=0;
+  });
+  el.addEventListener('click',()=>{ if(swiped) onDelete(); });
+}
+
+// ============ WORKOUT COMPLETE MODAL ============
+function showWOD(exercises, sets){
+  const streak = calcStreak();
+  document.getElementById('wc-sub-text').textContent = streak>1 ? streak+' day streak! Keep it going! 🔥' : 'You crushed it today!';
+  document.getElementById('wc-stats-row').innerHTML=`
+    <div class="wc-stat"><div class="wc-stat-val">${exercises}</div><div class="wc-stat-lbl">Exercises</div></div>
+    <div class="wc-stat"><div class="wc-stat-val">${sets}</div><div class="wc-stat-lbl">Sets Done</div></div>
+    <div class="wc-stat"><div class="wc-stat-val">${streak}</div><div class="wc-stat-lbl">Day Streak</div></div>
+  `;
+  document.getElementById('wod-complete').classList.add('show');
+  launchConfetti();
+}
+function closeWOD(){ document.getElementById('wod-complete').classList.remove('show'); }
+
+// ============ STREAK BANNER IN WORKOUT ============
+function renderStreakBanner(){
+  const streak = calcStreak();
+  const existing = document.getElementById('streak-banner');
+  if(existing) existing.remove();
+  if(streak===0) return;
+  const banner = document.createElement('div');
+  banner.className='streak-banner';
+  banner.id='streak-banner';
+  banner.innerHTML=`<div class="streak-flame">🔥</div><div class="streak-info"><div class="streak-num">${streak} Day Streak</div><div class="streak-lbl">Keep the chain alive!</div></div>`;
+  const dayStrip = document.getElementById('day-strip');
+  dayStrip.parentNode.insertBefore(banner, dayStrip.nextSibling);
+}
+
+// ============ PATCH finishWorkout to use animations ============
+const _origFinish = finishWorkout;
+finishWorkout = function(){
+  if(!S.wex.length){toast('No exercises to save');return;}
+  const exercises=S.wex.length;
+  const sets=S.wex.reduce((a,e)=>a+e.sets.filter(s=>s.done).length,0);
+  S.hist.unshift({id:uid2(),date:today(),type:'workout',title:S.wex.map(e=>e.name).join(', ').slice(0,55),exercises,sets});
+  S.wex=[];save();renderWorkout();
+  showWOD(exercises, sets);
+};
+
+// ============ PATCH renderWorkout to add streak + stagger ============
+const _origRW = renderWorkout;
+renderWorkout = function(){
+  _origRW();
+  renderStreakBanner();
+  setTimeout(()=>animateCards('exc-list'),50);
+};
+
+// ============ PATCH renderEx to stagger ============
+const _origREx = renderEx;
+renderEx = function(){
+  _origREx();
+  setTimeout(()=>animateCards('ex-grid'),50);
+};
+
+// ============ PATCH renderNut to count-up ============
+const _origRNut = renderNut;
+renderNut = function(){
+  _origRNut();
+  const kcalEl=document.getElementById('rkcal');
+  const target=parseInt(kcalEl.textContent)||0;
+  countUp(kcalEl,target,400);
+};
+
+// ============ INIT TAB INDICATOR ============
+document.addEventListener('DOMContentLoaded',()=>{
+  setTimeout(()=>{
+    const firstTab=document.querySelector('.tb.active');
+    if(firstTab) updateTabIndicator(firstTab);
+  },800);
+});
+
 </script>
 </body>
 </html>
