@@ -1475,6 +1475,268 @@ select option { background: var(--surface2); }
 
 /* ── HERO BANNER ── */
 #hero-banner { flex-shrink: 0; }
+
+/* ─────────────────────────────────────────
+   ELEVATE TAB
+───────────────────────────────────────── */
+/* Elevate hero */
+.elevate-hero {
+  margin:12px 16px 0;
+  background:linear-gradient(135deg,#0d0820 0%,#130a1a 100%);
+  border:1px solid rgba(187,127,255,0.2);
+  border-radius:18px;padding:16px;
+  position:relative;overflow:hidden;
+}
+.elevate-hero::before {
+  content:'';position:absolute;
+  right:-20px;top:-20px;
+  width:100px;height:100px;border-radius:50%;
+  background:radial-gradient(circle,rgba(187,127,255,0.1),transparent);
+}
+.elevate-streak-label {
+  font-size:10px;font-weight:800;
+  color:rgba(187,127,255,0.6);
+  text-transform:uppercase;letter-spacing:0.14em;margin-bottom:6px;
+}
+.elevate-streak-num {
+  font-size:28px;font-weight:900;
+  color:var(--purple);letter-spacing:-1px;line-height:1;
+}
+.elevate-hero-sub {
+  font-size:12px;color:rgba(187,127,255,0.4);
+  margin-top:6px;margin-bottom:12px;line-height:1.5;
+}
+.elevate-mini-stats {
+  display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;
+}
+.elevate-mini-stat {
+  background:rgba(187,127,255,0.07);
+  border:1px solid rgba(187,127,255,0.12);
+  border-radius:10px;padding:8px 10px;
+}
+.elevate-mini-val {
+  font-size:16px;font-weight:900;
+  color:var(--purple);letter-spacing:-0.3px;
+}
+.elevate-mini-lbl {
+  font-size:9px;font-weight:700;color:rgba(187,127,255,0.4);
+  text-transform:uppercase;letter-spacing:0.08em;margin-top:2px;
+}
+
+/* Pillar tabs */
+.elevate-pillar-btn {
+  flex-shrink:0;
+  background:var(--surface2);border:1px solid var(--border);
+  border-radius:20px;padding:6px 14px;
+  font-family:var(--fn);font-size:10px;font-weight:700;
+  color:var(--text3);cursor:pointer;
+  transition:all 0.15s;white-space:nowrap;
+  letter-spacing:0.05em;text-transform:uppercase;
+}
+.elevate-pillar-btn.active {
+  background:var(--purple-bg);
+  border-color:rgba(187,127,255,0.4);
+  color:var(--purple);
+}
+.elevate-pillar-btn:active{transform:scale(0.94);}
+
+/* Routine card */
+.routine-card {
+  background:var(--surface);border:1px solid var(--border);
+  border-radius:16px;overflow:hidden;
+  margin-bottom:12px;
+}
+.routine-header {
+  display:flex;align-items:center;justify-content:space-between;
+  padding:12px 14px;
+  background:var(--surface2);
+  border-bottom:1px solid var(--border);
+}
+.routine-title {
+  font-size:14px;font-weight:800;letter-spacing:-0.2px;
+}
+.routine-streak {
+  font-size:11px;font-weight:700;
+  color:var(--purple);
+  background:var(--purple-bg);
+  border:1px solid rgba(187,127,255,0.2);
+  border-radius:20px;padding:3px 10px;
+}
+.routine-step {
+  display:flex;align-items:center;gap:12px;
+  padding:11px 14px;
+  border-bottom:1px solid rgba(42,42,64,0.4);
+  cursor:pointer;transition:background 0.15s;
+}
+.routine-step:last-child{border-bottom:none;}
+.routine-step:active{background:var(--surface2);}
+.routine-step-check {
+  width:26px;height:26px;border-radius:50%;
+  border:1.5px solid var(--border2);
+  display:flex;align-items:center;justify-content:center;
+  flex-shrink:0;transition:all 0.2s;font-size:13px;
+}
+.routine-step-check.done {
+  background:var(--purple);border-color:transparent;
+  box-shadow:0 2px 8px var(--purple-bg);
+}
+.routine-step-info{flex:1;}
+.routine-step-name {
+  font-size:14px;font-weight:600;color:var(--text);
+}
+.routine-step-tip {
+  font-size:11px;color:var(--text3);margin-top:1px;
+}
+.routine-step-time {
+  font-size:11px;font-weight:700;color:var(--text3);
+  flex-shrink:0;
+}
+
+/* Skin progress */
+.skin-photos-grid {
+  display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:12px;
+}
+.skin-photo-slot {
+  aspect-ratio:1;border-radius:12px;
+  background:var(--surface2);border:1px solid var(--border);
+  display:flex;flex-direction:column;align-items:center;
+  justify-content:center;gap:4px;cursor:pointer;
+  overflow:hidden;position:relative;transition:all 0.15s;
+}
+.skin-photo-slot:active{border-color:var(--purple);}
+.skin-photo-slot img{width:100%;height:100%;object-fit:cover;}
+.skin-photo-label {
+  font-size:9px;font-weight:700;color:var(--text3);
+  text-transform:uppercase;letter-spacing:0.08em;
+}
+.skin-photo-date {
+  position:absolute;bottom:0;left:0;right:0;
+  background:rgba(0,0,0,0.6);
+  font-size:9px;color:white;padding:3px 6px;
+  font-weight:600;
+}
+
+/* Confidence journal */
+.journal-entry {
+  background:var(--surface);border:1px solid var(--border);
+  border-left:3px solid var(--purple);
+  border-radius:14px;padding:14px;margin-bottom:10px;
+}
+.journal-date {
+  font-size:10px;font-weight:700;color:var(--purple);
+  text-transform:uppercase;letter-spacing:0.1em;margin-bottom:6px;
+}
+.journal-text {
+  font-size:13px;color:var(--text2);line-height:1.65;
+}
+
+/* Product tracker */
+.product-row {
+  display:flex;align-items:center;gap:12px;
+  background:var(--surface);border:1px solid var(--border);
+  border-radius:14px;padding:12px 14px;margin-bottom:8px;
+}
+.product-ico {
+  width:40px;height:40px;border-radius:10px;
+  background:var(--surface2);border:1px solid var(--border);
+  display:flex;align-items:center;justify-content:center;
+  font-size:18px;flex-shrink:0;
+}
+.product-info{flex:1;min-width:0;}
+.product-name {
+  font-size:14px;font-weight:700;
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+}
+.product-when {
+  font-size:11px;color:var(--text3);margin-top:2px;font-weight:500;
+}
+
+/* Education card elevate */
+.elevate-edu-card {
+  background:var(--surface);
+  border:1px solid var(--border);
+  border-left:3px solid var(--purple);
+  border-radius:14px;padding:14px;
+  margin-bottom:10px;
+}
+.elevate-edu-title {
+  font-size:14px;font-weight:800;color:var(--text);
+  margin-bottom:5px;letter-spacing:-0.1px;
+}
+.elevate-edu-body {
+  font-size:12px;color:var(--text2);line-height:1.65;
+}
+.elevate-edu-body strong{color:var(--purple);font-weight:700;}
+
+/* Mood tracker */
+.mood-row {
+  display:flex;gap:8px;justify-content:space-between;
+  margin-bottom:12px;
+}
+.mood-btn {
+  flex:1;display:flex;flex-direction:column;align-items:center;gap:4px;
+  background:var(--surface2);border:1.5px solid var(--border);
+  border-radius:12px;padding:10px 6px;cursor:pointer;
+  transition:all 0.15s;
+}
+.mood-btn.active {
+  border-color:var(--purple);
+  background:var(--purple-bg);
+  box-shadow:0 2px 10px var(--purple-bg);
+}
+.mood-btn:active{transform:scale(0.93);}
+.mood-emoji{font-size:22px;}
+.mood-label{font-size:9px;font-weight:700;color:var(--text3);letter-spacing:0.04em;}
+.mood-btn.active .mood-label{color:var(--purple);}
+
+/* Sleep tracker */
+.sleep-card {
+  background:var(--surface);border:1px solid var(--border);
+  border-radius:16px;padding:16px;margin-bottom:12px;
+}
+.sleep-display {
+  display:flex;align-items:baseline;gap:6px;margin:8px 0 12px;
+}
+.sleep-hours {
+  font-size:42px;font-weight:900;
+  color:var(--purple);letter-spacing:-2px;line-height:1;
+}
+.sleep-unit {font-size:16px;color:var(--text3);font-weight:600;}
+.sleep-quality-row {
+  display:flex;gap:6px;margin-bottom:12px;
+}
+.sleep-q-btn {
+  flex:1;background:var(--surface2);border:1px solid var(--border);
+  border-radius:10px;padding:8px 4px;
+  font-size:11px;font-weight:700;color:var(--text3);
+  cursor:pointer;text-align:center;transition:all 0.15s;
+}
+.sleep-q-btn.active {
+  background:var(--purple-bg);border-color:rgba(187,127,255,0.4);color:var(--purple);
+}
+
+/* Body composition card */
+.body-comp-card {
+  background:var(--surface);border:1px solid var(--border);
+  border-radius:16px;padding:16px;margin-bottom:12px;
+}
+.body-comp-grid {
+  display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px;
+}
+.body-comp-stat {
+  background:var(--surface2);border:1px solid var(--border);
+  border-radius:12px;padding:12px;
+}
+.body-comp-val {
+  font-size:22px;font-weight:900;letter-spacing:-0.5px;
+}
+.body-comp-lbl {
+  font-size:9px;font-weight:700;color:var(--text3);
+  text-transform:uppercase;letter-spacing:0.08em;margin-top:3px;
+}
+.body-comp-change {
+  font-size:11px;font-weight:700;margin-top:2px;
+}
 </style>
 </head>
 <body>
@@ -1866,6 +2128,29 @@ select option { background: var(--surface2); }
   </div>
 </div>
 
+
+<!-- ========== ELEVATE SCREEN ========== -->
+<div id="sel" class="screen gone" style="display:flex;flex-direction:column;">
+  <div class="ph">
+    <div class="ph-left">
+      <div class="ph-title">ELEVATE</div>
+      <div class="ph-sub">Look good. Feel good. Be you.</div>
+    </div>
+    <div style="display:flex;gap:6px;">
+      <button class="hdr-icon-btn" onclick="toggleTheme()">🌙</button>
+      <button class="hdr-icon-btn" onclick="go('s',null)">⚙️</button>
+    </div>
+  </div>
+  <div style="flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;">
+    <!-- Elevate hero banner -->
+    <div id="elevate-hero"></div>
+    <!-- Pillar tab strip -->
+    <div style="display:flex;gap:8px;padding:12px 16px 0;overflow-x:auto;scrollbar-width:none;" id="elevate-pillars"></div>
+    <!-- Pillar content -->
+    <div class="scroll-body" id="elevate-content"></div>
+  </div>
+</div>
+
 <!-- TAB BAR -->
 <div class="tab-bar">
   <button class="tb active" id="tb-w" onclick="go('w',this)">
@@ -1887,6 +2172,10 @@ select option { background: var(--surface2); }
   <button class="tb" id="tb-p" onclick="go('p',this)">
     <svg fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
     <span class="tb-lbl">Progress</span>
+  </button>
+  <button class="tb" id="tb-el" onclick="go('el',this)">
+    <svg fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M12 2l2.4 7.4H22l-6.2 4.5 2.4 7.4L12 17l-6.2 4.3 2.4-7.4L2 9.4h7.6z"/></svg>
+    <span class="tb-lbl">Elevate</span>
   </button>
 </div>
 </div>
@@ -2273,7 +2562,7 @@ function fmtDate(iso){const d=new Date(iso+'T12:00:00');return DS[d.getDay()]+' 
 function kcalCard(type,mins,w=70){const ct=CTYPES.find(c=>c.id===type)||{met:6};return Math.round(ct.met*w*(mins/60));}
 
 // ============ TABS ============
-const SM={w:'sw',e:'se',c:'sc',n:'sn',p:'sp'};
+const SM={w:'sw',e:'se',c:'sc',n:'sn',p:'sp',el:'sel'};
 function go(k,el){
   // Settings opens as a slide-over, not a tab
   if(k==='s'){
@@ -2291,6 +2580,7 @@ function go(k,el){
   if(k==='n')renderNut();
   if(k==='p')renderProgress();
   if(k==='w')renderWorkout();
+  if(k==='el')renderElevate();
 }
 
 // ============ WORKOUT ============
@@ -3765,6 +4055,621 @@ function renderHeroBanner(){
     </div>`;
 }
 // ============ END HERO BANNER ============
+
+// ============================================================
+//  ELEVATE TAB — Look Good. Feel Good. Be You.
+// ============================================================
+
+// ── Data structure ──
+function freshElevate(){
+  return {
+    activePillar: 'skin',
+    // Grooming routines
+    morningRoutine: [
+      {id:'m1',name:'Cleanser',tip:'Wash face with lukewarm water',time:'1 min',done:false},
+      {id:'m2',name:'Moisturiser',tip:'Apply SPF moisturiser daily — most important step',time:'30 sec',done:false},
+      {id:'m3',name:'Eye cream',tip:'Tap gently — never rub the eye area',time:'20 sec',done:false},
+      {id:'m4',name:'Sunscreen SPF 50+',tip:'Non-negotiable. Sun damage is the #1 cause of ageing',time:'30 sec',done:false},
+    ],
+    eveningRoutine: [
+      {id:'e1',name:'Double cleanse',tip:'Oil cleanser first to remove SPF, then foam cleanser',time:'2 min',done:false},
+      {id:'e2',name:'Toner/essence',tip:'Hydrating toner on damp skin locks in moisture',time:'30 sec',done:false},
+      {id:'e3',name:'Serum',tip:'Vitamin C morning, retinol or niacinamide evening',time:'30 sec',done:false},
+      {id:'e4',name:'Night moisturiser',tip:'Skin repairs overnight — this is when products work hardest',time:'30 sec',done:false},
+    ],
+    routineStreak: 0,
+    lastRoutineDate: '',
+    // Skin progress photos
+    skinPhotos: [],
+    // Products
+    products: [],
+    // Mood log
+    moodLog: [],
+    // Sleep log
+    sleepLog: [],
+    // Journal entries
+    journal: [],
+    // Body measurements
+    measurements: [],
+    // Grooming streak
+    groomingStreak: 0,
+  };
+}
+
+// Load/save elevate state
+function loadElevate(){
+  try{ return {...freshElevate(),...JSON.parse(localStorage.getItem('ft_elevate')||'{}')}; }
+  catch(e){ return freshElevate(); }
+}
+function saveElevate(ev){ localStorage.setItem('ft_elevate',JSON.stringify(ev)); }
+
+let EV = loadElevate();
+
+// Pillars config
+const ELEVATE_PILLARS = [
+  {id:'skin',   icon:'🧴', label:'Skin'},
+  {id:'mind',   icon:'🧠', label:'Mind'},
+  {id:'body',   icon:'📊', label:'Body'},
+  {id:'style',  icon:'👕', label:'Style'},
+  {id:'learn',  icon:'📚', label:'Learn'},
+];
+
+// ── Education content ──
+const ELEVATE_EDU = {
+  skin:[
+    {title:'SPF is the only anti-ageing product that actually works',
+     body:'UV radiation causes 90% of visible skin ageing. <strong>Sunscreen daily</strong> — even indoors, even on cloudy days. SPF 50+ broad spectrum. This one habit has more impact than any serum or treatment.'},
+    {title:'Retinol — the gold standard ingredient',
+     body:'Retinol (Vitamin A) is the most evidence-backed skincare ingredient after SPF. It <strong>speeds cell turnover</strong>, reduces lines and improves texture. Start 2x/week, work up slowly. Always use at night — it breaks down in sunlight.'},
+    {title:'Hydration vs moisturisation — they are different',
+     body:'Hydration = water content in skin cells. Moisturisation = sealing that water in. <strong>Hyaluronic acid hydrates</strong>. Shea butter and ceramides moisturise. You need both. Apply hyaluronic acid to damp skin for maximum absorption.'},
+    {title:'The order of skincare products matters',
+     body:'Always apply thinnest to thickest: <strong>cleanser → toner → serum → eye cream → moisturiser → SPF</strong>. Thicker products block absorption of thinner ones applied after them.'},
+    {title:'Sleep is your best skincare product',
+     body:'Skin repairs itself almost entirely during sleep. Growth hormone peaks at night. <strong>7-9 hours consistently</strong> reduces cortisol which causes inflammation and breakouts. No serum replaces good sleep.'},
+  ],
+  mind:[
+    {title:'Confidence is built in the gym, maintained everywhere else',
+     body:'Exercise increases testosterone, reduces cortisol and releases endorphins. Training consistently for <strong>8-12 weeks</strong> creates measurable changes in posture, energy and confidence that other people notice before you do.'},
+    {title:'The posture-confidence connection is real',
+     body:'Research shows that standing tall <strong>increases testosterone by up to 20%</strong> and decreases cortisol. Your body posture changes your hormone levels. Fix your posture and your mindset follows.'},
+    {title:'Social confidence comes from competence',
+     body:'The fastest route to social confidence is becoming genuinely good at things. Training, building skills, pursuing goals — <strong>competence creates confidence</strong>. There are no shortcuts, but the gym is the most reliable starting point.'},
+    {title:'Sleep and mental performance',
+     body:'One night of poor sleep reduces emotional regulation, decision making and social reading ability significantly. <strong>Tired people appear less confident</strong> to others. Sleep is not optional for peak performance.'},
+    {title:'The one-degree rule for habits',
+     body:'You do not rise to the level of your goals. You fall to the level of your systems. <strong>One small habit done daily</strong> — moisturiser, sunscreen, 5 min journal — compounds into dramatic results over 90 days.'},
+  ],
+  body:[
+    {title:'Body recomposition — lose fat and build muscle simultaneously',
+     body:'This is possible for beginners and people returning after a break. <strong>Eat at or near maintenance, prioritise protein (2g/kg), train consistently</strong>. The scale may not move but your body composition changes dramatically.'},
+    {title:'Why the scale is misleading',
+     body:'Muscle weighs more than fat by volume. A person gaining muscle and losing fat may see no change on the scale for weeks while <strong>dramatically changing their appearance</strong>. Progress photos and measurements tell the real story.'},
+    {title:'Muscle takes longer than you think to build',
+     body:'Natural muscle gain is approximately <strong>1-2kg per month maximum</strong> for beginners with perfect training and nutrition. For intermediate lifters, much less. Manage expectations and measure over 90+ days, not weeks.'},
+    {title:'Body fat distribution is largely genetic — training is not',
+     body:'Where your body stores fat is genetic. How much fat your body stores is controllable. <strong>Focus on what you can control</strong> — consistency in training and nutrition — and let genetics handle the rest.'},
+    {title:'Measurements reveal what scales hide',
+     body:'Measure chest, waist, hips, arms and thighs monthly. Track with photos taken in <strong>the same lighting, same time of day, same pose</strong>. Real progress becomes undeniable over 90 days of consistent effort.'},
+  ],
+  style:[
+    {title:'Fit is the only thing that matters in clothing',
+     body:'A £20 t-shirt that fits perfectly looks better than a £200 one that does not. <strong>Shoulder seams at the shoulder, chest room to move, no excess fabric at the waist</strong>. Tailoring cheap clothes gives premium results.'},
+    {title:'Build a capsule wardrobe not a full wardrobe',
+     body:'10-15 versatile pieces that all work together outperform 50 pieces that mostly do not. <strong>Black, white, navy, grey and one accent colour</strong>. Every item should pair with at least 3 others you own.'},
+    {title:'Shoes are noticed more than any other item',
+     body:'Studies show shoes are one of the first things people notice. Clean, minimal trainers or quality leather shoes <strong>elevate any outfit</strong>. One good pair outperforms five mediocre pairs.'},
+    {title:'Grooming makes clothing work harder',
+     body:'A well-fitted outfit worn by someone with good skin, neat hair and good posture looks premium. The same outfit on someone dishevelled looks ordinary. <strong>Grooming multiplies the effect of clothing</strong>.'},
+    {title:'Dress for the body you have now',
+     body:'Wearing oversized clothing to hide your body sends the wrong signal and usually looks worse. <strong>Clothes that fit your current body</strong> look significantly better than clothes that might fit a future body.'},
+  ],
+  learn:[
+    {title:'The compound effect of daily habits',
+     body:'Doing 1% better each day means you are <strong>37 times better after one year</strong>. The opposite is also true. The difference between your current self and your best self is almost entirely habit accumulation over time.'},
+    {title:'Identity-based habits vs outcome-based habits',
+     body:'Instead of "I want clear skin", say <strong>"I am someone who takes care of their skin"</strong>. Every time you follow your routine you cast a vote for that identity. Identity precedes behaviour change.'},
+    {title:'Why most self-improvement fails',
+     body:'People overestimate what they can do in 30 days and underestimate what they can do in a year. Expecting dramatic results in weeks leads to quitting. <strong>Expect nothing for 60 days, then watch 90-180 compound</strong>.'},
+    {title:'The role of sleep in everything',
+     body:'Sleep affects skin repair, muscle growth, fat loss, mental clarity, confidence and social performance. It is the single highest-leverage habit in self-improvement. <strong>7-9 hours is not optional</strong>, it is the foundation.'},
+    {title:'You vs you only',
+     body:'Comparing yourself to others is information you cannot use — you cannot control their genetics, circumstances or starting point. <strong>Compare yourself to who you were last month</strong>. That is the only race that matters.'},
+  ],
+};
+
+let elevateEduIdx = {skin:0,mind:0,body:0,style:0,learn:0};
+
+// ── Main render function ──
+function renderElevate(){
+  EV = loadElevate();
+  renderElevateHero();
+  renderElevatePillars();
+  renderElevateContent();
+}
+
+function renderElevateHero(){
+  const el = document.getElementById('elevate-hero');
+  if(!el) return;
+  const streak = calcElevateStreak();
+  const todayMood = EV.moodLog.find(m=>m.date===today());
+  const lastSleep = EV.sleepLog.length ? EV.sleepLog[EV.sleepLog.length-1] : null;
+  const routineDone = EV.morningRoutine.filter(s=>s.done).length + EV.eveningRoutine.filter(s=>s.done).length;
+  const routineTotal = EV.morningRoutine.length + EV.eveningRoutine.length;
+
+  el.innerHTML = `
+    <div class="elevate-hero">
+      <div class="elevate-streak-label">✨ Elevate streak</div>
+      <div class="elevate-streak-num">${streak} days</div>
+      <div class="elevate-hero-sub">Feel good first. Look good follows.</div>
+      <div class="elevate-mini-stats">
+        <div class="elevate-mini-stat">
+          <div class="elevate-mini-val">${routineDone}/${routineTotal}</div>
+          <div class="elevate-mini-lbl">Routine</div>
+        </div>
+        <div class="elevate-mini-stat">
+          <div class="elevate-mini-val">${todayMood ? todayMood.emoji : '—'}</div>
+          <div class="elevate-mini-lbl">Mood</div>
+        </div>
+        <div class="elevate-mini-stat">
+          <div class="elevate-mini-val">${lastSleep ? lastSleep.hours+'h' : '—'}</div>
+          <div class="elevate-mini-lbl">Sleep</div>
+        </div>
+      </div>
+    </div>`;
+}
+
+function calcElevateStreak(){
+  // Simple streak based on days with any elevate activity
+  const dates = new Set([
+    ...EV.moodLog.map(m=>m.date),
+    ...EV.sleepLog.map(s=>s.date),
+    ...EV.journal.map(j=>j.date),
+  ]);
+  let streak=0, d=new Date();
+  while(true){
+    const ds=d.toISOString().slice(0,10);
+    if(dates.has(ds)){ streak++; d.setDate(d.getDate()-1); }
+    else break;
+  }
+  return streak;
+}
+
+function renderElevatePillars(){
+  const el = document.getElementById('elevate-pillars');
+  if(!el) return;
+  el.innerHTML = ELEVATE_PILLARS.map(p=>
+    `<button class="elevate-pillar-btn ${EV.activePillar===p.id?'active':''}" onclick="setElevatePillar('${p.id}')">
+      ${p.icon} ${p.label}
+    </button>`
+  ).join('');
+}
+
+function setElevatePillar(id){
+  EV.activePillar = id;
+  saveElevate(EV);
+  renderElevatePillars();
+  renderElevateContent();
+  haptic('light');
+}
+
+function renderElevateContent(){
+  const el = document.getElementById('elevate-content');
+  if(!el) return;
+  const p = EV.activePillar;
+  if(p==='skin') el.innerHTML = renderSkinPillar();
+  else if(p==='mind') el.innerHTML = renderMindPillar();
+  else if(p==='body') el.innerHTML = renderBodyPillar();
+  else if(p==='style') el.innerHTML = renderStylePillar();
+  else if(p==='learn') el.innerHTML = renderLearnPillar();
+}
+
+// ── SKIN PILLAR ──
+function renderSkinPillar(){
+  const morningDone = EV.morningRoutine.filter(s=>s.done).length;
+  const eveningDone = EV.eveningRoutine.filter(s=>s.done).length;
+  const edu = ELEVATE_EDU.skin[elevateEduIdx.skin];
+
+  return `
+    <div class="sec-head">MORNING ROUTINE</div>
+    <div class="routine-card">
+      <div class="routine-header">
+        <div class="routine-title">☀️ Morning</div>
+        <div class="routine-streak">${morningDone}/${EV.morningRoutine.length} done</div>
+      </div>
+      ${EV.morningRoutine.map((step,i)=>`
+        <div class="routine-step" onclick="toggleRoutineStep('morning',${i})">
+          <div class="routine-step-check ${step.done?'done':''}">
+            ${step.done?'✓':''}
+          </div>
+          <div class="routine-step-info">
+            <div class="routine-step-name" style="${step.done?'text-decoration:line-through;color:var(--text3);':''}">${step.name}</div>
+            <div class="routine-step-tip">${step.tip}</div>
+          </div>
+          <div class="routine-step-time">${step.time}</div>
+        </div>`).join('')}
+    </div>
+
+    <div class="sec-head">EVENING ROUTINE</div>
+    <div class="routine-card">
+      <div class="routine-header">
+        <div class="routine-title">🌙 Evening</div>
+        <div class="routine-streak">${eveningDone}/${EV.eveningRoutine.length} done</div>
+      </div>
+      ${EV.eveningRoutine.map((step,i)=>`
+        <div class="routine-step" onclick="toggleRoutineStep('evening',${i})">
+          <div class="routine-step-check ${step.done?'done':''}">
+            ${step.done?'✓':''}
+          </div>
+          <div class="routine-step-info">
+            <div class="routine-step-name" style="${step.done?'text-decoration:line-through;color:var(--text3);':''}">${step.name}</div>
+            <div class="routine-step-tip">${step.tip}</div>
+          </div>
+          <div class="routine-step-time">${step.time}</div>
+        </div>`).join('')}
+    </div>
+
+    <div class="sec-head">SKIN KNOWLEDGE</div>
+    <div class="elevate-edu-card">
+      <div class="elevate-edu-title">${edu.title}</div>
+      <div class="elevate-edu-body">${edu.body}</div>
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-top:12px;">
+        <button class="btn-ghost" style="width:auto;padding:6px 14px;font-size:11px;" onclick="prevElevateEdu('skin')">← Prev</button>
+        <div style="display:flex;gap:4px;">
+          ${ELEVATE_EDU.skin.map((_,i)=>`<div style="width:${i===elevateEduIdx.skin?'16':'6'}px;height:6px;border-radius:3px;background:${i===elevateEduIdx.skin?'var(--purple)':'var(--border2)'};transition:all 0.2s;"></div>`).join('')}
+        </div>
+        <button class="btn-ghost" style="width:auto;padding:6px 14px;font-size:11px;" onclick="nextElevateEdu('skin')">Next →</button>
+      </div>
+    </div>
+
+    <div class="sec-head">SKIN PROGRESS PHOTOS</div>
+    <div style="background:var(--surface2);border:1px solid var(--border);border-radius:14px;padding:12px;margin-bottom:12px;">
+      <div style="font-size:12px;color:var(--text3);margin-bottom:10px;line-height:1.6;">
+        📸 Take photos in the same lighting, same distance, same time of day for accurate comparison.
+      </div>
+      <button class="btn-accent" onclick="addSkinPhoto()" style="font-size:13px;padding:12px;">
+        + Add Skin Progress Photo
+      </button>
+    </div>
+    ${EV.skinPhotos.slice(-3).map((p,i)=>`
+      <div class="skin-photo-slot" style="aspect-ratio:unset;flex-direction:row;gap:10px;padding:10px 12px;background:var(--surface);border-radius:12px;margin-bottom:8px;">
+        <div style="font-size:20px;">📷</div>
+        <div>
+          <div style="font-size:12px;font-weight:700;color:var(--text);">${p.label||'Progress photo'}</div>
+          <div style="font-size:11px;color:var(--text3);margin-top:1px;">${p.date}</div>
+        </div>
+      </div>`).join('')}
+  `;
+}
+
+// ── MIND PILLAR ──
+function renderMindPillar(){
+  const todayMood = EV.moodLog.find(m=>m.date===today());
+  const lastSleep = EV.sleepLog.length ? EV.sleepLog[EV.sleepLog.length-1] : null;
+  const edu = ELEVATE_EDU.mind[elevateEduIdx.mind];
+  const moods = [
+    {emoji:'😴',label:'Tired'},
+    {emoji:'😐',label:'Okay'},
+    {emoji:'🙂',label:'Good'},
+    {emoji:'😊',label:'Great'},
+    {emoji:'🔥',label:'Elite'},
+  ];
+
+  return `
+    <div class="sec-head">TODAY'S MOOD</div>
+    <div style="background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:14px;margin-bottom:12px;">
+      <div style="font-size:12px;color:var(--text3);margin-bottom:10px;">How are you feeling today?</div>
+      <div class="mood-row">
+        ${moods.map(m=>`
+          <div class="mood-btn ${todayMood&&todayMood.emoji===m.emoji?'active':''}" onclick="logMood('${m.emoji}','${m.label}')">
+            <div class="mood-emoji">${m.emoji}</div>
+            <div class="mood-label">${m.label}</div>
+          </div>`).join('')}
+      </div>
+      ${todayMood?`<div style="font-size:12px;color:var(--purple);font-weight:600;text-align:center;">Logged: ${todayMood.emoji} ${todayMood.label}</div>`:''}
+    </div>
+
+    <div class="sec-head">SLEEP TRACKER</div>
+    <div class="sleep-card">
+      <div style="font-size:12px;color:var(--text3);">Last night's sleep</div>
+      <div class="sleep-display">
+        <div class="sleep-hours" id="sleep-hrs-display">${lastSleep?lastSleep.hours:'7'}</div>
+        <div class="sleep-unit">hours</div>
+      </div>
+      <input type="range" min="3" max="12" step="0.5" value="${lastSleep?lastSleep.hours:7}"
+        id="sleep-slider"
+        oninput="document.getElementById('sleep-hrs-display').textContent=parseFloat(this.value).toFixed(1)"
+        style="width:100%;margin-bottom:12px;"/>
+      <div style="font-size:11px;color:var(--text3);margin-bottom:8px;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;">Quality</div>
+      <div class="sleep-quality-row">
+        ${['Poor','Fair','Good','Great','Perfect'].map(q=>`
+          <div class="sleep-q-btn ${lastSleep&&lastSleep.quality===q?'active':''}" id="sleepq-${q}" onclick="selectSleepQuality('${q}')">${q}</div>`).join('')}
+      </div>
+      <button class="btn-accent" onclick="logSleep()" style="font-size:13px;padding:12px;margin-top:4px;">Log Sleep</button>
+    </div>
+
+    <div class="sec-head">CONFIDENCE JOURNAL</div>
+    <div style="background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:14px;margin-bottom:12px;">
+      <div style="font-size:13px;color:var(--purple);font-weight:700;margin-bottom:8px;">Today's prompt:</div>
+      <div style="font-size:13px;color:var(--text2);margin-bottom:12px;line-height:1.6;font-style:italic;">"${getDailyJournalPrompt()}"</div>
+      <textarea id="journal-input" placeholder="Write your thoughts..." rows="3"
+        style="width:100%;background:var(--surface2);border:1px solid var(--border);border-radius:10px;color:var(--text);font-family:var(--fb);font-size:13px;padding:10px 12px;outline:none;resize:none;"></textarea>
+      <button class="btn-accent" onclick="saveJournalEntry()" style="font-size:13px;padding:12px;margin-top:8px;">Save Entry</button>
+    </div>
+    ${EV.journal.slice(-2).reverse().map(j=>`
+      <div class="journal-entry">
+        <div class="journal-date">${j.date}</div>
+        <div class="journal-text">${j.text}</div>
+      </div>`).join('')}
+
+    <div class="sec-head">MIND KNOWLEDGE</div>
+    <div class="elevate-edu-card">
+      <div class="elevate-edu-title">${edu.title}</div>
+      <div class="elevate-edu-body">${edu.body}</div>
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-top:12px;">
+        <button class="btn-ghost" style="width:auto;padding:6px 14px;font-size:11px;" onclick="prevElevateEdu('mind')">← Prev</button>
+        <button class="btn-ghost" style="width:auto;padding:6px 14px;font-size:11px;" onclick="nextElevateEdu('mind')">Next →</button>
+      </div>
+    </div>
+  `;
+}
+
+// ── BODY PILLAR ──
+function renderBodyPillar(){
+  const edu = ELEVATE_EDU.body[elevateEduIdx.body];
+  const lastWeight = S.weightLog.length ? [...S.weightLog].sort((a,b)=>b.date.localeCompare(a.date))[0] : null;
+  const lastMeas = EV.measurements.length ? EV.measurements[EV.measurements.length-1] : null;
+
+  return `
+    <div class="sec-head">BODY COMPOSITION</div>
+    <div class="body-comp-card">
+      <div style="font-size:13px;font-weight:800;color:var(--text);margin-bottom:4px;">90-Day Recomposition Tracker</div>
+      <div style="font-size:11px;color:var(--text3);margin-bottom:0;">Weight + measurements + photos — the full picture</div>
+      <div class="body-comp-grid">
+        <div class="body-comp-stat">
+          <div class="body-comp-val" style="color:var(--purple);">${lastWeight?lastWeight.kg+'kg':'—'}</div>
+          <div class="body-comp-lbl">Weight</div>
+          <div class="body-comp-change" style="color:var(--text3);">From Progress tab</div>
+        </div>
+        <div class="body-comp-stat">
+          <div class="body-comp-val" style="color:var(--teal);">${lastMeas?lastMeas.chest+'"':'—'}</div>
+          <div class="body-comp-lbl">Chest</div>
+          <div class="body-comp-change" style="color:var(--text3);">${lastMeas?lastMeas.date:'Not logged'}</div>
+        </div>
+        <div class="body-comp-stat">
+          <div class="body-comp-val" style="color:var(--orange);">${lastMeas?lastMeas.waist+'"':'—'}</div>
+          <div class="body-comp-lbl">Waist</div>
+          <div class="body-comp-change"></div>
+        </div>
+        <div class="body-comp-stat">
+          <div class="body-comp-val" style="color:var(--blue);">${lastMeas?lastMeas.arms+'"':'—'}</div>
+          <div class="body-comp-lbl">Arms</div>
+          <div class="body-comp-change"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="sec-head">LOG MEASUREMENTS</div>
+    <div style="background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:14px;margin-bottom:12px;">
+      <div class="grid2" style="gap:10px;margin-bottom:10px;">
+        <div><label class="fl-lbl">Chest (inches)</label><input type="number" id="meas-chest" placeholder="e.g. 38" step="0.5"/></div>
+        <div><label class="fl-lbl">Waist (inches)</label><input type="number" id="meas-waist" placeholder="e.g. 32" step="0.5"/></div>
+        <div><label class="fl-lbl">Arms (inches)</label><input type="number" id="meas-arms" placeholder="e.g. 14" step="0.5"/></div>
+        <div><label class="fl-lbl">Thighs (inches)</label><input type="number" id="meas-thighs" placeholder="e.g. 22" step="0.5"/></div>
+      </div>
+      <button class="btn-accent" onclick="logMeasurements()" style="font-size:13px;padding:12px;">Save Measurements</button>
+    </div>
+
+    <div class="sec-head">BODY KNOWLEDGE</div>
+    <div class="elevate-edu-card">
+      <div class="elevate-edu-title">${edu.title}</div>
+      <div class="elevate-edu-body">${edu.body}</div>
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-top:12px;">
+        <button class="btn-ghost" style="width:auto;padding:6px 14px;font-size:11px;" onclick="prevElevateEdu('body')">← Prev</button>
+        <button class="btn-ghost" style="width:auto;padding:6px 14px;font-size:11px;" onclick="nextElevateEdu('body')">Next →</button>
+      </div>
+    </div>
+  `;
+}
+
+// ── STYLE PILLAR ──
+function renderStylePillar(){
+  const edu = ELEVATE_EDU.style[elevateEduIdx.style];
+  const bodyTypes = [
+    {id:'ecto',name:'Ectomorph',desc:'Slim, lean build. Narrow shoulders and hips.',tips:['Go slim-fit — baggy swamps your frame','Layering adds visual bulk','Horizontal stripes work for you','Avoid oversized everything']},
+    {id:'meso',name:'Mesomorph',desc:'Athletic, muscular build. Shoulders wider than hips.',tips:['Almost everything fits well — advantage','V-neck emphasises shoulder-to-waist ratio','Slim fit trousers show your athletic legs','Avoid boxy cuts that hide your shape']},
+    {id:'endo',name:'Endomorph',desc:'Broader, rounder build. Carries weight more easily.',tips:['Vertical patterns create length','Dark colours on bottom half','Structure is your friend — avoid shapeless','Slim trousers with a relaxed top']},
+  ];
+  const s = loadSettings();
+
+  return `
+    <div class="sec-head">YOUR BODY TYPE</div>
+    <div style="background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:14px;margin-bottom:12px;">
+      <div style="font-size:12px;color:var(--text3);margin-bottom:12px;line-height:1.5;">Select your body type for personalised fit guidance. This is about clothing, not genetics.</div>
+      ${bodyTypes.map(bt=>`
+        <div style="background:${EV.bodyType===bt.id?'var(--purple-bg)':'var(--surface2)'};border:1px solid ${EV.bodyType===bt.id?'rgba(187,127,255,0.4)':'var(--border)'};border-radius:12px;padding:12px;margin-bottom:8px;cursor:pointer;transition:all 0.15s;" onclick="setBodyType('${bt.id}')">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:4px;">
+            <div style="font-size:14px;font-weight:800;color:${EV.bodyType===bt.id?'var(--purple)':'var(--text)'};">${bt.name}</div>
+            ${EV.bodyType===bt.id?'<div style="font-size:10px;font-weight:800;color:var(--purple);background:var(--purple-bg);border:1px solid rgba(187,127,255,0.3);border-radius:20px;padding:2px 8px;letter-spacing:0.06em;">SELECTED</div>':''}
+          </div>
+          <div style="font-size:12px;color:var(--text3);margin-bottom:${EV.bodyType===bt.id?8:0}px;">${bt.desc}</div>
+          ${EV.bodyType===bt.id?`<div>${bt.tips.map(t=>`<div style="font-size:12px;color:var(--purple);margin-top:4px;">✓ ${t}</div>`).join('')}</div>`:''}
+        </div>`).join('')}
+    </div>
+
+    <div class="sec-head">CAPSULE WARDROBE ESSENTIALS</div>
+    <div style="background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:14px;margin-bottom:12px;">
+      ${[
+        ['White t-shirt','The most versatile piece. Fits everything.','✓'],
+        ['Black t-shirt','Dark essential. Slimming and clean.','✓'],
+        ['Dark slim jeans','Goes gym to street instantly.','✓'],
+        ['Chinos (navy or beige)','Smarter than jeans, casual enough daily.','✓'],
+        ['Clean white trainers','Elevate any casual outfit.','✓'],
+        ['Minimal hoodie','FitTrack brand. Black base.','✓'],
+        ['Oxford shirt (white or light blue)','One smart option for any occasion.','✓'],
+      ].map(([name,desc,icon])=>`
+        <div style="display:flex;gap:10px;align-items:center;padding:8px 0;border-bottom:1px solid var(--border);">
+          <div style="width:22px;height:22px;border-radius:50%;background:var(--purple-bg);border:1px solid rgba(187,127,255,0.3);display:flex;align-items:center;justify-content:center;font-size:11px;color:var(--purple);font-weight:800;flex-shrink:0;">${icon}</div>
+          <div>
+            <div style="font-size:13px;font-weight:700;color:var(--text);">${name}</div>
+            <div style="font-size:11px;color:var(--text3);">${desc}</div>
+          </div>
+        </div>`).join('')}
+    </div>
+
+    <div class="sec-head">STYLE KNOWLEDGE</div>
+    <div class="elevate-edu-card">
+      <div class="elevate-edu-title">${edu.title}</div>
+      <div class="elevate-edu-body">${edu.body}</div>
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-top:12px;">
+        <button class="btn-ghost" style="width:auto;padding:6px 14px;font-size:11px;" onclick="prevElevateEdu('style')">← Prev</button>
+        <button class="btn-ghost" style="width:auto;padding:6px 14px;font-size:11px;" onclick="nextElevateEdu('style')">Next →</button>
+      </div>
+    </div>
+  `;
+}
+
+// ── LEARN PILLAR ──
+function renderLearnPillar(){
+  const edu = ELEVATE_EDU.learn[elevateEduIdx.learn];
+  return `
+    <div class="sec-head">SELF-OPTIMISATION PRINCIPLES</div>
+    <div class="elevate-edu-card">
+      <div class="elevate-edu-title">${edu.title}</div>
+      <div class="elevate-edu-body">${edu.body}</div>
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-top:12px;">
+        <button class="btn-ghost" style="width:auto;padding:6px 14px;font-size:11px;" onclick="prevElevateEdu('learn')">← Prev</button>
+        <div style="font-size:11px;color:var(--text3);">${elevateEduIdx.learn+1} / ${ELEVATE_EDU.learn.length}</div>
+        <button class="btn-ghost" style="width:auto;padding:6px 14px;font-size:11px;" onclick="nextElevateEdu('learn')">Next →</button>
+      </div>
+    </div>
+
+    <div class="sec-head">THE FITTRACK PHILOSOPHY</div>
+    ${[
+      ['You vs you only','No rankings, no ratings, no comparisons to others. Your only competition is who you were yesterday.'],
+      ['Feel good first','Looking good is a side effect of consistent healthy habits. Chase the habits, not the outcome.'],
+      ['Science over trends','Every recommendation in Elevate is backed by research, not internet culture or pseudoscience.'],
+      ['Compound consistency','One percent better daily. The results compound over 90-180 days in ways that feel almost unbelievable.'],
+      ['Complete self-improvement','Fitness, nutrition, skin, style, sleep, confidence. All connected. All tracked. All improving together.'],
+    ].map(([title,body])=>`
+      <div style="background:var(--surface);border:1px solid var(--border);border-left:3px solid var(--purple);border-radius:14px;padding:14px;margin-bottom:10px;">
+        <div style="font-size:13px;font-weight:800;color:var(--purple);margin-bottom:5px;">${title}</div>
+        <div style="font-size:12px;color:var(--text2);line-height:1.65;">${body}</div>
+      </div>`).join('')}
+  `;
+}
+
+// ── Helper functions ──
+function toggleRoutineStep(type, idx){
+  EV = loadElevate();
+  if(type==='morning') EV.morningRoutine[idx].done = !EV.morningRoutine[idx].done;
+  else EV.eveningRoutine[idx].done = !EV.eveningRoutine[idx].done;
+  saveElevate(EV);
+  haptic('light');
+  renderElevateContent();
+  renderElevateHero();
+  const done = EV.morningRoutine.filter(s=>s.done).length + EV.eveningRoutine.filter(s=>s.done).length;
+  const total = EV.morningRoutine.length + EV.eveningRoutine.length;
+  if(done===total){ toast('Routine complete! 🌟'); haptic('success'); }
+}
+
+function logMood(emoji, label){
+  EV = loadElevate();
+  EV.moodLog = EV.moodLog.filter(m=>m.date!==today());
+  EV.moodLog.push({date:today(),emoji,label});
+  saveElevate(EV);
+  haptic('light');
+  renderElevateContent();
+  renderElevateHero();
+  toast(`Mood logged: ${emoji}`);
+}
+
+let selectedSleepQuality = 'Good';
+function selectSleepQuality(q){
+  selectedSleepQuality = q;
+  document.querySelectorAll('.sleep-q-btn').forEach(b=>{
+    b.classList.toggle('active', b.id===`sleepq-${q}`);
+  });
+}
+
+function logSleep(){
+  EV = loadElevate();
+  const hrs = parseFloat(document.getElementById('sleep-slider')?.value||7);
+  EV.sleepLog = EV.sleepLog.filter(s=>s.date!==today());
+  EV.sleepLog.push({date:today(),hours:hrs,quality:selectedSleepQuality});
+  saveElevate(EV);
+  haptic('success');
+  toast(`Sleep logged: ${hrs}h — ${selectedSleepQuality}`);
+  renderElevateContent();
+  renderElevateHero();
+}
+
+function saveJournalEntry(){
+  EV = loadElevate();
+  const inp = document.getElementById('journal-input');
+  if(!inp||!inp.value.trim()){ toast('Write something first'); return; }
+  EV.journal.push({date:today(),text:inp.value.trim(),prompt:getDailyJournalPrompt()});
+  saveElevate(EV);
+  haptic('success');
+  toast('Journal saved ✍️');
+  renderElevateContent();
+}
+
+function logMeasurements(){
+  EV = loadElevate();
+  const get = id => parseFloat(document.getElementById(id)?.value)||0;
+  const meas = {date:today(),chest:get('meas-chest'),waist:get('meas-waist'),arms:get('meas-arms'),thighs:get('meas-thighs')};
+  if(!meas.chest&&!meas.waist){ toast('Enter at least one measurement'); return; }
+  EV.measurements.push(meas);
+  saveElevate(EV);
+  haptic('success');
+  toast('Measurements saved 📏');
+  renderElevateContent();
+}
+
+function setBodyType(type){
+  EV = loadElevate();
+  EV.bodyType = type;
+  saveElevate(EV);
+  haptic('light');
+  renderElevateContent();
+}
+
+function addSkinPhoto(){
+  EV = loadElevate();
+  EV.skinPhotos.push({date:today(),label:'Skin progress'});
+  saveElevate(EV);
+  toast('Photo logged 📸');
+  renderElevateContent();
+}
+
+function nextElevateEdu(pillar){
+  elevateEduIdx[pillar] = (elevateEduIdx[pillar]+1)%ELEVATE_EDU[pillar].length;
+  haptic('light');
+  renderElevateContent();
+}
+function prevElevateEdu(pillar){
+  elevateEduIdx[pillar] = (elevateEduIdx[pillar]-1+ELEVATE_EDU[pillar].length)%ELEVATE_EDU[pillar].length;
+  haptic('light');
+  renderElevateContent();
+}
+
+const JOURNAL_PROMPTS = [
+  'What is one thing you did today that made you feel more like the person you want to be?',
+  'What physical or mental habit are you most proud of building this month?',
+  'Describe a moment this week where you felt genuinely confident.',
+  'What is one thing you would tell your past self from 90 days ago?',
+  'What does your best self look, feel and act like? Describe them in detail.',
+  'What habit, if you did it daily for a year, would change your life the most?',
+  'What is one thing about yourself that you have improved — no matter how small?',
+];
+function getDailyJournalPrompt(){
+  return JOURNAL_PROMPTS[new Date().getDate() % JOURNAL_PROMPTS.length];
+}
+// ============================================================
+// END ELEVATE
+// ============================================================
+
 // ============ REST TIMER ============
 let tInt=null,tTot=90,tLeft=90;
 function startTimer(s){clearInterval(tInt);tTot=s;tLeft=s;updTimer();document.getElementById('rest-ov').classList.add('open');tInt=setInterval(()=>{tLeft--;updTimer();if(tLeft<=0){clearInterval(tInt);toast('Rest done! Back to it 💪');closeTimer();}},1000);}
@@ -3991,6 +4896,7 @@ function goWithAnim(k, el){
   if(k==='n')renderNut();
   if(k==='p')renderProgress();
   if(k==='w')renderWorkout();
+  if(k==='el')renderElevate();
   if(el) updateTabIndicator(el);
 }
 // Override go after DOMContentLoaded
