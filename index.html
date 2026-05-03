@@ -2489,6 +2489,8 @@ input:focus, select:focus, textarea:focus {
       <div class="sec-head">PERSONAL RECORDS 🏆</div>
       <div id="pr-board"></div>
 
+      <!-- Weight goal tracker -->
+      <div id="weight-goal-card"></div>
       <!-- Weight Log -->
       <div class="sec-head">WEIGHT LOG</div>
       <button class="add-dash" onclick="openWeightModal()" style="margin-bottom:10px;">⚖️ Log today's weight</button>
@@ -2553,6 +2555,10 @@ input:focus, select:focus, textarea:focus {
           </select>
         </div>
         <div class="sett-row">
+          <label class="fl-lbl" style="margin-bottom:6px;">Target Weight (kg) — optional</label>
+          <input type="number" id="sett-target-weight" placeholder="e.g. 75" step="0.5" oninput="saveSettings()"/>
+        </div>
+      <div class="sett-row">
           <label class="fl-lbl" style="margin-bottom:6px;">Goal</label>
           <select id="sett-goal" onchange="saveSettings()">
             <option value="build">💪 Build Muscle</option>
@@ -2748,7 +2754,10 @@ input:focus, select:focus, textarea:focus {
   <div class="sheet" onclick="event.stopPropagation()">
     <div class="handle"></div>
     <div class="sheet-inner">
-      <div class="sheet-title">📦 Barcode Scanner</div>
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:4px;">
+        <div class="sheet-title" style="margin-bottom:0;">📦 Barcode Scanner</div>
+        <button onclick="closeM('barcode-modal')" style="background:var(--surface2);border:1px solid var(--border);border-radius:20px;padding:5px 12px;font-size:12px;font-weight:700;color:var(--text2);cursor:pointer;">✕ Close</button>
+      </div>
       <div id="barcode-search-section">
         <div style="background:var(--blue-bg);border:1px solid rgba(77,168,255,0.2);border-radius:12px;padding:12px;margin-bottom:14px;">
           <div style="font-size:12px;color:var(--blue);font-weight:600;line-height:1.5;">
@@ -2779,10 +2788,11 @@ input:focus, select:focus, textarea:focus {
     <div class="sheet-inner" style="display:flex;flex-direction:column;height:80vh;">
       <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px;">
         <div style="width:38px;height:38px;border-radius:50%;background:linear-gradient(135deg,var(--accent),var(--teal));display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;">🤖</div>
-        <div>
+        <div style="flex:1;">
           <div style="font-family:var(--fn);font-size:18px;font-weight:800;letter-spacing:-0.2px;">Coach FT</div>
           <div style="font-size:11px;color:var(--accent);font-weight:600;">AI Personal Trainer · Powered by Gemini</div>
         </div>
+        <button onclick="closeM('coach-modal')" style="background:var(--surface2);border:1px solid var(--border);border-radius:20px;padding:5px 12px;font-size:12px;font-weight:700;color:var(--text2);cursor:pointer;flex-shrink:0;">✕ Close</button>
       </div>
       <div id="coach-messages" style="flex:1;overflow-y:auto;display:flex;flex-direction:column;gap:10px;padding-bottom:10px;"></div>
       <div style="display:flex;gap:8px;padding-top:10px;border-top:1px solid var(--border);">
@@ -2829,6 +2839,15 @@ input:focus, select:focus, textarea:focus {
     <div class="handle"></div>
     <div class="sheet-inner">
       <div class="sheet-title">LOG FOOD</div>
+      <!-- AI text-to-macros -->
+      <div style="background:rgba(168,255,60,0.06);border:1px solid rgba(168,255,60,0.2);border-radius:12px;padding:10px 12px;margin-bottom:12px;">
+        <div style="font-size:10px;font-weight:800;color:var(--accent);text-transform:uppercase;letter-spacing:0.1em;margin-bottom:6px;">⚡ AI Quick Entry</div>
+        <div style="display:flex;gap:8px;">
+          <input type="text" id="ai-food-text" placeholder="e.g. rice 150g, beans 120g, chicken breast" style="flex:1;font-size:13px;" onkeydown="if(event.key==='Enter'){event.preventDefault();aiParseMacros();}"/>
+          <button onclick="aiParseMacros()" style="background:var(--accent);border:none;border-radius:10px;padding:8px 12px;color:#0c0c0e;font-family:var(--fn);font-size:12px;font-weight:800;cursor:pointer;white-space:nowrap;flex-shrink:0;">Parse →</button>
+        </div>
+        <div id="ai-food-status" style="font-size:11px;color:var(--text3);margin-top:4px;display:none;"></div>
+      </div>
       <div class="frow">
         <label class="fl-lbl">Food name</label>
         <input type="text" id="fn" placeholder="e.g. Rice and Beans, Chicken breast"/>
@@ -2873,7 +2892,10 @@ input:focus, select:focus, textarea:focus {
   <div class="sheet" onclick="event.stopPropagation()" style="max-height:95vh;">
     <div class="handle"></div>
     <div class="sheet-inner">
-      <div class="sheet-title">📷 AI Food Scanner</div>
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:4px;">
+        <div class="sheet-title" style="margin-bottom:0;">📷 AI Food Scanner</div>
+        <button onclick="closeScanModal()" style="background:var(--surface2);border:1px solid var(--border);border-radius:20px;padding:5px 12px;font-size:12px;font-weight:700;color:var(--text2);cursor:pointer;">✕ Close</button>
+      </div>
 
       <!-- API Key setup (shown if no key saved) -->
       <div id="scan-api-setup" style="display:none;">
@@ -3573,7 +3595,9 @@ function previewCardioKcal(){
 }
 function renderCForm(){
   const ct=CTYPES.find(c=>c.id===S.ctype)||CTYPES[1];
-  const hasDist=['walk','run','cycle','hike','row'].includes(ct.id);
+  const hasDist=['walk','run','cycle','hike','row','inclinewalk'].includes(ct.id);
+  const isTreadmill=['walk','run','inclinewalk'].includes(ct.id);
+  const isIncline=['inclinewalk'].includes(ct.id);
   document.getElementById('cform').innerHTML=`
     <div style="background:var(--surface);border:1px solid var(--border);border-radius:18px;overflow:hidden;margin-bottom:4px;">
       <div style="background:linear-gradient(135deg,rgba(255,107,53,0.08),transparent);padding:14px 16px;border-bottom:1px solid var(--border);">
@@ -3581,11 +3605,16 @@ function renderCForm(){
         <div style="font-size:11px;color:var(--text3);margin-top:2px;">MET ${ct.met} · calories auto-calculated from your weight</div>
       </div>
       <div style="padding:14px 16px;">
-        <div class="grid2" style="gap:10px;margin-bottom:12px;">
+        <div class="grid2" style="gap:10px;margin-bottom:10px;">
           <div><label class="fl-lbl">Duration (min)</label><input type="number" id="cdur" placeholder="30" min="1" style="font-size:20px;font-weight:800;text-align:center;color:var(--orange);" oninput="previewCardioKcal()"/></div>
           ${hasDist?`<div><label class="fl-lbl">Distance (km)</label><input type="number" id="cdist" placeholder="0.0" step="0.1" min="0" style="font-size:20px;font-weight:800;text-align:center;"/></div>`
           :`<div><label class="fl-lbl">Custom kcal</label><input type="number" id="ccal" placeholder="auto" style="font-size:20px;font-weight:800;text-align:center;"/></div>`}
         </div>
+        ${isTreadmill?`<div class="grid2" style="gap:10px;margin-bottom:10px;">
+          <div><label class="fl-lbl">Speed (km/h)</label><input type="number" id="cspeed" placeholder="e.g. 5.5" step="0.1" min="0" style="text-align:center;font-weight:700;"/></div>
+          ${isIncline?`<div><label class="fl-lbl">Incline (%)</label><input type="number" id="cincline" placeholder="e.g. 8" step="0.5" min="0" max="30" style="text-align:center;font-weight:700;"/></div>`:
+          '<div></div>'}
+        </div>`:''}
         <div id="cardio-kcal-preview" style="display:none;background:rgba(255,107,53,0.08);border:1px solid rgba(255,107,53,0.2);border-radius:10px;padding:10px;margin-bottom:12px;text-align:center;">
           <span style="font-size:24px;font-weight:900;color:#ff6b35;" id="kcal-preview-val">0</span>
           <span style="font-size:12px;color:rgba(255,107,53,0.5);font-weight:700;margin-left:4px;">kcal estimated</span>
@@ -3652,9 +3681,21 @@ function logCardio(){
   const manKcal=calEl?parseInt(calEl.value)||null:null;
   const kcal=manKcal||kcalCard(S.ctype,dur);
   const notes=document.getElementById('cnotes')?.value||'';
-  const e={id:uid2(),date:today(),type:'cardio',actType:S.ctype,name:ct.n,ico:ct.ico,dur,dist,kcal,notes};
+  const speed=parseFloat(document.getElementById('cspeed')?.value)||null;
+  const incline=parseFloat(document.getElementById('cincline')?.value)||null;
+  const e={id:uid2(),date:today(),type:'cardio',actType:S.ctype,name:ct.n,ico:ct.ico,dur,dist,kcal,notes,speed,incline};
   S.clog.unshift(e);S.hist.unshift({...e,title:`${ct.n}${dist?' – '+dist+'km':''} – ${dur} min`});
-  save();renderCardio();toast(`${ct.n} logged 🔥`);haptic('success');
+  save();
+  // Show prominent completion card
+  const heroEl=document.getElementById('cardio-hero');
+  if(heroEl){
+    const banner=document.createElement('div');
+    banner.style.cssText='background:linear-gradient(135deg,rgba(255,107,53,0.2),rgba(255,107,53,0.05));border:1.5px solid rgba(255,107,53,0.4);border-radius:14px;padding:12px 16px;margin:12px 16px 0;display:flex;align-items:center;gap:12px;animation:screenFadeIn 0.3s ease;';
+    banner.innerHTML='<span style="font-size:28px;">🔥</span><div><div style="font-size:14px;font-weight:800;color:#ff6b35;">'+ct.n+' logged!</div><div style="font-size:12px;color:rgba(255,107,53,0.6);">'+dur+' min · '+kcal+' kcal burned</div></div>';
+    heroEl.insertBefore(banner,heroEl.firstChild);
+    setTimeout(()=>{if(banner.parentElement)banner.remove();},3000);
+  }
+  renderCardio();haptic('success');
 }
 function renderCLog(){
   const td=S.clog.filter(c=>c.date===today());
@@ -3812,6 +3853,108 @@ const FOOD_KCAL_MAP = {
   'milk whole':61,'greek yogurt':59,'cottage cheese':98,'cheese':402,
   'broccoli':34,'spinach':23,'tomato':18,'carrot':41,'onion':40,
 };
+
+// ── AI TEXT-TO-MACROS ──
+async function aiParseMacros(){
+  const text = document.getElementById('ai-food-text')?.value?.trim();
+  if(!text){ toast('Type what you ate first'); return; }
+  const key = localStorage.getItem('gemini_key');
+  const statusEl = document.getElementById('ai-food-status');
+  if(statusEl){ statusEl.style.display='block'; statusEl.textContent='Analysing...'; statusEl.style.color='var(--accent)'; }
+  if(!key){
+    // Fallback: use local lookup for common foods
+    localParseMacros(text);
+    return;
+  }
+  const prompt = `You are a nutrition expert. Parse this meal description and return ONLY a JSON object with nutritional data.
+
+Meal: "${text}"
+
+Return ONLY valid JSON (no markdown, no explanation):
+{
+  "name": "meal name",
+  "kcal": number,
+  "protein": number,
+  "carbs": number,
+  "fat": number
+}
+
+Use accurate nutritional data. All numbers should be integers.`;
+  try {
+    const res = await fetch(
+      'https://generativelanguage.googleapis.com/v1/models/gemini-1.5-flash:generateContent?key='+key.trim(),
+      { method:'POST', headers:{'Content-Type':'application/json'},
+        body:JSON.stringify({contents:[{parts:[{text:prompt}]}],generationConfig:{temperature:0.1,maxOutputTokens:200}}) }
+    );
+    const data = await res.json();
+    if(!res.ok) throw new Error(data?.error?.message||'API error');
+    const raw = data.candidates?.[0]?.content?.parts?.[0]?.text||'';
+    const clean = raw.replace(/```json|```/g,'').trim();
+    const parsed = JSON.parse(clean);
+    // Fill the form
+    const setV=(id,v)=>{const el=document.getElementById(id);if(el)el.value=v;};
+    setV('fn', parsed.name||text);
+    setV('fk', parsed.kcal||0);
+    setV('fp', parsed.protein||0);
+    setV('fc', parsed.carbs||0);
+    setV('ff', parsed.fat||0);
+    if(statusEl){ statusEl.textContent=`✓ ${parsed.kcal} kcal · P:${parsed.protein}g C:${parsed.carbs}g F:${parsed.fat}g`; statusEl.style.color='var(--accent)'; }
+    haptic('success');
+  } catch(err){
+    // Fallback to local lookup
+    localParseMacros(text);
+    if(statusEl){ statusEl.textContent='Using local database (add API key for better accuracy)'; statusEl.style.color='var(--text3)'; }
+  }
+}
+
+function localParseMacros(text){
+  // Simple local parser — splits by comma, looks up each food
+  const PER100 = {
+    'rice':{kcal:130,p:2.7,c:28,f:0.3},'white rice':{kcal:130,p:2.7,c:28,f:0.3},
+    'brown rice':{kcal:112,p:2.6,c:23,f:0.9},'chicken':{kcal:165,p:31,c:0,f:3.6},
+    'chicken breast':{kcal:165,p:31,c:0,f:3.6},'beef':{kcal:250,p:26,c:0,f:15},
+    'eggs':{kcal:155,p:13,c:1.1,f:11},'egg':{kcal:155,p:13,c:1.1,f:11},
+    'beans':{kcal:127,p:8.7,c:22,f:0.5},'lentils':{kcal:116,p:9,c:20,f:0.4},
+    'oats':{kcal:389,p:17,c:66,f:7},'banana':{kcal:89,p:1.1,c:23,f:0.3},
+    'sweet potato':{kcal:86,p:1.6,c:20,f:0.1},'potato':{kcal:77,p:2,c:17,f:0.1},
+    'bread':{kcal:265,p:9,c:49,f:3.2},'milk':{kcal:61,p:3.2,c:4.8,f:3.3},
+    'yogurt':{kcal:59,p:10,c:3.6,f:0.4},'yoghurt':{kcal:59,p:10,c:3.6,f:0.4},
+    'fish':{kcal:136,p:24,c:0,f:4.2},'tilapia':{kcal:128,p:26,c:0,f:2.7},
+    'salmon':{kcal:208,p:20,c:0,f:13},'ugali':{kcal:100,p:2,c:22,f:0.3},
+    'sukuma wiki':{kcal:35,p:3,c:6,f:0.7},'avocado':{kcal:160,p:2,c:9,f:15},
+  };
+  let totKcal=0,totP=0,totC=0,totF=0,names=[];
+  const items = text.split(',').map(s=>s.trim().toLowerCase());
+  items.forEach(item=>{
+    const gMatch = item.match(/(\d+\.?\d*)\s*(g|gram|grams|ml)/i);
+    const grams = gMatch ? parseFloat(gMatch[1]) : 100;
+    const foodName = item.replace(/\d+\.?\d*\s*(g|gram|grams|ml|kg)/gi,'').trim();
+    let found=null;
+    for(const [key,val] of Object.entries(PER100)){
+      if(foodName.includes(key)||key.includes(foodName.split(' ')[0])){ found=val; break; }
+    }
+    if(found){
+      totKcal+=Math.round((found.kcal/100)*grams);
+      totP+=Math.round((found.p/100)*grams);
+      totC+=Math.round((found.c/100)*grams);
+      totF+=Math.round((found.f/100)*grams);
+      names.push(foodName.split(' ').map(w=>w.charAt(0).toUpperCase()+w.slice(1)).join(' '));
+    }
+  });
+  if(totKcal>0){
+    const setV=(id,v)=>{const el=document.getElementById(id);if(el)el.value=v;};
+    setV('fn', names.join(' + ')||text);
+    setV('fk', totKcal); setV('fp', totP); setV('fc', totC); setV('ff', totF);
+    const statusEl=document.getElementById('ai-food-status');
+    if(statusEl){statusEl.style.display='block';statusEl.textContent=`✓ ${totKcal} kcal · P:${totP}g C:${totC}g F:${totF}g`;statusEl.style.color='var(--accent)';}
+    haptic('success');
+  } else {
+    const statusEl=document.getElementById('ai-food-status');
+    if(statusEl){statusEl.style.display='block';statusEl.textContent='Food not found — fill in manually below';statusEl.style.color='var(--text3)';}
+  }
+}
+// ── END AI TEXT-TO-MACROS ──
+
 function estimateFoodKcal(){
   const name=(document.getElementById('fn')?.value||'').toLowerCase().trim();
   const weight=parseFloat(document.getElementById('fw')?.value)||0;
@@ -4000,6 +4143,65 @@ function renderProgress(){
         }).join('')}
       </div>`;
     }).join('');
+  }
+
+  // Weight goal tracker
+  const wgEl=document.getElementById('weight-goal-card');
+  if(wgEl){
+    const s2=loadSettings();
+    const tw=s2.targetWeight;
+    const wSorted=[...S.weightLog].sort((a,b)=>a.date.localeCompare(b.date));
+    const lastW=wSorted.length?wSorted[wSorted.length-1]:null;
+    const firstW=wSorted.length?wSorted[0]:null;
+    if(tw&&lastW){
+      const diff=Math.round((lastW.kg-tw)*10)/10;
+      const remaining=Math.abs(diff);
+      // Calculate pace (kg per week)
+      let pace=0,weeksLeft='?';
+      if(wSorted.length>=2){
+        const days=(new Date(lastW.date)-new Date(firstW.date))/(1000*60*60*24)||1;
+        const kgChange=(lastW.kg-firstW.kg);
+        pace=Math.abs(kgChange/(days/7));
+        if(pace>0) weeksLeft=Math.ceil(remaining/pace);
+      }
+      // Plateau detection: same weight 3+ times
+      const recent=wSorted.slice(-3).map(w=>w.kg);
+      const isPlat=recent.length>=3&&recent.every(v=>v===recent[0]);
+      // Progress pct
+      const startW=firstW?firstW.kg:lastW.kg;
+      const totalChange=Math.abs(startW-tw);
+      const done=totalChange>0?Math.min(100,Math.round((Math.abs(startW-lastW.kg)/totalChange)*100)):0;
+      wgEl.innerHTML=`
+        <div style="background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:14px;margin-bottom:12px;">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;">
+            <div style="font-size:13px;font-weight:800;color:var(--text);">⚖️ Weight Goal</div>
+            <div style="font-size:11px;font-weight:700;color:${diff===0?'var(--accent)':diff>0?'var(--red)':'var(--teal)'};">${diff===0?'🎯 Goal reached!':(diff>0?'+'+diff:''+diff)+'kg to go'}</div>
+          </div>
+          <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:10px;">
+            <div style="text-align:center;background:var(--surface2);border-radius:10px;padding:8px;">
+              <div style="font-size:18px;font-weight:900;color:var(--text);">${lastW.kg}kg</div>
+              <div style="font-size:9px;color:var(--text3);text-transform:uppercase;letter-spacing:0.08em;margin-top:2px;">Current</div>
+            </div>
+            <div style="text-align:center;background:var(--surface2);border-radius:10px;padding:8px;">
+              <div style="font-size:18px;font-weight:900;color:var(--accent);">${tw}kg</div>
+              <div style="font-size:9px;color:var(--text3);text-transform:uppercase;letter-spacing:0.08em;margin-top:2px;">Target</div>
+            </div>
+            <div style="text-align:center;background:var(--surface2);border-radius:10px;padding:8px;">
+              <div style="font-size:18px;font-weight:900;color:var(--purple);">${weeksLeft}w</div>
+              <div style="font-size:9px;color:var(--text3);text-transform:uppercase;letter-spacing:0.08em;margin-top:2px;">At this pace</div>
+            </div>
+          </div>
+          <div style="height:6px;background:var(--surface3);border-radius:3px;overflow:hidden;margin-bottom:8px;">
+            <div style="height:100%;background:linear-gradient(90deg,var(--accent),var(--teal));border-radius:3px;width:${done}%;transition:width 0.6s;"></div>
+          </div>
+          <div style="font-size:11px;color:var(--text3);">${done}% of the way there</div>
+          ${isPlat?'<div style="margin-top:8px;background:rgba(255,209,102,0.1);border:1px solid rgba(255,209,102,0.3);border-radius:8px;padding:8px 10px;font-size:11px;color:var(--gold);">⚠️ Weight plateau detected — same weight for 3+ entries. Consider adjusting calories by 100–150 kcal.</div>':''}
+        </div>`;
+    } else if(tw){
+      wgEl.innerHTML='<div style="background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:12px 14px;margin-bottom:12px;font-size:12px;color:var(--text3);">Log your weight to track progress toward your '+tw+'kg target.</div>';
+    } else {
+      wgEl.innerHTML='';
+    }
   }
 
   // Weight log
@@ -4214,7 +4416,7 @@ Rules:
 - Account for ALL visible food items`;
 
   const response = await fetch(
-    `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${key}`,
+    `https://generativelanguage.googleapis.com/v1/models/gemini-1.5-flash:generateContent?key=${key}`,
     {
       method: 'POST',
       headers: {'Content-Type': 'application/json'},
@@ -4419,6 +4621,7 @@ function saveSettings(){
     sex: document.getElementById('sett-sex')?.value||'male',
     activity: document.getElementById('sett-activity')?.value||'moderate',
     goal: document.getElementById('sett-goal')?.value||'build',
+    targetWeight: parseFloat(document.getElementById('sett-target-weight')?.value)||null,
     kcal: parseInt(document.getElementById('sett-kcal')?.value)||2000,
     protein: parseInt(document.getElementById('sett-protein')?.value)||150,
     carbs: parseInt(document.getElementById('sett-carbs')?.value)||200,
@@ -4442,6 +4645,7 @@ function renderSettings(){
   const setVal = (id, val) => { const el=document.getElementById(id); if(el) el.value=val; };
   setVal('sett-name', s.name);
   setVal('sett-weight', s.weight);
+  setVal('sett-target-weight', s.targetWeight||'');
   setVal('sett-height', s.height||'');
   setVal('sett-age', s.age||'');
   if(document.getElementById('sett-sex'))document.getElementById('sett-sex').value=s.sex||'male';
@@ -4633,7 +4837,7 @@ async function scanBarcodeImage(e){
     const base64 = ev.target.result.split(',')[1];
     try {
       const res = await fetch(
-        `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${key}`,
+        `https://generativelanguage.googleapis.com/v1/models/gemini-1.5-flash:generateContent?key=${key}`,
         {
           method:'POST',headers:{'Content-Type':'application/json'},
           body: JSON.stringify({
@@ -4819,7 +5023,7 @@ async function sendCoachMsg(){
 
   try {
     const res = await fetch(
-      `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${key}`,
+      `https://generativelanguage.googleapis.com/v1/models/gemini-1.5-flash:generateContent?key=${key}`,
       {
         method:'POST',
         headers:{'Content-Type':'application/json'},
@@ -5271,16 +5475,18 @@ function renderSkinPillar(){
         📷 Add Skin Progress Photo
       </button>
     </div>
-    ${(EV.skinPhotos||[]).length===0?'<div style="font-size:12px;color:var(--text3);text-align:center;padding:8px 0;">No skin photos yet. Add your first to track changes over time.</div>':
-      [...(EV.skinPhotos||[])].reverse().map((p,i)=>`
-        <div style="background:var(--surface);border:1px solid var(--border);border-radius:12px;overflow:hidden;margin-bottom:8px;">
-          ${p.src?`<img src="${p.src}" style="width:100%;max-height:160px;object-fit:cover;display:block;"/>`:
-            '<div style="height:80px;background:var(--surface2);display:flex;align-items:center;justify-content:center;font-size:28px;">📷</div>'}
-          <div style="display:flex;align-items:center;justify-content:space-between;padding:8px 12px;">
-            <div><div style="font-size:12px;font-weight:700;color:var(--text);">${p.label||'Skin progress'}</div><div style="font-size:11px;color:var(--text3);">${p.date}</div></div>
-            <button onclick="delSkinPhoto(${(EV.skinPhotos||[]).length-1-i})" style="background:none;border:none;color:var(--text3);font-size:16px;cursor:pointer;">✕</button>
-          </div>
-        </div>`).join('')}
+    ${(EV.skinPhotos||[]).length===0?
+      '<div style="font-size:12px;color:var(--text3);text-align:center;padding:8px 0;">No skin photos yet — add your first above</div>':
+      `<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:4px;">
+        ${[...(EV.skinPhotos||[])].reverse().map((p,i)=>`
+          <div style="position:relative;aspect-ratio:1;border-radius:10px;overflow:hidden;cursor:pointer;" onclick="viewSkinPhoto('${p.src||''}','${p.date}')">
+            ${p.src?`<img src="${p.src}" style="width:100%;height:100%;object-fit:cover;"/>`:'<div style="width:100%;height:100%;background:var(--surface3);display:flex;align-items:center;justify-content:center;font-size:20px;">📷</div>'}
+            <div style="position:absolute;bottom:0;left:0;right:0;background:linear-gradient(transparent,rgba(0,0,0,0.7));padding:4px 6px;">
+              <div style="font-size:9px;color:white;font-weight:600;">${p.date}</div>
+            </div>
+            <button onclick="event.stopPropagation();delSkinPhoto(${(EV.skinPhotos||[]).length-1-i})" style="position:absolute;top:4px;right:4px;background:rgba(0,0,0,0.6);border:none;border-radius:50%;width:20px;height:20px;color:white;font-size:10px;cursor:pointer;display:flex;align-items:center;justify-content:center;">✕</button>
+          </div>`).join('')}
+      </div>`}
   `;
 }
 
@@ -6480,7 +6686,7 @@ async function analyseOutfit(event){
     const prompt = `You are a professional fashion stylist. Analyse this outfit photo honestly and specifically.\n\nUSER: Body type ${bodyType}\n\nGive:\n1. FIT SCORE (1-10): How well items fit the body\n2. COLOUR COORDINATION (1-10): Do colours work together\n3. OVERALL STYLE RATING (1-10): Overall appearance\n4. WHAT WORKS: 2 specific positives\n5. WHAT TO IMPROVE: 2 specific actionable changes\n6. STYLING TIP: One tip to elevate this look right now\n\nBe specific about actual items visible. Honest but encouraging. Max 200 words.`;
     try {
       const res = await fetch(
-        'https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key='+key.trim(),
+        'https://generativelanguage.googleapis.com/v1/models/gemini-1.5-flash:generateContent?key='+key.trim(),
         { method:'POST', headers:{'Content-Type':'application/json'},
           body:JSON.stringify({contents:[{parts:[{inline_data:{mime_type:mimeType,data:b64}},{text:prompt}]}],generationConfig:{temperature:0.7,maxOutputTokens:400}}) }
       );
@@ -6519,7 +6725,23 @@ function triggerOutfitPicker(){
 
 // ============ SKIN + ELEVATE HELPERS ============
 function setSkinType(type){
-  EV=loadElevate(); EV.skinType=type; saveElevate(EV); haptic('light'); renderElevateContent();
+  EV=loadElevate(); EV.skinType=type; saveElevate(EV); haptic('light');
+  renderElevateContent();
+  // Show guidance banner
+  const guidance={'Oily':'Use a gentle foaming cleanser, BHA toner, niacinamide 10% serum and lightweight oil-free moisturiser. Never skip moisturiser — dry skin overproduces oil.','Dry':'Use a cream cleanser, hyaluronic acid on damp skin, ceramide-rich moisturiser and face oil at night. Avoid hot water and foaming cleansers.','Combination':'Use a gentle cleanser, apply BHA only to T-zone, light moisturiser on oily areas, richer moisturiser on dry cheeks.','Sensitive':'Use fragrance-free products only. Centella asiatica, ceramides and oat-based products. Patch test everything. Avoid acids and retinol until skin is stable.','Normal':'Lucky you — focus on SPF 50+ daily and a simple routine: cleanser, vitamin C serum, moisturiser, SPF. Add retinol at night for long-term maintenance.'};
+  const rec=guidance[type];
+  if(rec){
+    const el=document.getElementById('elevate-content');
+    if(!el) return;
+    const old=document.getElementById('skintype-banner');
+    if(old) old.remove();
+    const banner=document.createElement('div');
+    banner.id='skintype-banner';
+    banner.style.cssText='background:rgba(187,127,255,0.1);border:1px solid rgba(187,127,255,0.3);border-radius:12px;padding:12px 14px;margin-bottom:10px;position:relative;';
+    banner.setAttribute('data-type', type);
+    banner.innerHTML='<div style="font-size:12px;font-weight:800;color:var(--purple);margin-bottom:4px;">'+type+' skin routine</div><div style="font-size:11px;color:var(--text2);line-height:1.65;">'+rec+'</div><button onclick="this.closest(\'[id]\').remove()" style="position:absolute;top:8px;right:10px;background:none;border:none;color:var(--text3);font-size:14px;cursor:pointer;">✕</button>';
+    if(el.firstChild) el.insertBefore(banner,el.firstChild);
+  }
 }
 function toggleSkinConcern(concern){
   EV=loadElevate();
@@ -6577,6 +6799,14 @@ function handleSkinPhoto(event){
     saveElevate(EV); haptic('success'); toast('Skin photo saved 📸'); renderElevateContent();
   };
   reader.readAsDataURL(file);
+}
+function viewSkinPhoto(src, date){
+  if(!src) return;
+  const overlay=document.createElement('div');
+  overlay.style.cssText='position:fixed;inset:0;background:rgba(0,0,0,0.92);z-index:1000;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:20px;';
+  overlay.innerHTML=`<div style="font-size:12px;color:rgba(255,255,255,0.4);margin-bottom:10px;">${date}</div><img src="${src}" style="max-width:100%;max-height:80vh;border-radius:12px;object-fit:contain;"/><button onclick="this.closest('[style]').remove()" style="margin-top:16px;background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.2);border-radius:20px;padding:8px 24px;color:white;font-family:var(--fn);font-size:13px;font-weight:700;cursor:pointer;">Close</button>`;
+  overlay.onclick=(e)=>{if(e.target===overlay)overlay.remove();};
+  document.body.appendChild(overlay);
 }
 function delSkinPhoto(idx){
   EV=loadElevate(); EV.skinPhotos.splice(idx,1); saveElevate(EV); renderElevateContent();
