@@ -21,58 +21,6 @@
 
 /* ── DARK MODE (default) ── */
 :root {
-  --bg:         #0c0c0e;
-  --bg2:        #111114;
-  --surface:    #18181c;
-  --surface2:   #1e1e24;
-  --surface3:   #26262e;
-  --border:     #2c2c38;
-  --border2:    #3a3a48;
-
-  /* Electric green brand */
-  --accent:      #a8ff3c;
-  --accent-dim:  #7acc1e;
-  --accent-muted:#203a0a;
-  --accent-glow: rgba(168,255,60,0.15);
-  --accent-glow2:rgba(168,255,60,0.07);
-
-  /* Gold luxury accent */
-  --gold:        #ffd166;
-  --gold-dim:    #e6b84a;
-  --gold-muted:  #2a2008;
-  --gold-glow:   rgba(255,209,102,0.15);
-
-  /* Text */
-  --text:   #f4f4f6;
-  --text2:  #8a8a9a;
-  --text3:  #4a4a5a;
-  --text4:  #2a2a38;
-
-  /* Semantic */
-  --red:    #ff4f6a; --red-bg:   rgba(255,79,106,0.1);
-  --blue:   #4da8ff; --blue-bg:  rgba(77,168,255,0.1);
-  --orange: #ff6b35; --orange-bg:rgba(255,107,53,0.1);
-  --teal:   #4cc9f0; --teal-bg:  rgba(76,201,240,0.1);
-  --purple: #bb7fff; --purple-bg:rgba(187,127,255,0.1);
-
-  /* System */
-  --safe-top: env(safe-area-inset-top, 0px);
-  --safe-bot: env(safe-area-inset-bottom, 0px);
-  --fn: -apple-system, 'SF Pro Display', 'Helvetica Neue', Arial, sans-serif;
-  --fb: -apple-system, 'SF Pro Text', 'Helvetica Neue', Arial, sans-serif;
-  --r:  14px;
-  --r2: 20px;
-  --r3: 10px;
-
-  /* Shadows */
-  --sh:    0 2px 16px rgba(0,0,0,0.4);
-  --sh2:   0 4px 28px rgba(0,0,0,0.5);
-  --sh-g:  0 4px 24px var(--accent-glow);
-  --sh-gold: 0 4px 24px var(--gold-glow);
-}
-
-/* ── LIGHT MODE ── */
-[data-theme="light"] {
   --bg:         #f5f5f7;
   --bg2:        #ebebee;
   --surface:    #ffffff;
@@ -107,6 +55,82 @@
   --sh2:   0 4px 20px rgba(0,0,0,0.12);
   --sh-g:  0 4px 20px var(--accent-glow);
   --sh-gold: 0 4px 20px var(--gold-glow);
+
+  /* System */
+  --safe-top: env(safe-area-inset-top, 0px);
+  --safe-bot: env(safe-area-inset-bottom, 0px);
+  --fn: -apple-system, 'SF Pro Display', 'Helvetica Neue', Arial, sans-serif;
+  --fb: -apple-system, 'SF Pro Text', 'Helvetica Neue', Arial, sans-serif;
+  --r:  14px;
+  --r2: 20px;
+  --r3: 10px;
+
+  /* Shadows */
+  --sh:    0 2px 16px rgba(0,0,0,0.4);
+  --sh2:   0 4px 28px rgba(0,0,0,0.5);
+  --sh-g:  0 4px 24px var(--accent-glow);
+  --sh-gold: 0 4px 24px var(--gold-glow);
+}
+
+/* ── DARK MODE ── */
+[data-theme="dark"] {
+  --bg:         #f5f5f7;
+  --bg2:        #ebebee;
+  --surface:    #ffffff;
+  --surface2:   #f8f8fa;
+  --surface3:   #efeff2;
+  --border:     #e0e0e8;
+  --border2:    #d0d0dc;
+
+  --accent:      #35a000;
+  --accent-dim:  #267800;
+  --accent-muted:#e0f5d8;
+  --accent-glow: rgba(61,184,0,0.12);
+  --accent-glow2:rgba(61,184,0,0.06);
+
+  --gold:        #c88800;
+  --gold-dim:    #9a6600;
+  --gold-muted:  #fff4d4;
+  --gold-glow:   rgba(200,136,0,0.12);
+
+  --text:   #0c0c0e;
+  --text2:  #50505e;
+  --text3:  #9090a0;
+  --text4:  #d0d0dc;
+
+  --bg:         #0c0c0e;
+  --bg2:        #111114;
+  --surface:    #18181c;
+  --surface2:   #1e1e24;
+  --surface3:   #26262e;
+  --border:     #2c2c38;
+  --border2:    #3a3a48;
+
+  /* Electric green brand */
+  --accent:      #a8ff3c;
+  --accent-dim:  #7acc1e;
+  --accent-muted:#203a0a;
+  --accent-glow: rgba(168,255,60,0.15);
+  --accent-glow2:rgba(168,255,60,0.07);
+
+  /* Gold luxury accent */
+  --gold:        #ffd166;
+  --gold-dim:    #e6b84a;
+  --gold-muted:  #2a2008;
+  --gold-glow:   rgba(255,209,102,0.15);
+
+  /* Text */
+  --text:   #f4f4f6;
+  --text2:  #8a8a9a;
+  --text3:  #4a4a5a;
+  --text4:  #2a2a38;
+
+  /* Semantic */
+  --red:    #ff4f6a; --red-bg:   rgba(255,79,106,0.1);
+  --blue:   #4da8ff; --blue-bg:  rgba(77,168,255,0.1);
+  --orange: #ff6b35; --orange-bg:rgba(255,107,53,0.1);
+  --teal:   #4cc9f0; --teal-bg:  rgba(76,201,240,0.1);
+  --purple: #bb7fff; --purple-bg:rgba(187,127,255,0.1);
 }
 
 /* ── RESET ── */
@@ -143,35 +167,33 @@ body { display: flex; flex-direction: column; }
   width: 100%;
 }
 .tab-bar > *:not(.tb) { display: none; }
-.tab-bar::before {
-  content: '';
-  position: absolute; top: 0; left: 0; right: 0; height: 1px;
-  background: linear-gradient(90deg, transparent, rgba(168,255,60,0.4), rgba(255,209,102,0.3), rgba(168,255,60,0.4), transparent);
-}
 .tb {
   flex: 1;
   display: flex; flex-direction: column; align-items: center;
-  padding: 7px 0 4px; gap: 2px;
+  padding: 9px 0 5px; gap: 3px;
   border: none; background: transparent;
   color: var(--text3);
   cursor: pointer;
   font-family: var(--fb);
-  font-size: 8px; font-weight: 700;
-  letter-spacing: 0.04em; text-transform: uppercase;
-  transition: color 0.1s;
+  font-size: 9px; font-weight: 700;
+  letter-spacing: 0.05em; text-transform: uppercase;
+  transition: color 0.15s, transform 0.1s;
   position: relative;
+  -webkit-tap-highlight-color: transparent;
 }
-.tb svg { width: 19px; height: 19px; transition: transform 0.1s; }
+.tb svg { width: 21px; height: 21px; transition: transform 0.15s; }
 .tb.active { color: var(--accent); }
-.tb.active svg { transform: scale(1.15); filter: drop-shadow(0 0 5px var(--accent)); }
+.tb.active svg { transform: scale(1.1); }
+.tb:active { transform: scale(0.9); }
 .tb-lbl { transition: color 0.2s; }
-/* Active underline dot */
-.tb.active::after {
+/* Active top indicator line (Concept B) */
+.tb.active::before {
   content: '';
-  position: absolute; bottom: calc(var(--safe-bot) + 2px);
-  width: 20px; height: 3px; border-radius: 2px;
+  position: absolute; top: 0; left: 50%;
+  transform: translateX(-50%);
+  width: 22px; height: 2.5px;
+  border-radius: 0 0 3px 3px;
   background: var(--accent);
-  box-shadow: 0 0 8px var(--accent);
 }
 
 /* ── PAGE HEADER ── */
@@ -830,19 +852,163 @@ select option { background: var(--surface2); }
 /* ─────────────────────────────────────────
    HOME DASHBOARD
 ───────────────────────────────────────── */
+/* ── Concept B home grid ── */
 .today-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; padding: 10px 16px 0; }
 .today-card {
-  background: var(--surface); border: 1px solid var(--border);
-  border-radius: 14px; padding: 12px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 13px 14px;
   position: relative; overflow: hidden;
-  cursor: pointer; transition: opacity 0.1s;
+  cursor: pointer;
+  transition: transform 0.12s, box-shadow 0.12s;
+  box-shadow: var(--sh);
 }
-.today-card:active { transform: scale(0.96); }
-.tc-icon { font-size: 18px; margin-bottom: 5px; display: block; }
-.tc-val { font-family: var(--fn); font-size: 22px; font-weight: 900; letter-spacing: -0.5px; line-height: 1; }
-.tc-lbl { font-family: var(--fn); font-size: 9px; color: var(--text3); font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; margin-top: 4px; }
-.tc-bar { height: 2px; border-radius: 1px; background: var(--surface3); margin-top: 8px; overflow: hidden; }
-.tc-bar-fill { height: 100%; border-radius: 2px; transition: width 1s cubic-bezier(0.34,1.56,0.64,1); }
+.today-card:active { transform: scale(0.97); }
+.tc-icon { font-size: 16px; margin-bottom: 6px; display: block; opacity: 0.7; }
+.tc-val {
+  font-family: var(--fn);
+  font-size: 24px; font-weight: 900;
+  letter-spacing: -0.8px; line-height: 1;
+  color: var(--text);
+}
+.tc-lbl {
+  font-family: var(--fn);
+  font-size: 9px; color: var(--text3);
+  font-weight: 700; text-transform: uppercase;
+  letter-spacing: 0.1em; margin-top: 5px;
+}
+.tc-bar {
+  height: 3px; border-radius: 2px;
+  background: var(--surface3);
+  margin-top: 9px; overflow: hidden;
+}
+.tc-bar-fill {
+  height: 100%; border-radius: 2px;
+  transition: width 1s cubic-bezier(0.34,1.56,0.64,1);
+}
+
+/* ── Volt hero card (Concept B) ── */
+.volt-hero {
+  margin: 10px 16px 12px;
+  background: var(--accent);
+  border-radius: 20px;
+  padding: 16px 18px;
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  position: relative;
+  overflow: hidden;
+}
+[data-theme="dark"] .volt-hero { background: var(--accent); }
+.volt-hero::after {
+  content: '';
+  position: absolute;
+  right: -20px; top: -30px;
+  width: 110px; height: 110px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.08);
+}
+.vh-num {
+  font-family: var(--fn);
+  font-size: 48px; font-weight: 900;
+  letter-spacing: -3px; line-height: 1;
+  color: #071a00;
+}
+.vh-label {
+  font-size: 10px; font-weight: 700;
+  color: rgba(7,26,0,0.55);
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  margin-top: 4px;
+}
+.vh-right { text-align: right; }
+.vh-streak { font-size: 18px; font-weight: 800; color: #071a00; letter-spacing: -0.5px; }
+.vh-streak-lbl {
+  font-size: 9px; font-weight: 700;
+  color: rgba(7,26,0,0.45);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  margin-top: 2px;
+}
+
+/* ── Workout card — adapts to theme (Concept A inside B) ── */
+.workout-home-card {
+  margin: 8px 16px 0;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 18px;
+  overflow: hidden;
+  box-shadow: var(--sh);
+}
+.whc-header {
+  padding: 12px 14px 10px;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.whc-title {
+  font-size: 10px; font-weight: 800;
+  color: var(--text3);
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+}
+.whc-day {
+  font-size: 11px; font-weight: 700;
+  color: var(--accent);
+}
+.whc-ex-row {
+  display: flex; align-items: center;
+  gap: 10px; padding: 10px 14px;
+  border-bottom: 1px solid var(--border);
+}
+.whc-ex-ico {
+  width: 32px; height: 32px;
+  border-radius: 9px;
+  display: flex; align-items: center;
+  justify-content: center;
+  font-size: 15px; flex-shrink: 0;
+}
+.whc-ex-name {
+  flex: 1;
+  font-size: 13px; font-weight: 700;
+  color: var(--text);
+}
+.whc-ex-meta {
+  font-size: 11px;
+  color: var(--text3);
+  font-weight: 600;
+}
+.whc-ex-badge {
+  font-size: 9px; font-weight: 800;
+  padding: 3px 8px;
+  border-radius: 20px;
+  background: var(--accent-muted);
+  color: var(--accent);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+.whc-cta {
+  padding: 10px 14px;
+  display: flex; align-items: center;
+  justify-content: space-between;
+  cursor: pointer;
+}
+.whc-cta-text {
+  font-size: 11px; font-weight: 800;
+  color: var(--accent);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+.whc-cta-btn {
+  width: 28px; height: 28px;
+  border-radius: 50%;
+  background: var(--accent);
+  display: flex; align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
 
 /* Quote */
 .quote-card {
@@ -2155,13 +2321,18 @@ input:focus, select:focus, textarea:focus {
 
 <!-- WORKOUT / HOME -->
 <div id="sw" class="screen gone" style="display:flex;flex-direction:column;">
-  <!-- Dynamic header -->
-  <div class="ph">
-    <div class="ph-left">
-      <div class="ph-title" id="hdr-greeting">GOOD MORNING</div>
-      <div class="ph-sub" id="hdr-date"></div>
+  <!-- Dynamic header — Concept B -->
+  <div style="padding:14px 16px 6px;display:flex;align-items:flex-start;justify-content:space-between;flex-shrink:0;background:var(--bg);">
+    <div>
+      <div style="font-size:10px;font-weight:600;color:var(--text3);text-transform:uppercase;letter-spacing:0.14em;margin-bottom:3px;" id="hdr-greeting">Good morning</div>
+      <div style="font-size:26px;font-weight:800;color:var(--text);letter-spacing:-0.8px;line-height:1;" id="hdr-name">King</div>
+      <div style="font-size:11px;color:var(--text3);margin-top:2px;" id="hdr-date"></div>
     </div>
-    <div style="display:flex;gap:8px;align-items:center;"><button onclick="openM('coach-modal');initCoach();" style="background:linear-gradient(135deg,var(--accent-muted),rgba(46,255,208,0.1));border:1px solid rgba(127,255,58,0.3);border-radius:20px;padding:5px 11px;color:var(--accent);font-family:var(--fn);font-size:10px;font-weight:800;cursor:pointer;letter-spacing:0.04em;">🤖 Coach</button><button class="hdr-icon-btn" onclick="toggleTheme()" id="theme-btn">🌙</button><button class="hdr-icon-btn" onclick="go('s',null)">⚙️</button></div>
+    <div style="display:flex;gap:8px;align-items:center;padding-top:4px;">
+      <button onclick="openM('coach-modal');initCoach();" style="background:var(--accent-muted);border:1px solid var(--accent);border-radius:20px;padding:6px 13px;color:var(--accent);font-family:var(--fn);font-size:10px;font-weight:800;cursor:pointer;letter-spacing:0.06em;">🤖 Coach</button>
+      <button class="hdr-icon-btn" onclick="toggleTheme()" id="theme-btn">☀️</button>
+      <button class="hdr-icon-btn" onclick="go('s',null)">⚙️</button>
+    </div>
   </div>
 
   <!-- Workout progress bar -->
@@ -2172,7 +2343,7 @@ input:focus, select:focus, textarea:focus {
 
     <!-- Hero banner + streak -->
     <div id="hero-banner"></div>
-    <div id="streak-section"></div>
+    <div id="streak-section" style="display:none;"></div>
 
     <!-- Day strip -->
     <div id="day-strip" style="flex-shrink:0;"></div>
@@ -2201,15 +2372,35 @@ input:focus, select:focus, textarea:focus {
 <!-- EXERCISES -->
 <div id="se" class="screen gone" style="display:flex;flex-direction:column;">
   <div class="ph"><div class="ph-left"><div class="ph-title">EXERCISES</div><div class="ph-sub">Library &amp; guides</div></div><div style="display:flex;gap:6px;"><button class="hdr-icon-btn" onclick="toggleTheme()">🌙</button><button class="hdr-icon-btn" onclick="go('s',null)">⚙️</button></div></div>
-  <div class="ex-search-wrap">
-    <div class="sbox">
-      <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-      <input type="text" id="ex-s" placeholder="Search exercises…" oninput="filterEx()"/>
-    </div>
+  <!-- Sub-tabs -->
+  <div style="display:flex;background:var(--surface);border-bottom:1px solid var(--border);flex-shrink:0;">
+    <button class="nut-tab active" id="extab-library" onclick="setExTab('library')">Library</button>
+    <button class="nut-tab" id="extab-splits" onclick="setExTab('splits')">Splits</button>
+    <button class="nut-tab" id="extab-plans" onclick="setExTab('plans')">My Plan</button>
   </div>
-  <div class="filter-wrap"><div class="fscroll" id="ex-pills"></div></div>
-  <div id="edu-section-ex" style="padding:0 16px 0;"></div>
-<div class="ex-grid" id="ex-grid"></div>
+
+  <!-- Library panel -->
+  <div id="expanel-library" style="display:flex;flex-direction:column;flex:1;overflow:hidden;">
+    <div class="ex-search-wrap">
+      <div class="sbox">
+        <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        <input type="text" id="ex-s" placeholder="Search exercises…" oninput="filterEx()"/>
+      </div>
+    </div>
+    <div class="filter-wrap"><div class="fscroll" id="ex-pills"></div></div>
+    <div id="edu-section-ex" style="padding:0 16px 0;"></div>
+    <div class="ex-grid" id="ex-grid" style="overflow-y:auto;flex:1;"></div>
+  </div>
+
+  <!-- Splits panel -->
+  <div id="expanel-splits" style="display:none;flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;">
+    <div id="splits-content"></div>
+  </div>
+
+  <!-- My Plan panel -->
+  <div id="expanel-plans" style="display:none;flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;">
+    <div id="plans-content"></div>
+  </div>
 </div>
 
 <!-- CARDIO -->
@@ -3111,6 +3302,32 @@ const EXS=[
   {id:42,name:"World's Greatest Stretch",muscle:"Mobility",type:"mobility",icon:"🧘",bg:"#2a1a0a",desc:"Full body mobility drill. Hip flexors, thoracic spine, hamstrings.",steps:["Start in lunge position","Place same-side hand inside front foot","Rotate upper body and reach arm to sky","Hold, return, and repeat on other side"],tags:["Stretch","Hip","Thoracic","Full Body"]},
   {id:43,name:"Cat-Cow Stretch",muscle:"Mobility",type:"mobility",icon:"🧘",bg:"#2a1a0a",desc:"Spinal mobility drill to loosen the back and improve posture.",steps:["Start on all fours, wrists under shoulders","Arch back upward (cat) — exhale","Drop belly toward floor (cow) — inhale","Move slowly and breathe through the movement"],tags:["Mobility","Spine","Back","Morning Routine"]},
   {id:44,name:"Thoracic Rotation",muscle:"Mobility",type:"mobility",icon:"🧘",bg:"#2a1a0a",desc:"Upper back rotation drill to improve posture and shoulder health.",steps:["Lie on side, knees stacked at 90 degrees","Top arm stretched forward on floor","Rotate top arm open toward ceiling","Follow hand with eyes, hold, return"],tags:["Mobility","Thoracic","Posture","Recovery"]},
+  // ── CALISTHENICS ──
+  {id:101,name:"Pull-Up",muscle:"Calisthenics",type:"strength",icon:"🔝",bg:"#0a1a2a",desc:"The king of upper body calisthenics. Build lats, biceps and grip.",steps:["Dead hang from bar, overhand grip slightly wider than shoulders","Pull elbows down and back — don't swing","Chin clears bar at top","Lower with full control over 2-3 seconds"],tags:["Calisthenics","Back","Biceps","Bodyweight"]},
+  {id:102,name:"Dip",muscle:"Calisthenics",type:"strength",icon:"⬇️",bg:"#0a1a2a",desc:"Compound push. Targets chest, triceps and shoulders simultaneously.",steps:["Grip parallel bars, slight forward lean for chest focus","Lower until elbows reach 90 degrees","Press back up to full lockout — no kipping","Control the descent — 2 seconds down"],tags:["Calisthenics","Chest","Triceps","Bodyweight"]},
+  {id:103,name:"Pistol Squat",muscle:"Calisthenics",type:"strength",icon:"🦵",bg:"#0a1a2a",desc:"Single-leg squat — the ultimate lower body strength and balance test.",steps:["Stand on one leg, extend other forward","Squat down until thigh is below parallel","Keep heel flat, core tight, arms forward for counterbalance","Drive through heel back to standing"],tags:["Calisthenics","Legs","Balance","Bodyweight"]},
+  {id:104,name:"Muscle-Up",muscle:"Calisthenics",type:"strength",icon:"💪",bg:"#0a1a2a",desc:"Pull-up into dip. Elite upper body strength — master pull-ups first.",steps:["Generate momentum on the pull — explosive top half","Get chest to bar level at peak","Quickly transition wrists over bar","Press to lockout as in a dip"],tags:["Calisthenics","Advanced","Full upper body","Bodyweight"]},
+  {id:105,name:"L-Sit",muscle:"Calisthenics",type:"strength",icon:"🪑",bg:"#0a1a2a",desc:"Isometric core and tricep hold. Dense functional strength builder.",steps:["Support on parallel bars or floor, arms fully locked","Raise legs parallel to floor — knees straight","Hold position — start tucked if needed","Build to 30 second holds progressively"],tags:["Calisthenics","Core","Isometric","Bodyweight"]},
+  {id:106,name:"Handstand Push-Up",muscle:"Calisthenics",type:"strength",icon:"🙃",bg:"#0a1a2a",desc:"Vertical pressing strength. Harder on shoulders than any barbell press.",steps:["Kick up to wall handstand, hands 6 inches from wall","Lower head slowly to floor — full control","Press back to lockout — do not touch head and bounce","Master wall-assisted before freestanding"],tags:["Calisthenics","Shoulders","Advanced","Bodyweight"]},
+  {id:107,name:"Australian Row",muscle:"Calisthenics",type:"strength",icon:"📐",bg:"#0a1a2a",desc:"Horizontal pull. Best beginner stepping stone toward pull-ups.",steps:["Set bar at waist height, lie underneath it","Grip overhand, body straight heel to head","Pull chest to bar — elbows close to body","3 second eccentric on the way down"],tags:["Calisthenics","Back","Beginner","Bodyweight"]},
+  {id:108,name:"Dragon Flag",muscle:"Calisthenics",type:"strength",icon:"🐉",bg:"#0a1a2a",desc:"Rocky Balboa's core exercise. Advanced full-body tension movement.",steps:["Lie on bench, grip behind head tightly","Raise legs and lower back keeping body rigid as a plank","Lower slowly — the slower the harder","Stop before lower back touches bench"],tags:["Calisthenics","Core","Advanced","Bodyweight"]},
+  // ── CROSSFIT ──
+  {id:111,name:"Thruster",muscle:"CrossFit",type:"strength",icon:"🏋️",bg:"#1a0a1a",desc:"Front squat into overhead press. High-intensity full body compound.",steps:["Hold bar at front rack — elbows high, parallel to floor","Squat deep maintaining upright torso","Drive up explosively — use hip power to press bar overhead","Full lockout overhead before the next rep"],tags:["CrossFit","Full body","Olympic","Barbell"]},
+  {id:112,name:"Box Jump",muscle:"CrossFit",type:"cardio",icon:"📦",bg:"#1a0a1a",desc:"Explosive plyometric power. Builds fast-twitch muscle fibers.",steps:["Stand facing box, feet hip-width","Load hips — quarter squat with arm swing back","Jump explosively — swing arms up to generate height","Land softly with bent knees, stand tall, step back down"],tags:["CrossFit","Power","Plyometric","Legs"]},
+  {id:113,name:"Kettlebell Swing",muscle:"CrossFit",type:"strength",icon:"🏑",bg:"#1a0a1a",desc:"Hip hinge power development. Targets posterior chain explosively.",steps:["Hike KB back between legs — this is a hip hinge not a squat","Drive hips forward explosively — hard glute squeeze","KB floats to shoulder height from hip power alone — not arms","Let it fall, absorb with hips, hike back"],tags:["CrossFit","Posterior chain","Kettlebell","Power"]},
+  {id:114,name:"Wall Ball",muscle:"CrossFit",type:"cardio",icon:"🏀",bg:"#1a0a1a",desc:"Squat to overhead throw. Classic CrossFit metabolic conditioning.",steps:["Hold medicine ball at chest, feet shoulder-width","Squat deep — below parallel","Drive up and throw ball to 10ft target","Catch on the way down and immediately squat"],tags:["CrossFit","Full body","Metabolic","Med ball"]},
+  {id:115,name:"Burpee",muscle:"CrossFit",type:"cardio",icon:"🌊",bg:"#1a0a1a",desc:"Total body conditioning. Maximum output per rep.",steps:["Stand, drop hands to floor","Jump feet back to plank","Chest to floor","Jump feet forward and jump up with arms overhead"],tags:["CrossFit","Cardio","Full body","Bodyweight"]},
+  {id:116,name:"Clean & Jerk",muscle:"CrossFit",type:"strength",icon:"⚡",bg:"#1a0a1a",desc:"Olympic lift. The most technically demanding barbell movement.",steps:["Pull bar from floor maintaining back angle","Explosive triple extension — ankles, knees, hips","Drop under bar into front rack squat, stand to full height","Dip, drive, split or squat under bar to lockout overhead"],tags:["CrossFit","Olympic","Advanced","Full body"]},
+  // ── RUNNING ──
+  {id:121,name:"Tempo Run",muscle:"Running",type:"cardio",icon:"🏃",bg:"#001a0a",desc:"Sustained effort run at comfortably hard pace. Builds aerobic threshold.",steps:["Warm up 10 minutes at easy conversational pace","Run at 7/10 effort — you can speak single words only","Maintain 20-40 minutes without pace drop","Cool down 10 minutes easy, stretch hamstrings and calves"],tags:["Running","Aerobic","Threshold","Endurance"]},
+  {id:122,name:"Interval Sprints",muscle:"Running",type:"cardio",icon:"💨",bg:"#001a0a",desc:"High-intensity speed work. Burns fat and improves VO2 max.",steps:["Warm up 15 minutes jogging","Sprint at 90% max effort for 200-400m","Walk or jog recovery until heart rate drops below 65%","Repeat 6-10 times — quality over quantity"],tags:["Running","HIIT","Speed","VO2max"]},
+  {id:123,name:"Hill Repeats",muscle:"Running",type:"cardio",icon:"⛰️",bg:"#001a0a",desc:"Run uphill hard, walk down. Builds running strength and power.",steps:["Find hill 100-200m long at 5-8% grade","Sprint up at 85% effort — drive arms aggressively","Walk slowly down for full recovery — do not jog","Repeat 8-12 times, stop when form deteriorates"],tags:["Running","Strength","Hills","Endurance"]},
+  {id:124,name:"Long Run",muscle:"Running",type:"cardio",icon:"🌅",bg:"#001a0a",desc:"Easy pace, extended distance. Builds aerobic base and fat adaptation.",steps:["Start slower than feels right — you should speak full sentences","Maintain consistent effort, not speed — slow on hills is fine","Fuel every 45-60 minutes on runs over 90 minutes","Finish easier than you started"],tags:["Running","Aerobic","Endurance","Base building"]},
+  // ── SPORT-SPECIFIC ──
+  {id:131,name:"Plyometric Lunge",muscle:"Sport",type:"strength",icon:"🏅",bg:"#1a1a00",desc:"Explosive jumping lunge. Athletic lower body power for any sport.",steps:["Start in lunge position — good depth","Jump explosively and switch legs in the air","Land softly in opposite lunge — absorb through bent knee","Keep torso upright throughout"],tags:["Sport","Plyometric","Legs","Power"]},
+  {id:132,name:"Medicine Ball Slam",muscle:"Sport",type:"strength",icon:"💥",bg:"#1a1a00",desc:"Total body explosive power. Essential for combat and field athletes.",steps:["Hold med ball overhead, feet shoulder-width","Slam as hard as possible into ground — full body involvement","Bend to pick up on bounce","Chain reps for conditioning or reset for power"],tags:["Sport","Power","Full body","Explosive"]},
+  {id:133,name:"Lateral Bound",muscle:"Sport",type:"strength",icon:"↔️",bg:"#1a1a00",desc:"Single-leg lateral jump. Builds agility and lateral power.",steps:["Balance on right leg with slight knee bend","Jump laterally off single leg","Land on opposite leg only — absorb and stabilise","Hold 1 second, then jump back"],tags:["Sport","Agility","Lateral","Legs"]},
+  {id:134,name:"Farmer's Carry",muscle:"Sport",type:"strength",icon:"🧳",bg:"#1a1a00",desc:"Walk with heavy load. Builds grip, core and functional strength.",steps:["Hold heavy dumbbells or kettlebells at sides","Walk with tall posture — shoulders back, no lean","Maintain grip and steady breathing throughout","Set distance 20-40m or time 30-60 seconds"],tags:["Sport","Grip","Core","Functional"]},
 ];
 
 const CTYPES=[
@@ -3129,7 +3346,7 @@ const CTYPES=[
 const DS=['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
 const MS=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
 const FICOS=['🍗','🥩','🍳','🥑','🍚','🥛','🫐','🥦','🍌','🧁','🥤','🍎','🥗','🍝'];
-const MUSF=['All','Chest','Back','Legs','Shoulders','Biceps','Triceps','Core','Mobility'];
+const MUSF=['All','Chest','Back','Legs','Shoulders','Biceps','Triceps','Core','Mobility','Calisthenics','CrossFit','Running','Sport'];
 let GK=2000,GP=150,GC=200,GF=65,GW=8,GSTEPS=10000;
 
 // ============ STATE ============
@@ -3233,9 +3450,13 @@ function addWODToWorkout(planIdx){
 }
 
 function renderWorkout(){
-  // Greeting
+  // Greeting — Concept B header
   const greetEl=document.getElementById('hdr-greeting');
-  if(greetEl)greetEl.textContent=getGreeting();
+  if(greetEl) greetEl.textContent=getGreeting();
+  const nameEl=document.getElementById('hdr-name');
+  if(nameEl){ const sn=loadSettings(); nameEl.textContent=sn.name?sn.name.split(' ')[0]:'King'; }
+  const dateEl=document.getElementById('hdr-date');
+  if(dateEl){ const dn=new Date(); dateEl.textContent=dn.toLocaleDateString('en-US',{weekday:'long',month:'long',day:'numeric'}); }
 
   // Day strip
   const tnow=new Date();
@@ -3270,39 +3491,63 @@ function renderWorkout(){
       </div>`;
   }
 
-  // Today summary cards
+  // Today summary — Concept B layout
   const todayKcal=S.food.reduce((a,f)=>a+(f.kcal||0),0);
   const todayBurned=S.clog.filter(c=>c.date===today()).reduce((a,c)=>a+c.kcal,0);
   const todayWater=Math.max(0,Math.min(8,S.water));
   const todaySets=S.wex.reduce((a,e)=>a+e.sets.filter(s=>s.done).length,0);
+  const streak2=calcStreak();
+  const s2=loadSettings();
+  const kcalTarget=s2.kcal||2000;
+  const protTarget=s2.protein||150;
+  const todayProt=S.food.reduce((a,f)=>a+(f.p||0),0);
   const sumEl=document.getElementById('today-summary');
   if(sumEl){
-    sumEl.innerHTML=`<div class="today-grid">
-      <div class="today-card c1" style="animation-delay:0s;">
-        <div class="tc-icon">🏋️</div>
-        <div class="tc-val" style="color:var(--accent);">${todaySets}</div>
-        <div class="tc-lbl">Sets Done</div>
-        <div class="tc-bar"><div class="tc-bar-fill" style="width:${Math.min(100,(todaySets/20)*100)}%;background:var(--accent);"></div></div>
+    sumEl.innerHTML=`
+      <!-- Volt hero card (Concept B) -->
+      <div id="health-score-card-inline"></div>
+      <div class="volt-hero" onclick="go('p',document.getElementById('tb-p'))">
+        <div>
+          <div class="vh-num">${calcHealthScore().score}</div>
+          <div class="vh-label">Health score today</div>
+        </div>
+        <div class="vh-right">
+          <div class="vh-streak">${streak2 > 0 ? streak2 + ' day streak 🔥' : 'Start your streak'}</div>
+          <div class="vh-streak-lbl">${streak2>=7?'Unstoppable':streak2>=3?'Building momentum':'Keep going'}</div>
+        </div>
       </div>
-      <div class="today-card c2" style="animation-delay:0.05s;">
-        <div class="tc-icon">🔥</div>
-        <div class="tc-val" style="color:var(--orange);">${todayBurned}</div>
-        <div class="tc-lbl">kcal Burned</div>
-        <div class="tc-bar"><div class="tc-bar-fill" style="width:${Math.min(100,(todayBurned/600)*100)}%;background:var(--orange);"></div></div>
+
+      <!-- 2x2 metric cards (Concept B) -->
+      <div class="today-grid">
+        <div class="today-card">
+          <div class="tc-icon">🍽️</div>
+          <div class="tc-val" style="color:var(--text);">${todayKcal}<span style="font-size:12px;font-weight:500;color:var(--text3);">/${kcalTarget}</span></div>
+          <div class="tc-lbl">Calories</div>
+          <div class="tc-bar"><div class="tc-bar-fill" style="width:${Math.min(100,Math.round((todayKcal/kcalTarget)*100))}%;background:var(--accent);"></div></div>
+        </div>
+        <div class="today-card">
+          <div class="tc-icon">💪</div>
+          <div class="tc-val" style="color:var(--text);">${todayProt}g<span style="font-size:12px;font-weight:500;color:var(--text3);">/${protTarget}g</span></div>
+          <div class="tc-lbl">Protein</div>
+          <div class="tc-bar"><div class="tc-bar-fill" style="width:${Math.min(100,Math.round((todayProt/protTarget)*100))}%;background:var(--orange);"></div></div>
+        </div>
+        <div class="today-card">
+          <div class="tc-icon">🔥</div>
+          <div class="tc-val" style="color:var(--text);">${todayBurned}</div>
+          <div class="tc-lbl">kcal Burned</div>
+          <div class="tc-bar"><div class="tc-bar-fill" style="width:${Math.min(100,Math.round((todayBurned/500)*100))}%;background:var(--red);"></div></div>
+        </div>
+        <div class="today-card">
+          <div class="tc-icon">💧</div>
+          <div class="tc-val" style="color:var(--text);">${todayWater}<span style="font-size:12px;font-weight:500;color:var(--text3);">/8</span></div>
+          <div class="tc-lbl">Water</div>
+          <div class="tc-bar"><div class="tc-bar-fill" style="width:${Math.round((todayWater/8)*100)}%;background:var(--blue);"></div></div>
+        </div>
       </div>
-      <div class="today-card c3" style="animation-delay:0.1s;">
-        <div class="tc-icon">🍽️</div>
-        <div class="tc-val" style="color:var(--blue);">${todayKcal}</div>
-        <div class="tc-lbl">kcal Eaten</div>
-        <div class="tc-bar"><div class="tc-bar-fill" style="width:${Math.min(100,(todayKcal/2000)*100)}%;background:var(--blue);"></div></div>
-      </div>
-      <div class="today-card c4" style="animation-delay:0.15s;">
-        <div class="tc-icon">💧</div>
-        <div class="tc-val" style="color:var(--purple);">${todayWater}<span style="font-size:13px;color:var(--text3);">/8</span></div>
-        <div class="tc-lbl">Glasses Water</div>
-        <div class="tc-bar"><div class="tc-bar-fill" style="width:${(todayWater/8)*100}%;background:var(--purple);"></div></div>
-      </div>
-    </div>`;
+
+      <!-- Today's workout card (Concept A inside Concept B) -->
+      ${renderWorkoutHomeCard()}
+    `;
   }
 
   // Quote now rendered by renderQuoteBottom() below
@@ -6723,6 +6968,401 @@ function triggerOutfitPicker(){
 }
 // ── END OUTFIT ANALYSER ──
 
+
+
+function renderWorkoutHomeCard(){
+  const s=loadSettings();
+  const dayNames=['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+  const dayFocuses=['Rest & Recovery','Push Day','Pull Day','Leg Day','Active Recovery','Push Day','Full Body'];
+  const today_day=new Date().getDay();
+  const focus=dayFocuses[today_day];
+
+  // Active exercises
+  if(S.wex.length>0){
+    const doneSets=S.wex.reduce((a,e)=>a+e.sets.filter(s=>s.done).length,0);
+    const totalSets=S.wex.reduce((a,e)=>a+e.sets.length,0);
+    const nextEx=S.wex.find(e=>e.sets.some(s=>!s.done));
+    const rows=S.wex.slice(0,3).map(ex=>{
+      const done=ex.sets.filter(s=>s.done).length;
+      const allDone=done===ex.sets.length&&ex.sets.length>0;
+      return`<div class="whc-ex-row">
+        <div class="whc-ex-ico" style="background:${ex.bg||'var(--surface2)'};">${ex.icon||'🏋️'}</div>
+        <div class="whc-ex-name">${ex.name}</div>
+        ${allDone?'<div class="whc-ex-badge">Done</div>':`<div class="whc-ex-meta">${done}/${ex.sets.length} sets</div>`}
+      </div>`;
+    }).join('');
+    return`<div class="workout-home-card" style="margin-top:12px;">
+      <div class="whc-header">
+        <div class="whc-title">Today's Workout</div>
+        <div class="whc-day">${focus}</div>
+      </div>
+      ${rows}
+      ${S.wex.length>3?`<div style="padding:6px 14px;font-size:11px;color:var(--text3);">+${S.wex.length-3} more exercises</div>`:''}
+      <div class="whc-cta" onclick="go('w',document.getElementById('tb-w'))">
+        <div class="whc-cta-text">${doneSets<totalSets?'Continue workout':'Finish workout'}</div>
+        <div class="whc-cta-btn">
+          <svg width="10" height="10" viewBox="0 0 10 10" fill="#071a00"><polygon points="2,1 9,5 2,9"/></svg>
+        </div>
+      </div>
+    </div>`;
+  }
+
+  // No active workout — show today's plan from split or empty
+  const savedSplit=localStorage.getItem('ft_split');
+  const todayHist=S.hist.filter(h=>h.date===today()&&h.type==='workout');
+  if(todayHist.length>0){
+    return`<div class="workout-home-card" style="margin-top:12px;">
+      <div class="whc-header">
+        <div class="whc-title">Completed today</div>
+        <div class="whc-day" style="color:var(--accent);">✓ Done</div>
+      </div>
+      ${todayHist.map(h=>`<div class="whc-ex-row">
+        <div class="whc-ex-ico" style="background:var(--accent-muted);">✓</div>
+        <div class="whc-ex-name">${h.title}</div>
+        <div class="whc-ex-meta">${h.sets} sets</div>
+      </div>`).join('')}
+      <div class="whc-cta" onclick="go('w',document.getElementById('tb-w'))">
+        <div class="whc-cta-text">Add another session</div>
+        <div class="whc-cta-btn">
+          <svg width="10" height="10" viewBox="0 0 10 10" fill="#071a00"><polygon points="2,1 9,5 2,9"/></svg>
+        </div>
+      </div>
+    </div>`;
+  }
+
+  return`<div class="workout-home-card" style="margin-top:12px;">
+    <div class="whc-header">
+      <div class="whc-title">Today's Workout</div>
+      <div class="whc-day">${focus}</div>
+    </div>
+    <div style="padding:16px 14px;display:flex;align-items:center;justify-content:space-between;">
+      <div style="font-size:13px;color:var(--text3);">No workout started yet</div>
+    </div>
+    <div class="whc-cta" onclick="go('w',document.getElementById('tb-w'))">
+      <div class="whc-cta-text">Start today's session</div>
+      <div class="whc-cta-btn">
+        <svg width="10" height="10" viewBox="0 0 10 10" fill="#071a00"><polygon points="2,1 9,5 2,9"/></svg>
+      </div>
+    </div>
+  </div>`;
+}
+
+// ============ DAILY HEALTH SCORE ============
+function calcHealthScore(){
+  const s=loadSettings();
+  const ev=loadElevate();
+  const now=new Date();
+  let score=0; let details=[];
+
+  // 1. Workout today (25pts)
+  const todayWo=S.wex.filter(e=>e.sets&&e.sets.some(st=>st.done)).length>0;
+  const histToday=S.hist.filter(h=>h.date===today()&&h.type==='workout').length>0;
+  if(todayWo||histToday){ score+=25; details.push({label:'Workout',pts:25,done:true}); }
+  else { details.push({label:'Workout',pts:25,done:false}); }
+
+  // 2. Protein target (20pts)
+  const tP=S.food.reduce((a,f)=>a+(f.p||0),0);
+  const GP2=s.protein||150;
+  const protPct=Math.min(1,tP/GP2);
+  const protPts=Math.round(protPct*20);
+  score+=protPts; details.push({label:'Protein',pts:20,done:protPts>=16,val:tP+'g/'+GP2+'g'});
+
+  // 3. Hydration (15pts)
+  const GW2=s.water||8;
+  const waterPct=Math.min(1,(S.water||0)/GW2);
+  const waterPts=Math.round(waterPct*15);
+  score+=waterPts; details.push({label:'Hydration',pts:15,done:waterPts>=12,val:(S.water||0)+'/'+GW2+' glasses'});
+
+  // 4. Sleep (20pts) — from Elevate
+  const lastSleep=ev.sleepLog&&ev.sleepLog.length?[...ev.sleepLog].sort((a,b)=>b.date.localeCompare(a.date))[0]:null;
+  if(lastSleep){
+    const hrs=lastSleep.hours||0;
+    const sleepPts=hrs>=7?20:hrs>=6?14:hrs>=5?8:0;
+    score+=sleepPts; details.push({label:'Sleep',pts:20,done:sleepPts>=14,val:hrs+'h'});
+  } else { details.push({label:'Sleep',pts:20,done:false,val:'Not logged'}); }
+
+  // 5. Skincare routine (10pts)
+  const routineDone=(ev.morningRoutine||[]).filter(s=>s.done).length+(ev.eveningRoutine||[]).filter(s=>s.done).length;
+  const routineTotal=(ev.morningRoutine||[]).length+(ev.eveningRoutine||[]).length;
+  const skinPts=routineTotal>0?Math.round((routineDone/routineTotal)*10):0;
+  score+=skinPts; details.push({label:'Skincare',pts:10,done:skinPts>=7,val:routineDone+'/'+routineTotal});
+
+  // 6. Mood (10pts)
+  const todayMood=ev.moodLog&&ev.moodLog.find(m=>m.date===today());
+  if(todayMood){
+    const moodPts={Tired:3,Okay:6,Good:8,Great:9,Elite:10}[todayMood.label]||6;
+    score+=moodPts; details.push({label:'Mood',pts:10,done:moodPts>=7,val:todayMood.emoji});
+  } else { details.push({label:'Mood',pts:10,done:false,val:'Not logged'}); }
+
+  return {score:Math.min(100,score), details};
+}
+
+function renderHealthScore(){
+  const hsEl=document.getElementById('health-score-card');
+  if(!hsEl) return;
+  const {score,details}=calcHealthScore();
+  const col=score>=80?'var(--accent)':score>=60?'var(--gold)':score>=40?'var(--orange)':'var(--red)';
+  const label=score>=80?'Excellent':score>=60?'Good':score>=40?'Fair':'Needs work';
+  // Yesterday comparison (rough: check if hist has yesterday)
+  const yest=new Date(); yest.setDate(yest.getDate()-1);
+  const yStr=yest.toISOString().slice(0,10);
+  const hadYest=S.hist.some(h=>h.date===yStr);
+  const trend=hadYest?'+':'-';
+
+  hsEl.innerHTML=`
+    <div style="background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:14px;margin:0 16px 12px;">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;">
+        <div>
+          <div style="font-size:10px;font-weight:800;color:var(--text3);text-transform:uppercase;letter-spacing:0.12em;margin-bottom:3px;">Daily Health Score</div>
+          <div style="font-size:10px;color:var(--text3);">Based on today's activity</div>
+        </div>
+        <div style="text-align:right;">
+          <div style="font-family:var(--fn);font-size:38px;font-weight:900;color:${col};letter-spacing:-2px;line-height:1;">${score}</div>
+          <div style="font-size:10px;font-weight:700;color:${col};">${label}</div>
+        </div>
+      </div>
+      <!-- Score bar -->
+      <div style="height:6px;background:var(--surface3);border-radius:3px;overflow:hidden;margin-bottom:12px;">
+        <div style="height:100%;background:linear-gradient(90deg,${col},${col}88);border-radius:3px;width:${score}%;transition:width 0.8s cubic-bezier(0.34,1.56,0.64,1);"></div>
+      </div>
+      <!-- Detail pills -->
+      <div style="display:flex;gap:6px;flex-wrap:wrap;">
+        ${details.map(d=>`
+          <div style="display:flex;align-items:center;gap:4px;background:${d.done?'rgba(168,255,60,0.08)':'var(--surface2)'};border:1px solid ${d.done?'rgba(168,255,60,0.2)':'var(--border)'};border-radius:20px;padding:4px 10px;">
+            <span style="font-size:10px;">${d.done?'✓':'○'}</span>
+            <span style="font-size:10px;font-weight:700;color:${d.done?'var(--accent)':'var(--text3)'};">${d.label}${d.val?' · '+d.val:''}</span>
+          </div>`).join('')}
+      </div>
+    </div>`;
+}
+// ============ END HEALTH SCORE ============
+
+
+// ============ WORKOUT SPLITS ============
+let activeExTab = 'library';
+
+function setExTab(tab){
+  activeExTab = tab;
+  ['library','splits','plans'].forEach(t=>{
+    const panel=document.getElementById('expanel-'+t);
+    const btn=document.getElementById('extab-'+t);
+    if(panel) panel.style.display = t===tab?'block':'none';
+    if(btn) btn.classList.toggle('active', t===tab);
+  });
+  if(tab==='splits') renderSplits();
+  if(tab==='plans') renderMyPlans();
+  haptic('light');
+}
+
+const SPLIT_TEMPLATES = [
+  {
+    id:'ppl',name:'Push / Pull / Legs',days:6,icon:'💪',
+    desc:'The most popular split for intermediate lifters. High frequency, balanced volume.',
+    schedule:[
+      {day:'Monday',focus:'Push',muscles:['Chest','Shoulders','Triceps'],exIds:[1,2,4,19,20,21]},
+      {day:'Tuesday',focus:'Pull',muscles:['Back','Biceps'],exIds:[7,8,9,25,26,27]},
+      {day:'Wednesday',focus:'Legs',muscles:['Legs'],exIds:[13,14,15,16,17]},
+      {day:'Thursday',focus:'Push',muscles:['Chest','Shoulders','Triceps'],exIds:[3,5,6,20,21,22]},
+      {day:'Friday',focus:'Pull',muscles:['Back','Biceps'],exIds:[10,11,12,27,28,29]},
+      {day:'Saturday',focus:'Legs',muscles:['Legs'],exIds:[13,15,16,17,18]},
+      {day:'Sunday',focus:'Rest',muscles:[],exIds:[]},
+    ]
+  },
+  {
+    id:'upper_lower',name:'Upper / Lower',days:4,icon:'⚡',
+    desc:'Great for beginners to intermediate. High frequency, each muscle trained twice per week.',
+    schedule:[
+      {day:'Monday',focus:'Upper',muscles:['Chest','Back','Shoulders','Biceps','Triceps'],exIds:[1,7,19,25,21]},
+      {day:'Tuesday',focus:'Lower',muscles:['Legs','Core'],exIds:[13,14,15,33,34]},
+      {day:'Wednesday',focus:'Rest',muscles:[],exIds:[]},
+      {day:'Thursday',focus:'Upper',muscles:['Chest','Back','Shoulders','Biceps','Triceps'],exIds:[2,8,20,26,22]},
+      {day:'Friday',focus:'Lower',muscles:['Legs','Core'],exIds:[16,17,18,35,36]},
+      {day:'Saturday',focus:'Rest',muscles:[],exIds:[]},
+      {day:'Sunday',focus:'Rest',muscles:[],exIds:[]},
+    ]
+  },
+  {
+    id:'full_body',name:'Full Body 3x',days:3,icon:'🏋️',
+    desc:'Best for beginners and busy schedules. Trains everything three times a week.',
+    schedule:[
+      {day:'Monday',focus:'Full Body A',muscles:['Chest','Back','Legs','Core'],exIds:[1,7,13,33]},
+      {day:'Tuesday',focus:'Rest',muscles:[],exIds:[]},
+      {day:'Wednesday',focus:'Full Body B',muscles:['Chest','Back','Legs','Shoulders'],exIds:[2,8,14,19]},
+      {day:'Thursday',focus:'Rest',muscles:[],exIds:[]},
+      {day:'Friday',focus:'Full Body A',muscles:['Chest','Back','Legs','Core'],exIds:[1,7,13,33]},
+      {day:'Saturday',focus:'Rest',muscles:[],exIds:[]},
+      {day:'Sunday',focus:'Rest',muscles:[],exIds:[]},
+    ]
+  },
+  {
+    id:'bro_split',name:'Bro Split (5-day)',days:5,icon:'🎯',
+    desc:'One muscle group per day. Classic bodybuilding approach. High volume per muscle.',
+    schedule:[
+      {day:'Monday',focus:'Chest',muscles:['Chest'],exIds:[1,2,3,4,5,6]},
+      {day:'Tuesday',focus:'Back',muscles:['Back'],exIds:[7,8,9,10,11,12]},
+      {day:'Wednesday',focus:'Legs',muscles:['Legs'],exIds:[13,14,15,16,17,18]},
+      {day:'Thursday',focus:'Shoulders',muscles:['Shoulders'],exIds:[19,20,21,22,23,24]},
+      {day:'Friday',focus:'Arms',muscles:['Biceps','Triceps'],exIds:[25,26,27,28,29,30]},
+      {day:'Saturday',focus:'Rest',muscles:[],exIds:[]},
+      {day:'Sunday',focus:'Rest',muscles:[],exIds:[]},
+    ]
+  },
+  {
+    id:'calisthenics_split',name:'Calisthenics Progression',days:4,icon:'🔝',
+    desc:'Bodyweight focused. Build strength without equipment.',
+    schedule:[
+      {day:'Monday',focus:'Push',muscles:['Calisthenics'],exIds:[102,106,107]},
+      {day:'Tuesday',focus:'Pull',muscles:['Calisthenics'],exIds:[101,104,107]},
+      {day:'Wednesday',focus:'Rest / Mobility',muscles:['Mobility'],exIds:[41,42,43]},
+      {day:'Thursday',focus:'Legs + Core',muscles:['Calisthenics'],exIds:[103,105,108]},
+      {day:'Friday',focus:'Full Body',muscles:['Calisthenics'],exIds:[101,102,103,105]},
+      {day:'Saturday',focus:'Rest',muscles:[],exIds:[]},
+      {day:'Sunday',focus:'Rest',muscles:[],exIds:[]},
+    ]
+  },
+];
+
+let savedSplit = null;
+
+function renderSplits(){
+  const el = document.getElementById('splits-content');
+  if(!el) return;
+  const s = loadSettings();
+  const saved = localStorage.getItem('ft_split');
+  if(saved){ try{ savedSplit=JSON.parse(saved); }catch(e){} }
+
+  el.innerHTML = `
+    <div style="padding:14px 16px 100px;">
+      ${savedSplit ? `
+        <div style="background:rgba(168,255,60,0.06);border:1px solid rgba(168,255,60,0.2);border-radius:14px;padding:12px 14px;margin-bottom:16px;display:flex;align-items:center;justify-content:space-between;">
+          <div>
+            <div style="font-size:10px;font-weight:800;color:var(--accent);text-transform:uppercase;letter-spacing:0.1em;margin-bottom:2px;">Active Split</div>
+            <div style="font-size:14px;font-weight:800;color:var(--text);">${savedSplit.icon} ${savedSplit.name}</div>
+          </div>
+          <button onclick="clearSplit()" style="background:none;border:1px solid var(--border);border-radius:10px;padding:5px 10px;color:var(--text3);font-size:11px;cursor:pointer;">Change</button>
+        </div>
+        <!-- Today's session from split -->
+        ${renderTodaySplit()}
+      ` : ''}
+
+      <div style="font-size:10px;font-weight:800;color:var(--text3);text-transform:uppercase;letter-spacing:0.12em;margin-bottom:12px;">Choose a Split</div>
+
+      ${SPLIT_TEMPLATES.map(sp=>`
+        <div style="background:var(--surface);border:1px solid ${savedSplit&&savedSplit.id===sp.id?'rgba(168,255,60,0.4)':'var(--border)'};border-radius:16px;padding:14px;margin-bottom:10px;">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;">
+            <div style="display:flex;align-items:center;gap:10px;">
+              <span style="font-size:22px;">${sp.icon}</span>
+              <div>
+                <div style="font-size:14px;font-weight:800;color:var(--text);">${sp.name}</div>
+                <div style="font-size:11px;color:var(--text3);">${sp.days} training days/week</div>
+              </div>
+            </div>
+            <button onclick="activateSplit('${sp.id}')" style="background:${savedSplit&&savedSplit.id===sp.id?'var(--accent)':'var(--surface2)'};border:1px solid ${savedSplit&&savedSplit.id===sp.id?'transparent':'var(--border2)'};border-radius:20px;padding:6px 14px;color:${savedSplit&&savedSplit.id===sp.id?'#0c0c0e':'var(--text2)'};font-family:var(--fn);font-size:11px;font-weight:800;cursor:pointer;white-space:nowrap;">
+              ${savedSplit&&savedSplit.id===sp.id?'✓ Active':'Use this'}
+            </button>
+          </div>
+          <div style="font-size:12px;color:var(--text3);margin-bottom:10px;">${sp.desc}</div>
+          <div style="display:flex;gap:4px;flex-wrap:wrap;">
+            ${sp.schedule.filter(d=>d.focus!=='Rest').map(d=>`
+              <div style="background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:4px 10px;font-size:10px;font-weight:700;color:var(--text2);">${d.day.slice(0,3)}: ${d.focus}</div>`).join('')}
+          </div>
+        </div>`).join('')}
+
+      <div style="font-size:10px;font-weight:800;color:var(--text3);text-transform:uppercase;letter-spacing:0.12em;margin:20px 0 12px;">Or Build Your Own</div>
+      <button onclick="openCustomSplit()" style="width:100%;background:var(--surface);border:1px dashed var(--border2);border-radius:14px;padding:14px;color:var(--text2);font-family:var(--fn);font-size:13px;font-weight:700;cursor:pointer;">
+        + Create Custom Split
+      </button>
+    </div>`;
+}
+
+function renderTodaySplit(){
+  if(!savedSplit) return '';
+  const dayIdx = new Date().getDay(); // 0=Sun
+  // Map: 0=Sun→rest, 1=Mon→day0, etc
+  const dayMap=[6,0,1,2,3,4,5]; // Mon=0 in our split
+  const todaySchedule = savedSplit.schedule[dayMap[dayIdx]];
+  if(!todaySchedule||todaySchedule.focus==='Rest') return '<div style="background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:12px 14px;margin-bottom:16px;font-size:13px;color:var(--text3);text-align:center;">Rest day today — recover well 💤</div>';
+  const exs = todaySchedule.exIds.map(id=>EXS.find(e=>e.id===id)).filter(Boolean);
+  return `
+    <div style="background:var(--surface);border:1px solid var(--border);border-radius:14px;overflow:hidden;margin-bottom:16px;">
+      <div style="background:rgba(168,255,60,0.06);padding:10px 14px;border-bottom:1px solid var(--border);">
+        <div style="font-size:10px;font-weight:800;color:var(--accent);text-transform:uppercase;letter-spacing:0.1em;">Today — ${todaySchedule.focus}</div>
+      </div>
+      ${exs.map(ex=>`
+        <div style="display:flex;align-items:center;gap:10px;padding:10px 14px;border-bottom:1px solid var(--border);">
+          <div style="width:32px;height:32px;border-radius:8px;background:${ex.bg};display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0;">${ex.icon}</div>
+          <div style="flex:1;font-size:13px;font-weight:700;color:var(--text);">${ex.name}</div>
+          <button onclick="addExToWorkout(${ex.id})" style="background:var(--accent);border:none;border-radius:10px;padding:5px 12px;color:#0c0c0e;font-family:var(--fn);font-size:11px;font-weight:800;cursor:pointer;">Add</button>
+        </div>`).join('')}
+    </div>`;
+}
+
+function activateSplit(id){
+  const sp = SPLIT_TEMPLATES.find(s=>s.id===id);
+  if(!sp) return;
+  savedSplit = sp;
+  localStorage.setItem('ft_split', JSON.stringify(sp));
+  haptic('success');
+  toast(sp.name+' activated 💪');
+  renderSplits();
+}
+function clearSplit(){
+  savedSplit=null;
+  localStorage.removeItem('ft_split');
+  renderSplits();
+}
+function addExToWorkout(id){
+  const ex=EXS.find(e=>e.id===id);
+  if(!ex) return;
+  if(!S.wex) S.wex=[];
+  if(S.wex.find(e=>e.id===id)){ toast(ex.name+' already in workout'); return; }
+  S.wex.push({id:ex.id,name:ex.name,icon:ex.icon,bg:ex.bg,sets:[]});
+  save(); haptic('success');
+  toast(ex.name+' added to workout ✓');
+  go('w',document.getElementById('tb-w'));
+}
+function openCustomSplit(){
+  toast('Custom split builder coming soon — use a template for now');
+}
+function renderMyPlans(){
+  const el=document.getElementById('plans-content');
+  if(!el) return;
+  const saved=localStorage.getItem('ft_split');
+  if(!saved){
+    el.innerHTML='<div class="empty-rich" style="padding:40px 16px;"><div class="empty-rich-icon" style="font-size:28px;">📋</div><div class="empty-rich-title">No plan active</div><div class="empty-rich-sub">Go to Splits tab and choose a training split.</div></div>';
+    return;
+  }
+  const sp=JSON.parse(saved);
+  el.innerHTML=`<div style="padding:14px 16px 100px;">
+    <div style="font-size:10px;font-weight:800;color:var(--text3);text-transform:uppercase;letter-spacing:0.12em;margin-bottom:12px;">Your Active Plan</div>
+    ${sp.schedule.map((d,i)=>`
+      <div style="background:var(--surface);border:1px solid ${d.focus==='Rest'?'var(--border)':'rgba(168,255,60,0.15)'};border-radius:14px;padding:12px 14px;margin-bottom:8px;display:flex;align-items:center;gap:12px;">
+        <div style="width:40px;height:40px;border-radius:10px;background:${d.focus==='Rest'?'var(--surface2)':'rgba(168,255,60,0.08)'};display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;color:${d.focus==='Rest'?'var(--text3)':'var(--accent)'};flex-shrink:0;">${d.day.slice(0,3)}</div>
+        <div style="flex:1;">
+          <div style="font-size:13px;font-weight:800;color:${d.focus==='Rest'?'var(--text3)':'var(--text)'};">${d.focus}</div>
+          ${d.muscles.length?'<div style="font-size:11px;color:var(--text3);">'+d.muscles.join(' · ')+'</div>':''}
+        </div>
+        ${d.focus!=='Rest'?'<button onclick="loadSplitDay('+i+')" style="background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:5px 12px;font-family:var(--fn);font-size:11px;font-weight:700;color:var(--text2);cursor:pointer;">Start</button>':''}
+      </div>`).join('')}
+  </div>`;
+}
+function loadSplitDay(dayIdx){
+  const saved=localStorage.getItem('ft_split');
+  if(!saved) return;
+  const sp=JSON.parse(saved);
+  const day=sp.schedule[dayIdx];
+  if(!day||!day.exIds.length){ toast('Rest day'); return; }
+  // Add all exercises for this day to workout
+  day.exIds.forEach(id=>{
+    const ex=EXS.find(e=>e.id===id);
+    if(ex&&!S.wex.find(e=>e.id===id)) S.wex.push({id:ex.id,name:ex.name,icon:ex.icon,bg:ex.bg,sets:[]});
+  });
+  save(); haptic('success');
+  toast(day.focus+' session loaded 💪');
+  go('w',document.getElementById('tb-w'));
+}
+// ============ END WORKOUT SPLITS ============
+
 // ============ SKIN + ELEVATE HELPERS ============
 function setSkinType(type){
   EV=loadElevate(); EV.skinType=type; saveElevate(EV); haptic('light');
@@ -6827,6 +7467,7 @@ function initApp(){
   const d=new Date();
   const greetEl=document.getElementById('hdr-greeting');
   if(greetEl){ const s=loadSettings(); greetEl.textContent=getGreeting()+(s.name?', '+s.name.split(' ')[0].toUpperCase():''); }
+  // Health Score rendered inline in today-summary volt card
   const dateEl=document.getElementById('hdr-date');
   if(dateEl)dateEl.textContent=DS[d.getDay()]+', '+MS[d.getMonth()]+' '+d.getDate();
   const sw=document.getElementById('sw');sw.classList.remove('gone');sw.style.display='flex';
