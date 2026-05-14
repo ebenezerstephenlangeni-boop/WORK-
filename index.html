@@ -566,7 +566,6 @@ select option { background: var(--surface2); }
 ───────────────────────────────────────── */
 .ex-search-wrap {
   padding: 8px 16px 0;
-  position: sticky; top: 56px; z-index: 40;
   background: var(--bg);
 }
 .sbox {
@@ -579,7 +578,7 @@ select option { background: var(--surface2); }
 .sbox svg { color: var(--text3); flex-shrink: 0; }
 .sbox input { background: transparent; border: none; outline: none; color: var(--text); font-size: 14px; width: 100%; font-family: var(--fb); font-weight: 500; }
 .sbox input::placeholder { color: var(--text3); }
-.filter-wrap { position: sticky; top: calc(56px + 54px); z-index: 39; background: var(--bg); }
+.filter-wrap { background: var(--bg); }
 .fscroll { display: flex; gap: 7px; padding: 8px 16px; overflow-x: auto; scrollbar-width: none; }
 .fscroll::-webkit-scrollbar { display: none; }
 .fpill {
@@ -2414,7 +2413,6 @@ input:focus, select:focus, textarea:focus {
       </div>
     </div>
     <div class="filter-wrap" style="flex-shrink:0;"><div class="fscroll" id="ex-pills"></div></div>
-    <div id="edu-section-ex" style="padding:0 16px 0;flex-shrink:0;"></div>
     <div class="ex-grid" id="ex-grid" style="overflow-y:auto;-webkit-overflow-scrolling:touch;flex:1;min-height:0;padding-bottom:80px;"></div>
   </div>
 
@@ -3578,7 +3576,7 @@ function renderWorkout(){
 
   // Quote now rendered by renderQuoteBottom() below
 
-  // Old WOD suggestions removed — now using edu section + suggested dropdown
+  // Edu section now rendered inside ex-grid by renderEx()
   if(false && document.getElementById('wod-suggest')){
     const suggestions=WOD_PLANS.slice().sort(()=>Math.random()-0.5).slice(0,5);
     const planColors=[['#1a2a0a','#0a1a00'],['#0a1520','#0a0a20'],['#1e1a08','#0a0a00'],['#1a0a1a','#0a0010'],['#2a1a0a','#1a0a00']];
@@ -3769,7 +3767,6 @@ function addExW(id){const ex=EXS.find(e=>e.id===id);if(!ex)return;S.wex.push({..
 
 // ============ EXERCISES ============
 function renderEx(){
-  renderEduSection();
   document.getElementById('ex-pills').innerHTML=MUSF.map(m=>`<button class="fpill ${S.exf===m?'active':''}" onclick="setExF('${m}')">${m}</button>`).join('');
   const q=(S.exs||'').toLowerCase();
   const list=EXS.filter(ex=>{
@@ -3779,7 +3776,8 @@ function renderEx(){
   });
   const tc={strength:'cg',cardio:'cb',mobility:'co'};
   const hasPO=(name)=>S.poLog[name]&&S.poLog[name].length>0;
-  document.getElementById('ex-grid').innerHTML=list.map(ex=>`
+  const eduHtml=getEduCardHtml();
+  const exRows=list.map(ex=>`
     <div class="ex-row" onclick="openExD(${ex.id})">
       <div class="er-ico" style="background:${ex.bg};">${ex.icon}</div>
       <div class="er-info">
@@ -3788,6 +3786,39 @@ function renderEx(){
       </div>
       <span class="chip ${tc[ex.type]}">${ex.type}</span>
     </div>`).join('')||'<div style="text-align:center;padding:40px;color:var(--text3);font-size:13px;">No results</div>';
+  document.getElementById('ex-grid').innerHTML = eduHtml + exRows;
+}
+
+function getEduCardHtml(){
+  const eduArr=ELEVATE_EDU&&ELEVATE_EDU.fitness?ELEVATE_EDU.fitness:[];
+  if(!eduArr.length) return '';
+  const idx=typeof elevateEduIdx!=='undefined'&&elevateEduIdx.fitness!==undefined?elevateEduIdx.fitness:0;
+  const edu=eduArr[idx%eduArr.length];
+  if(!edu) return '';
+  const dots=eduArr.map((_,i)=>`<div style="width:${i===idx?'16':'6'}px;height:6px;border-radius:3px;background:${i===idx?'var(--gold)':'var(--border2)'};transition:all 0.2s;"></div>`).join('');
+  return `<div style="padding:12px 16px 4px;">
+    <div class="elevate-edu-card" style="border-left-color:var(--gold);">
+      <div class="elevate-edu-title">${edu.title}</div>
+      <div class="elevate-edu-body">${edu.body}</div>
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-top:10px;">
+        <button class="btn-ghost" style="width:auto;padding:5px 12px;font-size:11px;" onclick="prevExEdu()">← Prev</button>
+        <div style="display:flex;gap:4px;">${dots}</div>
+        <button class="btn-ghost" style="width:auto;padding:5px 12px;font-size:11px;" onclick="nextExEdu()">Next →</button>
+      </div>
+    </div>
+  </div>`;
+}
+function prevExEdu(){
+  if(typeof elevateEduIdx==='undefined') return;
+  const arr=ELEVATE_EDU.fitness||[];
+  elevateEduIdx.fitness=(elevateEduIdx.fitness-1+arr.length)%arr.length;
+  renderEx();
+}
+function nextExEdu(){
+  if(typeof elevateEduIdx==='undefined') return;
+  const arr=ELEVATE_EDU.fitness||[];
+  elevateEduIdx.fitness=(elevateEduIdx.fitness+1)%arr.length;
+  renderEx();
 }
 function setExF(m){S.exf=m;save();renderEx();}
 function filterEx(){S.exs=document.getElementById('ex-s').value;save();renderEx();}
