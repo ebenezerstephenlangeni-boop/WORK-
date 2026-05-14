@@ -140,16 +140,29 @@
   -webkit-tap-highlight-color: transparent;
   -webkit-touch-callout: none;
 }
-html, body {
+html {
+  /* Hardcoded dark initial bg — prevents white flash before theme loads */
+  background: #0c0c0e;
   height: 100%;
-  background: var(--bg);
+  overflow: hidden;
+}
+html[data-theme="light"] {
+  background: #f5f5f7;
+}
+html, body {
   color: var(--text);
   font-family: var(--fb);
   overflow: hidden;
   -webkit-font-smoothing: antialiased;
   font-size: 14px;
 }
-body { display: flex; flex-direction: column; }
+body {
+  height: 100%;
+  background: var(--bg);
+  display: flex;
+  flex-direction: column;
+  min-height: 100dvh;
+}
 .status-bar { height: var(--safe-top); background: var(--bg); flex-shrink: 0; }
 .app-shell  { flex: 1; display: flex; flex-direction: column; overflow: hidden; min-height: 0; }
 .screen     { flex: 1; overflow-y: auto; overflow-x: hidden; -webkit-overflow-scrolling: touch; }
@@ -1101,6 +1114,14 @@ select option { background: var(--surface2); }
 /* ─────────────────────────────────────────
    SPLASH SCREEN — HEXAGON MARK
 ───────────────────────────────────────── */
+html, body {
+  background: #0c0c0e !important;
+  min-height: 100%;
+}
+[data-theme="light"] body,
+[data-theme="light"] html {
+  background: #f5f5f7 !important;
+}
 #splash {
   position: fixed; inset: 0; z-index: 9999;
   background: #0c0c0e;
@@ -1108,6 +1129,9 @@ select option { background: var(--surface2); }
   flex-direction: column; gap: 0;
   transition: opacity 0.7s cubic-bezier(0.4,0,0.2,1), transform 0.7s cubic-bezier(0.4,0,0.2,1);
   overflow: hidden;
+  /* Extend into safe areas */
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+  padding-top: env(safe-area-inset-top, 0px);
 }
 #splash.hide { opacity: 0; transform: scale(1.06); pointer-events: none; }
 #splash-bg-canvas { position: absolute; inset: 0; width: 100%; height: 100%; }
