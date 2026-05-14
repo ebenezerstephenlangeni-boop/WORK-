@@ -2081,16 +2081,18 @@ select option { background: var(--surface2); }
 }
 
 /* ── LIGHT MODE FIXES ── */
-[data-theme="light"] #splash { background: #f5f5f7; }
-[data-theme="light"] #splash-bg-canvas { display: none; }
-[data-theme="light"] #logo-name { color: #0c0c0e; }
-[data-theme="light"] #logo-tag { color: rgba(12,12,14,0.4); }
-[data-theme="light"] .tab-bar { background: rgba(245,245,247,0.95); }
-[data-theme="light"] .ph { background: rgba(245,245,247,0.95); }
-[data-theme="light"] .ob-slide { color: #0c0c0e; }
-[data-theme="light"] #onboarding { background: #f5f5f7; }
-[data-theme="light"] .elevate-hero { background: linear-gradient(135deg,rgba(187,127,255,0.08),rgba(187,127,255,0.03)); }
-[data-theme="light"] .wc-overlay-bg { background: rgba(245,245,247,0.95); }
+[data-theme="dark"] #splash { background: #0c0c0e; }
+[data-theme="dark"] #logo-name { color: #f4f4f6; }
+[data-theme="dark"] #logo-tag { color: rgba(244,244,246,0.4); }
+[data-theme="dark"] .tab-bar { background: rgba(12,12,14,0.95); }
+[data-theme="dark"] .ph { background: rgba(12,12,14,0.95); }
+[data-theme="dark"] .ob-slide { color: #f4f4f6; }
+[data-theme="dark"] #onboarding { background: #0c0c0e; }
+[data-theme="dark"] .wc-overlay-bg { background: rgba(12,12,14,0.95); }
+[data-theme="dark"] .volt-hero .vh-num { color: #071a00; }
+[data-theme="dark"] .volt-hero .vh-label { color: rgba(7,26,0,0.55); }
+[data-theme="dark"] .volt-hero .vh-streak { color: #071a00; }
+[data-theme="dark"] .volt-hero .vh-streak-lbl { color: rgba(7,26,0,0.45); }
 
 /* ── STAGGERED CARD ANIMATIONS ── */
 .anim-stagger > *:nth-child(1) { animation: cardIn 0.25s ease both 0.02s; }
@@ -2370,8 +2372,8 @@ input:focus, select:focus, textarea:focus {
 </div>
 
 <!-- EXERCISES -->
-<div id="se" class="screen gone" style="display:flex;flex-direction:column;">
-  <div class="ph"><div class="ph-left"><div class="ph-title">EXERCISES</div><div class="ph-sub">Library &amp; guides</div></div><div style="display:flex;gap:6px;"><button class="hdr-icon-btn" onclick="toggleTheme()">🌙</button><button class="hdr-icon-btn" onclick="go('s',null)">⚙️</button></div></div>
+<div id="se" class="screen gone" style="display:flex;flex-direction:column;min-height:0;overflow:hidden;">
+  <div class="ph"><div class="ph-left"><div class="ph-title">EXERCISES</div><div class="ph-sub">Library &amp; guides</div></div><div style="display:flex;gap:6px;"><button class="hdr-icon-btn theme-toggle" onclick="toggleTheme()">🌙</button><button class="hdr-icon-btn" onclick="go('s',null)">⚙️</button></div></div>
   <!-- Sub-tabs -->
   <div style="display:flex;background:var(--surface);border-bottom:1px solid var(--border);flex-shrink:0;">
     <button class="nut-tab active" id="extab-library" onclick="setExTab('library')">Library</button>
@@ -2380,25 +2382,25 @@ input:focus, select:focus, textarea:focus {
   </div>
 
   <!-- Library panel -->
-  <div id="expanel-library" style="display:flex;flex-direction:column;flex:1;overflow:hidden;">
-    <div class="ex-search-wrap">
+  <div id="expanel-library" style="display:flex;flex-direction:column;min-height:0;flex:1;">
+    <div class="ex-search-wrap" style="flex-shrink:0;">
       <div class="sbox">
         <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
         <input type="text" id="ex-s" placeholder="Search exercises…" oninput="filterEx()"/>
       </div>
     </div>
-    <div class="filter-wrap"><div class="fscroll" id="ex-pills"></div></div>
-    <div id="edu-section-ex" style="padding:0 16px 0;"></div>
-    <div class="ex-grid" id="ex-grid" style="overflow-y:auto;flex:1;"></div>
+    <div class="filter-wrap" style="flex-shrink:0;"><div class="fscroll" id="ex-pills"></div></div>
+    <div id="edu-section-ex" style="padding:0 16px 0;flex-shrink:0;"></div>
+    <div class="ex-grid" id="ex-grid" style="overflow-y:auto;-webkit-overflow-scrolling:touch;flex:1;min-height:0;padding-bottom:80px;"></div>
   </div>
 
   <!-- Splits panel -->
-  <div id="expanel-splits" style="display:none;flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;">
+  <div id="expanel-splits" style="display:none;flex:1;min-height:0;overflow-y:auto;-webkit-overflow-scrolling:touch;">
     <div id="splits-content"></div>
   </div>
 
   <!-- My Plan panel -->
-  <div id="expanel-plans" style="display:none;flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;">
+  <div id="expanel-plans" style="display:none;flex:1;min-height:0;overflow-y:auto;-webkit-overflow-scrolling:touch;">
     <div id="plans-content"></div>
   </div>
 </div>
@@ -2407,7 +2409,7 @@ input:focus, select:focus, textarea:focus {
 <div id="sc" class="screen gone" style="display:flex;flex-direction:column;">
   <div class="ph">
     <div class="ph-left"><div class="ph-title">CARDIO</div><div class="ph-sub">Move. Burn. Recover.</div></div>
-    <div style="display:flex;gap:6px;"><button class="hdr-icon-btn" onclick="toggleTheme()">🌙</button><button class="hdr-icon-btn" onclick="go('s',null)">⚙️</button></div>
+    <div style="display:flex;gap:6px;"><button class="hdr-icon-btn theme-toggle" onclick="toggleTheme()">🌙</button><button class="hdr-icon-btn" onclick="go('s',null)">⚙️</button></div>
   </div>
   <div style="flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;">
     <!-- Live timer section — always at top -->
@@ -2437,7 +2439,7 @@ input:focus, select:focus, textarea:focus {
 <div id="sn" class="screen gone" style="display:flex;flex-direction:column;">
   <div class="ph">
     <div class="ph-left"><div class="ph-title">NUTRITION</div><div class="ph-sub">Fuel your transformation</div></div>
-    <div style="display:flex;gap:6px;"><button class="hdr-icon-btn" onclick="toggleTheme()">🌙</button><button class="hdr-icon-btn" onclick="go('s',null)">⚙️</button></div>
+    <div style="display:flex;gap:6px;"><button class="hdr-icon-btn theme-toggle" onclick="toggleTheme()">🌙</button><button class="hdr-icon-btn" onclick="go('s',null)">⚙️</button></div>
   </div>
 
   <!-- Nutrition sub-tabs -->
@@ -2600,7 +2602,7 @@ input:focus, select:focus, textarea:focus {
 <div id="sp" class="screen gone" style="display:flex;flex-direction:column;">
   <div class="ph">
     <div class="ph-left"><div class="ph-title">PROGRESS</div><div class="ph-sub">Your transformation journey</div></div>
-    <div style="display:flex;gap:6px;"><button class="hdr-icon-btn" onclick="toggleTheme()">🌙</button><button class="hdr-icon-btn" onclick="go('s',null)">⚙️</button></div>
+    <div style="display:flex;gap:6px;"><button class="hdr-icon-btn theme-toggle" onclick="toggleTheme()">🌙</button><button class="hdr-icon-btn" onclick="go('s',null)">⚙️</button></div>
   </div>
   <div style="flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;">
 
@@ -2710,7 +2712,7 @@ input:focus, select:focus, textarea:focus {
       <button class="settings-close-btn" onclick="document.getElementById('settings-overlay').classList.remove('open')">✕</button>
     </div>
     <div class="settings-panel-body">
-  <div class="ph"><div class="ph-left"><div class="ph-title">SETTINGS</div><div class="ph-sub">Preferences &amp; profile</div></div><button class="hdr-icon-btn" onclick="toggleTheme()">🌙</button></div>
+  <div class="ph"><div class="ph-left"><div class="ph-title">SETTINGS</div><div class="ph-sub">Preferences &amp; profile</div></div><button class="hdr-icon-btn theme-toggle" onclick="toggleTheme()">🌙</button></div>
   <div style="flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;">
     <div class="scroll-body">
 
@@ -2864,7 +2866,7 @@ input:focus, select:focus, textarea:focus {
       <div class="ph-sub">Look good. Feel good. Be you.</div>
     </div>
     <div style="display:flex;gap:6px;">
-      <button class="hdr-icon-btn" onclick="toggleTheme()">🌙</button>
+      <button class="hdr-icon-btn theme-toggle" onclick="toggleTheme()">🌙</button>
       <button class="hdr-icon-btn" onclick="go('s',null)">⚙️</button>
     </div>
   </div>
@@ -4822,25 +4824,23 @@ function confirmScanLog(){
 // ============ THEME TOGGLE ============
 function toggleTheme(){
   const root = document.documentElement;
-  const current = root.getAttribute('data-theme');
+  const current = root.getAttribute('data-theme') || 'light';
   const next = current === 'light' ? 'dark' : 'light';
-  root.setAttribute('data-theme', next === 'dark' ? null : 'light');
-  if(next === 'dark') root.removeAttribute('data-theme');
+  root.setAttribute('data-theme', next);
   localStorage.setItem('ft_theme', next);
   updateThemeBtn();
   updateSettThemeBtn();
 }
 function updateThemeBtn(){
-  const isDark = !document.documentElement.getAttribute('data-theme');
-  document.querySelectorAll('.theme-toggle').forEach(btn => {
-    btn.textContent = isDark ? '🌙' : '☀️';
-  });
+  const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+  const icon = isDark ? '☀️' : '🌙';
+  document.querySelectorAll('.theme-toggle').forEach(btn => btn.textContent = icon);
+  const mainBtn = document.getElementById('theme-btn');
+  if(mainBtn) mainBtn.textContent = icon;
 }
 function initTheme(){
-  const saved = localStorage.getItem('ft_theme') || 'dark';
-  if(saved === 'light'){
-    document.documentElement.setAttribute('data-theme','light');
-  }
+  const saved = localStorage.getItem('ft_theme') || 'light';
+  document.documentElement.setAttribute('data-theme', saved);
   updateThemeBtn();
 }
 // ============ END THEME TOGGLE ============
