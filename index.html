@@ -3776,7 +3776,7 @@ function renderEx(){
   });
   const tc={strength:'cg',cardio:'cb',mobility:'co'};
   const hasPO=(name)=>S.poLog[name]&&S.poLog[name].length>0;
-  const eduHtml=getEduCardHtml();
+  const eduHtml="";
   const exRows=list.map(ex=>`
     <div class="ex-row" onclick="openExD(${ex.id})">
       <div class="er-ico" style="background:${ex.bg};">${ex.icon}</div>
@@ -7888,36 +7888,11 @@ const EDU_CONTENT = {
 let eduTab = 'diet';
 let eduCardIdx = 0;
 
-function renderEduSection(){
-  const el = document.getElementById('edu-section-ex') || document.getElementById('edu-section');
-  if(!el) return;
-  const cards = EDU_CONTENT[eduTab];
-  const card = cards[eduCardIdx];
-  el.innerHTML = `
-    <div class="edu-section">
-      <div class="edu-tab-row">
-        <button class="edu-tab ${eduTab==='diet'?'active':''}" onclick="setEduTab('diet')">🥗 Diet</button>
-        <button class="edu-tab ${eduTab==='muscle'?'active':''}" onclick="setEduTab('muscle')">💪 Muscle</button>
-        <button class="edu-tab ${eduTab==='fitness'?'active':''}" onclick="setEduTab('fitness')">⚡ Fitness</button>
-      </div>
-      <div class="edu-card">
-        <div class="edu-card-title">${card.title}</div>
-        <div class="edu-card-body">${card.body}</div>
-        <div class="edu-tags">${card.tags.map(t=>`<span class="edu-tag">${t}</span>`).join('')}</div>
-        <div class="edu-nav">
-          <button class="edu-nav-btn" onclick="prevEduCard()">← Prev</button>
-          <div class="edu-dots">
-            ${cards.map((_,i)=>`<div class="edu-dot ${i===eduCardIdx?'active':''}"></div>`).join('')}
-          </div>
-          <button class="edu-nav-btn" onclick="nextEduCard()">Next →</button>
-        </div>
-      </div>
-    </div>`;
-}
-
-function setEduTab(tab){ eduTab=tab; eduCardIdx=0; renderEduSection(); }
-function nextEduCard(){ const cards=EDU_CONTENT[eduTab]; eduCardIdx=(eduCardIdx+1)%cards.length; renderEduSection(); }
-function prevEduCard(){ const cards=EDU_CONTENT[eduTab]; eduCardIdx=(eduCardIdx-1+cards.length)%cards.length; renderEduSection(); }
+// renderEduSection disabled — edu card now rendered inline inside ex-grid by getEduCardHtml()
+function renderEduSection(){ /* disabled — replaced by getEduCardHtml() */ }
+function setEduTab(tab){ }
+function nextEduCard(){ }
+function prevEduCard(){ }
 
 // ============ SUGGESTED EXERCISES DROPDOWN ============
 let suggOpen = false;
