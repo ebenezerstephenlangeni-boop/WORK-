@@ -1253,6 +1253,10 @@ tr.set-flash    { animation: setRowFlash 0.55s ease both; }
 @keyframes flamePulse { 0%, 100% { transform: scale(1) rotate(-3deg); } 50% { transform: scale(1.12) rotate(3deg); } }
 @keyframes tabBounce { 0% { transform: scale(1); } 40% { transform: scale(1.28); } 70% { transform: scale(0.92); } 100% { transform: scale(1); } }
 .tab-bounce { animation: tabBounce 0.32s cubic-bezier(0.34,1.56,0.64,1) both; }
+.grocery-item.checked { opacity: 0.45; }
+.grocery-item.checked span { text-decoration: line-through; }
+.grocery-item.checked .grocery-check { background: var(--accent); border-color: var(--accent); }
+.grocery-item.checked .grocery-check::after { content: '✓'; font-size: 11px; color: #071a00; font-weight: 900; }
 .tb.active svg { animation: tabBounce 0.3s cubic-bezier(0.32,0.72,0,1); }
 .skel { background: linear-gradient(90deg, var(--surface2) 25%, var(--surface3) 50%, var(--surface2) 75%); background-size: 200% 100%; animation: skelShimmer 1.2s infinite; border-radius: 8px; }
 @keyframes skelShimmer { 0% { background-position: 200% 0; } 100% { background-position: -200% 0; } }
@@ -2525,6 +2529,8 @@ input:focus, select:focus, textarea:focus {
     <button class="nut-tab active" id="ntab-track" onclick="setNutTab('track')">Track</button>
     <button class="nut-tab" id="ntab-guide" onclick="setNutTab('guide')">Guide</button>
     <button class="nut-tab" id="ntab-meals" onclick="setNutTab('meals')">Meals</button>
+    <button class="nut-tab" id="ntab-plan" onclick="setNutTab('plan')">Plan</button>
+    <button class="nut-tab" id="ntab-grocery" onclick="setNutTab('grocery')">Grocery</button>
   </div>
 
   <div style="flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;">
@@ -2673,6 +2679,16 @@ input:focus, select:focus, textarea:focus {
       <div id="nut-meals-content"></div>
     </div>
 
+    <!-- ══ TAB: PLAN ══ -->
+    <div id="nut-plan" class="scroll-body" style="display:none;padding-top:14px;">
+      <div id="nut-plan-content"></div>
+    </div>
+
+    <!-- ══ TAB: GROCERY ══ -->
+    <div id="nut-grocery" class="scroll-body" style="display:none;padding-top:14px;">
+      <div id="nut-grocery-content"></div>
+    </div>
+
   </div>
 </div>
 
@@ -2691,6 +2707,8 @@ input:focus, select:focus, textarea:focus {
 
   <!-- PROGRESS PANEL -->
   <div id="sp" style="flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;display:none;flex-direction:column;">
+    <!-- Weekly Health Report -->
+    <div id="weekly-report"></div>
     <!-- Progress hero -->
     <div id="prog-hero"></div>
     <div class="scroll-body" style="padding-top:14px;">
@@ -2779,6 +2797,10 @@ input:focus, select:focus, textarea:focus {
       <div class="photo-grid" id="photo-grid"></div>
       <input type="file" id="photo-input" accept="image/*" style="display:none;" onchange="handlePhoto(event)"/>
 
+      <!-- Body Composition -->
+      <div class="sec-head">BODY COMPOSITION</div>
+      <div id="body-comp-section"></div>
+
       <!-- Session History -->
       <div class="sec-head" style="margin-top:8px;">SESSION HISTORY</div>
       <div class="hs-grid" id="hs-cards"></div>
@@ -2789,6 +2811,7 @@ input:focus, select:focus, textarea:focus {
 
   <!-- ELEVATE PANEL -->
   <div id="sel" style="flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;display:flex;flex-direction:column;">
+    <div id="glow-report"></div>
     <div id="elevate-hero"></div>
     <div style="display:flex;gap:8px;padding:12px 16px 0;overflow-x:auto;scrollbar-width:none;" id="elevate-pillars"></div>
     <div class="scroll-body" id="elevate-content"></div>
@@ -3091,6 +3114,17 @@ input:focus, select:focus, textarea:focus {
       </div>
       <div id="pk-list"></div>
     </div>
+  </div>
+</div>
+
+<!-- MEAL PICKER MODAL -->
+<div class="overlay" id="meal-picker-modal" onclick="closeM('meal-picker-modal')">
+  <div class="sheet" onclick="event.stopPropagation()">
+    <div class="handle"></div>
+    <div class="sheet-inner" style="padding-bottom:0;">
+      <div class="sheet-title" id="meal-picker-title">ADD MEAL</div>
+    </div>
+    <div id="meal-picker-list" style="overflow-y:auto;max-height:60vh;"></div>
   </div>
 </div>
 
@@ -3429,6 +3463,9 @@ if(!S.photos)S.photos=[];
 if(!S.poLog)S.poLog={};
 if(!S.steps)S.steps=0;
 if(!S.stepDate)S.stepDate=today();
+if(!S.mealPlan)S.mealPlan={Mon:[],Tue:[],Wed:[],Thu:[],Fri:[],Sat:[],Sun:[]};
+if(!S.bodyComp)S.bodyComp={sex:'male',measurements:[]};
+if(!S.soreness)S.soreness={date:'',level:0};
 // Daily reset
 if(S.wdate!==today()){
   // Save food summary before resetting
@@ -3604,6 +3641,9 @@ function renderWorkout(){
           <div class="vh-streak-lbl">${streak2>=7?'Unstoppable':streak2>=3?'Building momentum':'Keep going'}</div>
         </div>
       </div>
+
+      <!-- Recovery Score -->
+      <div id="recovery-card-home"></div>
 
       <!-- 2x2 metric cards (Concept B) -->
       <div class="today-grid">
@@ -4195,6 +4235,8 @@ function renderNut(){
   const tP=S.food.reduce((a,f)=>a+(f.p||0),0);
   const tC=S.food.reduce((a,f)=>a+(f.c||0),0);
   const tF=S.food.reduce((a,f)=>a+(f.f||0),0);
+  if(activeNutTab==='plan'){ renderMealPlan(); return; }
+  if(activeNutTab==='grocery'){ renderGroceryList(); return; }
   // Macros text
   document.getElementById('rkcal').textContent=tK;
   document.getElementById('mp').textContent=tP+'g';
@@ -4438,6 +4480,11 @@ function setSteps(){document.getElementById('steps-val').value=S.steps||'';openM
 function confirmSetSteps(){const v=parseInt(document.getElementById('steps-val').value)||0;S.steps=Math.max(0,v);closeM('steps-modal');save();renderProgress();toast('Steps set!');}
 
 function renderProgress(){
+  // Weekly Health Report — renders above prog-hero
+  renderWeeklyHealthReport();
+  // Body composition estimator
+  renderBodyComp();
+
   // Steps - now a progress bar not SVG ring
   document.getElementById('step-count').textContent=S.steps.toLocaleString();
   const stepPct=Math.min(100,Math.round((S.steps/GSTEPS)*100));
@@ -5681,6 +5728,7 @@ let elevateEduIdx = {skin:0,mind:0,body:0,style:0,learn:0};
 // ── Main render function ──
 function renderElevate(){
   EV = loadElevate();
+  renderMonthlyGlowReport();
   renderElevateHero();
   renderElevatePillars();
   renderElevateContent();
@@ -6353,7 +6401,7 @@ function getDailyJournalPrompt(){
 let activeNutTab = 'track';
 function setNutTab(tab){
   activeNutTab = tab;
-  ['track','guide','meals'].forEach(t=>{
+  ['track','guide','meals','plan','grocery'].forEach(t=>{
     const panel = document.getElementById('nut-'+t);
     const btn = document.getElementById('ntab-'+t);
     if(panel) panel.style.display = t===tab ? 'block' : 'none';
@@ -6361,6 +6409,8 @@ function setNutTab(tab){
   });
   if(tab==='guide') renderNutGuide();
   if(tab==='meals') renderNutMeals();
+  if(tab==='plan') renderMealPlan();
+  if(tab==='grocery') renderGroceryList();
   haptic('light');
 }
 
@@ -6720,6 +6770,116 @@ const MEALS_DB = [
    ingredients:'Salmon, teriyaki sauce (light), sushi rice, edamame, broccoli, sesame',
    why:'Salmon omega-3s reduce inflammation from heavy training. Teriyaki sauce adds sweetness without excessive calories. Edamame provides plant protein alongside fish.',
    tags:['Omega-3','Anti-inflammatory','Bulk']},
+
+  // ── EAST AFRICAN (expanded) ──
+  {name:'Nyama Choma & Kachumbari',region:'East Africa',flag:'🇰🇪',goal:['cut','maintain'],kcal:360,protein:38,carbs:8,fat:18,
+   ingredients:'Grilled goat or beef, kachumbari salad (tomato, onion, coriander, lemon)',
+   why:'Nyama choma is pure grilled meat — no sauces, no additives. Extremely high protein, natural. Kachumbari adds vitamins C and B6. East Africa\'s answer to clean eating.',
+   tags:['High-protein','Clean','Grilled']},
+  {name:'Matoke & Groundnut Stew',region:'East Africa',flag:'🇺🇬',goal:['bulk','maintain'],kcal:480,protein:22,carbs:62,fat:16,
+   ingredients:'Green bananas (matoke), groundnut paste, onion, tomato, beef or chicken',
+   why:'Matoke is a complex carbohydrate that digests slowly. Groundnut paste delivers healthy fats and protein. A classic Ugandan bulking meal used by athletes for generations.',
+   tags:['Complex-carbs','Bulk','Traditional']},
+  {name:'Chapati & Bean Stew',region:'East Africa',flag:'🇰🇪',goal:['maintain','bulk'],kcal:520,protein:24,carbs:72,fat:12,
+   ingredients:'Whole wheat chapati, kidney beans, tomato, onion, cumin, coriander',
+   why:'Kidney beans are one of the best sources of plant protein and fibre. Whole wheat chapati provides complex carbs. High satiety, high nutrition, very affordable.',
+   tags:['Plant-protein','High-fibre','Affordable']},
+  {name:'Pilau Rice & Kachumbari',region:'East Africa',flag:'🇰🇪',goal:['maintain','bulk'],kcal:490,protein:28,carbs:60,fat:11,
+   ingredients:'Basmati rice, beef, pilau spices (cumin, coriander, cardamom, cloves), onion, garlic',
+   why:'Pilau spices — cardamom, cloves, cinnamon — have strong antioxidant and anti-inflammatory properties. Beef provides complete protein and iron. Aromatic, balanced, nutritious.',
+   tags:['Spiced','Iron-rich','Balanced']},
+  {name:'Githeri (Maize & Beans)',region:'East Africa',flag:'🇰🇪',goal:['cut','maintain'],kcal:310,protein:18,carbs:50,fat:4,
+   ingredients:'Boiled maize, kidney beans, tomato, onion, pepper, kale',
+   why:'One of the most complete plant-based meals in East Africa. Maize and beans together create a complete amino acid profile. High fibre, very low fat, incredibly filling.',
+   tags:['Complete-protein','Plant-based','Filling']},
+  {name:'Mukimo & Stewed Beef',region:'East Africa',flag:'🇰🇪',goal:['bulk','maintain'],kcal:540,protein:34,carbs:58,fat:14,
+   ingredients:'Mashed potato with peas and maize, slow-stewed beef, onion, tomato',
+   why:'Mukimo is a calorie-dense carb base perfect for bulking. Stewed beef slow-cooked with tomato breaks down collagen for joint health. High protein, high carb combination.',
+   tags:['Bulk','Traditional','High-carb']},
+
+  // ── WEST AFRICAN (expanded) ──
+  {name:'Egusi Soup & Fufu',region:'West Africa',flag:'🇳🇬',goal:['bulk','maintain'],kcal:620,protein:32,carbs:68,fat:24,
+   ingredients:'Egusi (melon seeds), leafy greens, palm oil, beef or fish, fufu (cassava or yam)',
+   why:'Egusi seeds are extremely nutrient-dense — high in protein, healthy fats, vitamin E and zinc. Palm oil contains beta-carotene. A traditional bulking powerhouse.',
+   tags:['Nutrient-dense','Bulk','Traditional']},
+  {name:'Groundnut Soup & Rice',region:'West Africa',flag:'🇬🇭',goal:['bulk','maintain'],kcal:580,protein:36,carbs:54,fat:22,
+   ingredients:'Groundnut paste, chicken or beef, tomato, pepper, onion, white rice',
+   why:'Groundnuts are packed with protein, healthy fats, niacin and folate. The long simmer creates a sauce with incredible depth. One of the most satisfying meals in West African cuisine.',
+   tags:['High-fat','Protein-rich','Traditional']},
+  {name:'Kelewele & Grilled Fish',region:'West Africa',flag:'🇬🇭',goal:['maintain','cut'],kcal:390,protein:32,carbs:38,fat:12,
+   ingredients:'Fried spiced plantain, whole grilled tilapia or mackerel, pepper sauce, onion',
+   why:'Plantain provides natural sugars and potassium for muscle function. Whole grilled fish — tilapia or mackerel — is a lean complete protein. The pepper sauce is rich in vitamin C.',
+   tags:['Potassium-rich','High-protein','Balanced']},
+  {name:'Moi Moi (Bean Pudding)',region:'West Africa',flag:'🇳🇬',goal:['cut','maintain'],kcal:260,protein:16,carbs:30,fat:8,
+   ingredients:'Black-eyed peas, red pepper, onion, crayfish, egg, fish or chicken (optional)',
+   why:'Moi Moi is steamed — not fried — making it one of the lowest calorie bean dishes. High plant protein, high fibre, no added oil. An elite cut meal hiding in plain sight.',
+   tags:['Steamed','High-fibre','Low-cal']},
+  {name:'Ofe Onugbu (Bitter Leaf Soup) & Garri',region:'West Africa',flag:'🇳🇬',goal:['maintain'],kcal:450,protein:26,carbs:48,fat:16,
+   ingredients:'Bitter leaf, cocoyam, palm oil, stockfish, beef, crayfish',
+   why:'Bitter leaf is exceptionally rich in vitamins A, C and K, and has anti-diabetic properties. Stockfish is one of the highest-protein preserved foods available. Complex, nutritious, traditional.',
+   tags:['Micronutrient-rich','Traditional','Balanced']},
+
+  // ── SOUTH ASIAN (expanded) ──
+  {name:'Chicken Biryani (Lean)',region:'South Asian',flag:'🇮🇳',goal:['bulk','maintain'],kcal:580,protein:42,carbs:64,fat:14,
+   ingredients:'Basmati rice, chicken breast, yoghurt, saffron, whole spices, caramelised onion',
+   why:'Biryani made with chicken breast instead of thigh cuts fat significantly. Saffron has mood-boosting properties. The spice blend — cardamom, cloves, cinnamon — is powerfully anti-inflammatory.',
+   tags:['Anti-inflammatory','High-protein','Bulk']},
+  {name:'Paneer Tikka & Roti',region:'South Asian',flag:'🇮🇳',goal:['maintain','bulk'],kcal:480,protein:32,carbs:40,fat:18,
+   ingredients:'Paneer, yoghurt marinade, tikka spices, whole wheat roti, mint chutney, salad',
+   why:'Paneer is extremely high in casein protein — the slow-digesting protein ideal before sleep. Whole wheat roti provides complex carbs. High protein, satisfying vegetarian option.',
+   tags:['Casein-protein','Vegetarian','Balanced']},
+  {name:'Fish Curry & Brown Rice',region:'South Asian',flag:'🇧🇩',goal:['cut','maintain'],kcal:380,protein:36,carbs:38,fat:10,
+   ingredients:'White fish (tilapia or cod), turmeric, mustard seeds, tomato, onion, ginger, brown rice',
+   why:'White fish is the leanest protein source. Turmeric and mustard seeds are among the most studied anti-inflammatory compounds. Brown rice provides slow-release energy. Clean, complete meal.',
+   tags:['Very lean','Anti-inflammatory','Clean']},
+  {name:'Chana Masala',region:'South Asian',flag:'🇮🇳',goal:['cut','maintain'],kcal:300,protein:16,carbs:42,fat:7,
+   ingredients:'Chickpeas, tomato, onion, garlic, ginger, cumin, coriander, garam masala',
+   why:'Chickpeas have one of the highest fibre contents of any food — 12g per cup. They digest slowly, controlling blood sugar perfectly. The spice blend is a powerful anti-inflammatory stack.',
+   tags:['High-fibre','Blood-sugar control','Plant-based']},
+  {name:'Saag Chicken',region:'South Asian',flag:'🇮🇳',goal:['cut','maintain'],kcal:340,protein:38,carbs:14,fat:14,
+   ingredients:'Chicken breast, spinach (saag), garlic, ginger, cumin, turmeric, light cream',
+   why:'Saag is one of the highest-iron vegetable preparations in Indian cuisine. Chicken breast keeps protein sky-high and fat low. The light cream adds minimal calories with maximum satisfaction.',
+   tags:['Iron-rich','High-protein','Low-carb']},
+  {name:'Masala Oats',region:'South Asian',flag:'🇮🇳',goal:['cut'],kcal:220,protein:12,carbs:32,fat:5,
+   ingredients:'Rolled oats, mustard seeds, curry leaves, green chilli, tomato, onion, turmeric',
+   why:'Savoury oats is a secret weapon for cutting. Oats are the highest-fibre grain and control hunger for hours. The spices add zero calories and maximum flavour. Perfect breakfast or pre-workout.',
+   tags:['High-fibre','Cut','Quick']},
+
+  // ── MIDDLE EASTERN (expanded) ──
+  {name:'Grilled Kofta & Tabbouleh',region:'Middle East',flag:'🇱🇧',goal:['cut','maintain'],kcal:410,protein:36,carbs:22,fat:18,
+   ingredients:'Lamb or beef kofta, parsley tabbouleh, bulgur wheat, tomato, lemon, olive oil',
+   why:'Kofta made lean is a high-protein, flavour-dense meal. Tabbouleh is mostly parsley — one of the most vitamin-K rich foods available. Bulgur wheat is lower GI than white rice.',
+   tags:['Low-GI','High-protein','Vitamin-K']},
+  {name:'Lentil Soup (Shorbat Adas)',region:'Middle East',flag:'🇸🇦',goal:['cut'],kcal:240,protein:14,carbs:36,fat:4,
+   ingredients:'Red lentils, cumin, turmeric, lemon, onion, garlic, olive oil drizzle',
+   why:'The most calorie-efficient filling meal in Middle Eastern cuisine. Lentils expand in your stomach, creating satiety for very few calories. Cumin and turmeric synergistically reduce inflammation.',
+   tags:['Very low-cal','Filling','Anti-inflammatory']},
+  {name:'Grilled Hammour & Fattoush',region:'Middle East',flag:'🇦🇪',goal:['cut','maintain'],kcal:350,protein:38,carbs:20,fat:12,
+   ingredients:'Hammour (grouper) or sea bass, fattoush salad, sumac, pita chips, lemon',
+   why:'Grouper is exceptionally lean — one of the best white fish available in the Gulf region. Sumac is extremely high in antioxidants. Fattoush provides volume with minimal calories.',
+   tags:['Very lean','Antioxidant-rich','Gulf cuisine']},
+  {name:'Mansaf (Lean Version)',region:'Middle East',flag:'🇯🇴',goal:['bulk','maintain'],kcal:580,protein:44,carbs:52,fat:18,
+   ingredients:'Lamb (lean cuts), jameed (fermented yoghurt), rice, pine nuts, parsley',
+   why:'Jordan\'s national dish. Jameed is a fermented dairy product rich in probiotics. Lean lamb provides complete protein, zinc, iron and B12. Pine nuts add healthy fats and magnesium.',
+   tags:['Probiotic-rich','Zinc','Complete-protein']},
+  {name:'Shakshuka with Eggs',region:'Middle East',flag:'🇮🇱',goal:['cut','maintain'],kcal:280,protein:18,carbs:20,fat:14,
+   ingredients:'Eggs, crushed tomatoes, red pepper, onion, cumin, paprika, chilli, olive oil',
+   why:'Shakshuka is one of the best low-calorie high-protein breakfasts or light meals. Tomatoes cooked in olive oil release more lycopene than raw. Eggs provide all essential amino acids.',
+   tags:['Low-cal','High-protein','Breakfast']},
+
+  // ── AMERICAN (expanded) ──
+  {name:'Tuna Steak & Asparagus',region:'American',flag:'🇺🇸',goal:['cut','aggressive-cut'],kcal:310,protein:46,carbs:8,fat:10,
+   ingredients:'Seared tuna steak, asparagus, lemon, olive oil, garlic, sea salt',
+   why:'Tuna steak is one of the highest protein-to-calorie ratio meals possible. Asparagus is a natural diuretic — helps reduce water retention when cutting. Elite aggressive cut meal.',
+   tags:['Aggressive-cut','Very high-protein','Elite lean']},
+  {name:'Turkey Meatball & Courgette Pasta',region:'American',flag:'🇺🇸',goal:['cut','maintain'],kcal:360,protein:38,carbs:18,fat:12,
+   ingredients:'Turkey meatballs, spiralised courgette, marinara sauce, parmesan, basil',
+   why:'Courgette noodles replace pasta — same volume at a fraction of the calories. Turkey meatballs are leaner than beef. Marinara is rich in lycopene. The perfect cut comfort food.',
+   tags:['Low-carb','High-protein','Cut-friendly']},
+  {name:'Egg & Veggie Breakfast Burrito',region:'American',flag:'🇺🇸',goal:['maintain','bulk'],kcal:480,protein:32,carbs:44,fat:18,
+   ingredients:'Whole eggs, egg whites, black beans, peppers, onion, whole wheat tortilla, salsa, avocado',
+   why:'The ultimate breakfast macros — complete protein from eggs, plant protein from beans, healthy fat from avocado, complex carbs from whole wheat. Everything in one wrap.',
+   tags:['Breakfast','Complete-meal','Balanced']},
 ];
 
 let activeMealRegion = 'all';
@@ -6729,26 +6889,26 @@ function renderNutMeals(){
   const el = document.getElementById('nut-meals-content');
   if(!el) return;
 
-  const regions = ['all','East Africa','West Africa','Tanzania','Ethiopia','East Asia','Japan','India','Korea','Mediterranean','Middle East','North Africa','Western'];
-  const goals = ['all','cut','bulk','maintain'];
+  const regions = ['all','East Africa','West Africa','South Asian','Middle East','American','Latin American','European','Mediterranean','Japanese'];
+  const goals = ['all','cut','aggressive-cut','bulk','maintain'];
   const s = loadSettings();
 
   let filtered = MEALS_DB;
-  if(activeMealRegion !== 'all') filtered = filtered.filter(m=>m.region===activeMealRegion||m.flag==='🇹🇿'&&activeMealRegion==='Tanzania');
+  if(activeMealRegion !== 'all') filtered = filtered.filter(m=>m.region===activeMealRegion||m.region.includes(activeMealRegion));
   if(activeMealGoal !== 'all') filtered = filtered.filter(m=>m.goal.includes(activeMealGoal));
 
   el.innerHTML = `
     <!-- Goal filter -->
-    <div style="display:flex;gap:7px;margin-bottom:10px;">
-      ${goals.map(g=>`
-        <button onclick="setMealGoalFilter('${g}')" style="flex:1;padding:7px 4px;border-radius:10px;border:1px solid ${activeMealGoal===g?'var(--accent)':'var(--border)'};background:${activeMealGoal===g?'var(--accent-glow2)':'var(--surface2)'};color:${activeMealGoal===g?'var(--accent)':'var(--text3)'};font-family:var(--fn);font-size:10px;font-weight:800;cursor:pointer;text-transform:uppercase;letter-spacing:0.05em;transition:all 0.12s;">
-          ${g==='all'?'All':g==='cut'?'Cut 🔥':g==='bulk'?'Bulk 💪':'Maintain ⚖️'}
+    <div style="display:flex;gap:7px;margin-bottom:10px;flex-wrap:wrap;">
+      ${['all','cut','aggressive-cut','bulk','maintain'].map(g=>`
+        <button onclick="setMealGoalFilter('${g}')" style="flex:1;min-width:fit-content;padding:7px 4px;border-radius:10px;border:1px solid ${activeMealGoal===g?'var(--accent)':'var(--border)'};background:${activeMealGoal===g?'var(--accent-glow2)':'var(--surface2)'};color:${activeMealGoal===g?'var(--accent)':'var(--text3)'};font-family:var(--fn);font-size:10px;font-weight:800;cursor:pointer;text-transform:uppercase;letter-spacing:0.05em;transition:all 0.12s;">
+          ${g==='all'?'All':g==='cut'?'Cut 🔥':g==='aggressive-cut'?'⚡ Aggr.':g==='bulk'?'Bulk 💪':'Maintain ⚖️'}
         </button>`).join('')}
     </div>
 
     <!-- Region filter pills -->
     <div style="display:flex;gap:7px;overflow-x:auto;scrollbar-width:none;padding-bottom:6px;margin-bottom:14px;">
-      ${['all','East Africa','West Africa','Asia','American','Latin American','European','Mediterranean','Middle East'].map(r=>`
+      ${['all','East Africa','West Africa','South Asian','Middle East','American','Latin American','European','Mediterranean','Japanese'].map(r=>`
         <button onclick="setMealRegionFilter('${r}')" class="meal-region-btn ${activeMealRegion===r?'active':''}">${r==='all'?'🌍 All':r}</button>`).join('')}
     </div>
 
@@ -6804,10 +6964,700 @@ function logMealFromDB(idx){
   toast(m.name + ' logged! ✅');
   haptic('success');
 }
+function logMealFromDB(idx){
+  const m = MEALS_DB[idx];
+  if(!m) return;
+  S.food.push({
+    name: m.name, kcal: m.kcal,
+    p: m.protein, c: m.carbs, f: m.fat,
+    ico: m.flag
+  });
+  save(); renderNut();
+  setNutTab('track');
+  toast(m.name + ' logged! ✅');
+  haptic('success');
+}
+
+// ── ADD MEAL TO PLAN ──
+function addMealToPlan(day, mealIdx){
+  if(!S.mealPlan[day]) S.mealPlan[day] = [];
+  if(S.mealPlan[day].length >= 3){ toast('Max 3 meals per day'); return; }
+  if(S.mealPlan[day].includes(mealIdx)){ toast('Already in plan'); return; }
+  S.mealPlan[day].push(mealIdx);
+  save();
+  renderMealPlan();
+  toast('Added to ' + day + ' ✅');
+  haptic('success');
+}
+function removeMealFromPlan(day, mealIdx){
+  S.mealPlan[day] = S.mealPlan[day].filter(i=>i!==mealIdx);
+  save(); renderMealPlan();
+}
+function clearMealPlan(){
+  Object.keys(S.mealPlan).forEach(d=>S.mealPlan[d]=[]);
+  save(); renderMealPlan(); toast('Plan cleared');
+}
+
+// ── RENDER MEAL PLAN ──
+function renderMealPlan(){
+  const el = document.getElementById('nut-plan-content');
+  if(!el) return;
+  const days = ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
+  const totalMeals = days.reduce((a,d)=>a+(S.mealPlan[d]||[]).length,0);
+  const totalKcal = days.reduce((a,d)=>a+(S.mealPlan[d]||[]).reduce((b,i)=>b+(MEALS_DB[i]?MEALS_DB[i].kcal:0),0),0);
+
+  el.innerHTML = `
+    <div style="padding:0 16px 12px;">
+      <div style="font-size:18px;font-weight:900;color:var(--text);letter-spacing:-0.3px;margin-bottom:2px;">Weekly Meal Plan</div>
+      <div style="font-size:12px;color:var(--text3);">Pick up to 3 meals per day from the Meals library</div>
+    </div>
+
+    ${totalMeals > 0 ? `
+    <div style="margin:0 16px 14px;padding:12px 14px;background:var(--accent-glow2);border:1px solid rgba(168,255,60,0.25);border-radius:14px;display:flex;justify-content:space-between;align-items:center;">
+      <div>
+        <div style="font-size:11px;font-weight:800;color:var(--accent);text-transform:uppercase;letter-spacing:0.08em;">Week Total</div>
+        <div style="font-size:20px;font-weight:900;color:var(--text);">${totalKcal.toLocaleString()} <span style="font-size:11px;color:var(--text3);font-weight:600;">kcal</span></div>
+        <div style="font-size:11px;color:var(--text3);">${totalMeals} meal${totalMeals!==1?'s':''} planned</div>
+      </div>
+      <button onclick="clearMealPlan()" style="padding:8px 14px;border-radius:10px;border:1px solid var(--border);background:var(--surface2);color:var(--text3);font-family:var(--fn);font-size:11px;font-weight:700;cursor:pointer;">Clear All</button>
+    </div>` : ''}
+
+    ${days.map(day=>{
+      const dayMeals = (S.mealPlan[day]||[]).map(i=>MEALS_DB[i]).filter(Boolean);
+      const dayKcal = dayMeals.reduce((a,m)=>a+m.kcal,0);
+      const dayProt = dayMeals.reduce((a,m)=>a+m.protein,0);
+      return `
+      <div style="margin:0 16px 12px;background:var(--surface);border:1px solid var(--border);border-radius:16px;overflow:hidden;">
+        <div style="display:flex;justify-content:space-between;align-items:center;padding:11px 14px;border-bottom:${dayMeals.length?'1px solid var(--border)':'none'};">
+          <div style="font-size:13px;font-weight:800;color:var(--text);">${day}</div>
+          <div style="display:flex;align-items:center;gap:10px;">
+            ${dayKcal ? `<span style="font-size:11px;color:var(--text3);font-weight:600;">${dayKcal} kcal · ${dayProt}g protein</span>` : '<span style="font-size:11px;color:var(--text3);">No meals</span>'}
+            ${dayMeals.length < 3 ? `<button onclick="openMealPicker('${day}')" style="width:26px;height:26px;border-radius:8px;border:1px dashed var(--accent);background:transparent;color:var(--accent);font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center;line-height:1;">+</button>` : ''}
+          </div>
+        </div>
+        ${dayMeals.map((m,mi)=>`
+          <div style="display:flex;align-items:center;padding:9px 14px;${mi<dayMeals.length-1?'border-bottom:1px solid var(--border2);':''}">
+            <span style="font-size:18px;margin-right:10px;">${m.flag}</span>
+            <div style="flex:1;min-width:0;">
+              <div style="font-size:12px;font-weight:700;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${m.name}</div>
+              <div style="font-size:10px;color:var(--text3);">${m.kcal} kcal · ${m.protein}g P · ${m.carbs}g C · ${m.fat}g F</div>
+            </div>
+            <button onclick="removeMealFromPlan('${day}',${MEALS_DB.indexOf(m)})" style="width:24px;height:24px;border-radius:6px;border:none;background:var(--surface3);color:var(--text3);font-size:14px;cursor:pointer;flex-shrink:0;margin-left:8px;">×</button>
+          </div>`).join('')}
+      </div>`;
+    }).join('')}
+
+    <div style="padding:12px 16px 8px;text-align:center;">
+      <button onclick="setNutTab('grocery')" style="width:100%;padding:14px;border-radius:14px;border:none;background:var(--accent);color:#071a00;font-family:var(--fn);font-size:13px;font-weight:800;letter-spacing:0.05em;cursor:pointer;">🛒 Generate Grocery List</button>
+    </div>
+  `;
+}
+
+// ── MEAL PICKER MODAL ──
+let _mealPickerDay = '';
+function openMealPicker(day){
+  _mealPickerDay = day;
+  const el = document.getElementById('meal-picker-modal');
+  if(!el) return;
+  const s = loadSettings();
+  const goal = s.goal || 'maintain';
+  // Show meals matching user's goal, sorted by protein
+  let pool = MEALS_DB.filter(m=>m.goal.includes(goal)||m.goal.includes('maintain'));
+  if(pool.length < 10) pool = MEALS_DB;
+  pool = [...pool].sort((a,b)=>b.protein-a.protein);
+
+  document.getElementById('meal-picker-title').textContent = 'Add Meal — ' + day;
+  document.getElementById('meal-picker-list').innerHTML = pool.map((m,i)=>`
+    <div onclick="addMealToPlan('${day}',${MEALS_DB.indexOf(m)});closeM('meal-picker-modal');" style="display:flex;align-items:center;padding:11px 16px;border-bottom:1px solid var(--border2);cursor:pointer;transition:background 0.1s;" onmouseenter="this.style.background='var(--surface2)'" onmouseleave="this.style.background=''">
+      <span style="font-size:20px;margin-right:12px;">${m.flag}</span>
+      <div style="flex:1;">
+        <div style="font-size:13px;font-weight:700;color:var(--text);">${m.name}</div>
+        <div style="font-size:11px;color:var(--text3);">${m.kcal} kcal · ${m.protein}g protein · ${m.region}</div>
+      </div>
+      <svg width="14" height="14" fill="none" stroke="var(--accent)" stroke-width="2.5" viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+    </div>
+  `).join('');
+  openM('meal-picker-modal');
+}
+
+// ── RENDER GROCERY LIST ──
+function renderGroceryList(){
+  const el = document.getElementById('nut-grocery-content');
+  if(!el) return;
+  const days = ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
+  const allMealIdxs = [...new Set(days.flatMap(d=>S.mealPlan[d]||[]))];
+  const meals = allMealIdxs.map(i=>MEALS_DB[i]).filter(Boolean);
+
+  if(meals.length === 0){
+    el.innerHTML = `
+      <div style="padding:40px 24px;text-align:center;">
+        <div style="font-size:40px;margin-bottom:12px;">🛒</div>
+        <div style="font-size:15px;font-weight:700;color:var(--text);margin-bottom:6px;">No meals planned yet</div>
+        <div style="font-size:12px;color:var(--text3);margin-bottom:20px;">Add meals in the Plan tab first</div>
+        <button onclick="setNutTab('plan')" style="padding:11px 22px;border-radius:12px;border:none;background:var(--accent);color:#071a00;font-family:var(--fn);font-size:12px;font-weight:800;cursor:pointer;">Go to Plan</button>
+      </div>`;
+    return;
+  }
+
+  // Parse all ingredients from planned meals and categorise
+  const rawIngredients = meals.flatMap(m=>m.ingredients.split(',').map(i=>i.trim())).filter(Boolean);
+
+  // Category keywords
+  const cats = {
+    '🥩 Proteins':     ['chicken','beef','turkey','fish','salmon','tuna','tilapia','cod','lamb','goat','pork','egg','tofu','paneer','shrimp','prawn','stockfish','hammour'],
+    '🥦 Produce':      ['kale','spinach','broccoli','tomato','onion','garlic','ginger','pepper','capsicum','courgette','asparagus','cucumber','lettuce','parsley','coriander','basil','lemon','lime','plantain','kachumbari','sukuma','mchicha','saag','amaranth'],
+    '🌾 Grains & Carbs':['rice','ugali','chapati','roti','noodle','pasta','oat','bread','tortilla','wrap','quinoa','bulgur','injera','fufu','matoke','maize','cassava'],
+    '🫘 Legumes':       ['lentil','bean','chickpea','dal','pea','edamame','black-eyed','kidney','black bean'],
+    '🧀 Dairy':        ['yoghurt','cheese','milk','cream','paneer','feta','parmesan','jameed'],
+    '🫙 Pantry':       ['olive oil','soy sauce','sesame','tahini','spice','cumin','turmeric','garam','berbere','suya','groundnut','peanut','salsa','hummus','teriyaki','palm oil','coconut milk','stock'],
+  };
+
+  const categorised = {};
+  Object.keys(cats).forEach(cat=>categorised[cat]=[]);
+  const uncategorised = [];
+
+  rawIngredients.forEach(ing=>{
+    const ingLower = ing.toLowerCase();
+    let matched = false;
+    for(const [cat, keywords] of Object.entries(cats)){
+      if(keywords.some(kw=>ingLower.includes(kw))){
+        if(!categorised[cat].find(i=>i.toLowerCase()===ingLower)){
+          categorised[cat].push(ing);
+        }
+        matched = true; break;
+      }
+    }
+    if(!matched && !uncategorised.find(i=>i.toLowerCase()===ingLower)){
+      uncategorised.push(ing);
+    }
+  });
+  if(uncategorised.length) categorised['📦 Other'] = uncategorised;
+
+  const allLines = Object.entries(categorised)
+    .filter(([,items])=>items.length>0)
+    .flatMap(([cat,items])=>[cat,...items.map(i=>'  • '+i)])
+    .join('\n');
+
+  el.innerHTML = `
+    <div style="padding:0 16px 12px;">
+      <div style="font-size:18px;font-weight:900;color:var(--text);letter-spacing:-0.3px;margin-bottom:2px;">Grocery List</div>
+      <div style="font-size:12px;color:var(--text3);">Generated from ${meals.length} planned meal${meals.length!==1?'s':''} across the week</div>
+    </div>
+
+    <div style="margin:0 16px 12px;display:flex;gap:8px;">
+      <button onclick="copyGroceryList()" style="flex:1;padding:11px;border-radius:12px;border:none;background:var(--accent);color:#071a00;font-family:var(--fn);font-size:12px;font-weight:800;cursor:pointer;">📋 Copy List</button>
+      <button onclick="setNutTab('plan')" style="padding:11px 14px;border-radius:12px;border:1px solid var(--border);background:var(--surface2);color:var(--text2);font-family:var(--fn);font-size:12px;font-weight:700;cursor:pointer;">Edit Plan</button>
+    </div>
+
+    ${Object.entries(categorised).filter(([,items])=>items.length>0).map(([cat,items])=>`
+      <div style="margin:0 16px 10px;">
+        <div style="font-size:11px;font-weight:800;color:var(--text3);text-transform:uppercase;letter-spacing:0.1em;margin-bottom:6px;">${cat}</div>
+        ${items.map(item=>`
+          <div class="grocery-item" onclick="this.classList.toggle('checked')" style="display:flex;align-items:center;gap:10px;padding:9px 12px;background:var(--surface);border:1px solid var(--border);border-radius:10px;margin-bottom:5px;cursor:pointer;transition:all 0.12s;">
+            <div style="width:18px;height:18px;border-radius:5px;border:1.5px solid var(--border2);background:var(--surface2);flex-shrink:0;display:flex;align-items:center;justify-content:center;" class="grocery-check"></div>
+            <span style="font-size:13px;color:var(--text);font-weight:500;">${item}</span>
+          </div>`).join('')}
+      </div>`).join('')}
+  `;
+}
+
+function copyGroceryList(){
+  const days = ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
+  const allMealIdxs = [...new Set(days.flatMap(d=>S.mealPlan[d]||[]))];
+  const meals = allMealIdxs.map(i=>MEALS_DB[i]).filter(Boolean);
+  if(!meals.length){ toast('No meals planned'); return; }
+  const text = 'FitTrack Grocery List\n\n' + meals.flatMap(m=>m.ingredients.split(',').map(i=>'• '+i.trim())).join('\n');
+  if(navigator.clipboard){ navigator.clipboard.writeText(text).then(()=>toast('Copied to clipboard! 📋')); }
+  else { toast('Copy not supported in this browser'); }
+}
+
 // ============================================================
 // END NUTRITION GUIDE + MEALS
 // ============================================================
 
+
+// ============ WEEKLY HEALTH REPORT ============
+function renderWeeklyHealthReport(){
+  const el = document.getElementById('weekly-report');
+  if(!el) return;
+
+  // Gather last 7 days
+  const tn = new Date();
+  const days7 = [];
+  for(let i=6;i>=0;i--){ const d=new Date(tn); d.setDate(tn.getDate()-i); days7.push(d.toISOString().slice(0,10)); }
+
+  const workouts = S.hist.filter(h=>days7.includes(h.date)&&h.type==='workout').length;
+  const cardioSessions = (S.clog||[]).filter(c=>days7.includes(c.date)).length;
+  const totalActive = workouts + cardioSessions;
+
+  // Calories — from hist food_summary for past days, today from S.food
+  const kcalDays = days7.map(iso=>{
+    if(iso===today()) return S.food.reduce((a,f)=>a+(f.kcal||0),0);
+    const h=S.hist.find(x=>x.date===iso&&x.type==='food_summary');
+    return h?h.kcal:0;
+  }).filter(v=>v>0);
+  const avgKcal = kcalDays.length ? Math.round(kcalDays.reduce((a,b)=>a+b,0)/kcalDays.length) : 0;
+
+  // Sleep
+  const EV2 = loadElevate();
+  const sleepDays = (EV2.sleepLog||[]).filter(s=>days7.includes(s.date));
+  const avgSleep = sleepDays.length ? Math.round((sleepDays.reduce((a,s)=>a+s.hours,0)/sleepDays.length)*10)/10 : 0;
+
+  // Mood
+  const moodMap = {'😄':5,'😊':4,'😐':3,'😔':2,'😢':1,'😤':2,'😴':3,'🤩':5,'😰':2,'🥱':3};
+  const moodDays = (EV2.moodLog||[]).filter(m=>days7.includes(m.date));
+  const avgMoodScore = moodDays.length ? moodDays.reduce((a,m)=>a+(moodMap[m.emoji]||3),0)/moodDays.length : 0;
+  const moodLabel = avgMoodScore>=4.5?'Excellent':avgMoodScore>=3.5?'Good':avgMoodScore>=2.5?'Okay':avgMoodScore>0?'Low':'—';
+  const moodEmoji = avgMoodScore>=4.5?'😄':avgMoodScore>=3.5?'😊':avgMoodScore>=2.5?'😐':avgMoodScore>0?'😔':'—';
+
+  // Health score
+  const healthScore = calcHealthScore().score;
+
+  // Streak
+  const streak = calcStreak();
+
+  // Calorie target
+  const s2 = loadSettings();
+  const kcalTarget = s2.kcal || 2000;
+  const kcalStatus = avgKcal === 0 ? 'Not tracked' : avgKcal <= kcalTarget ? 'On target ✓' : 'Over target';
+  const kcalColor = avgKcal===0?'var(--text3)':avgKcal<=kcalTarget?'var(--accent)':'var(--red)';
+
+  // Generate insight line
+  let insight = '';
+  if(totalActive >= 5) insight = 'Elite week. You trained almost every day — that consistency is what separates people.';
+  else if(totalActive >= 3) insight = 'Solid week. '+(workouts>=2?'Your lifting sessions are stacking up.':'Keep pushing on the active days.');
+  else if(totalActive >= 1) insight = 'You showed up this week. Build on that — aim for one more session next week.';
+  else insight = 'Rest week recorded. Recovery is part of the process — come back strong.';
+
+  if(avgSleep > 0 && avgSleep < 6.5) insight += ' Sleep is your weak point this week — prioritise it.';
+  if(avgSleep >= 8) insight += ' Sleep was excellent — your recovery is optimised.';
+
+  // Grade
+  let grade='C', gradeColor='var(--orange)';
+  if(healthScore>=85){grade='A+';gradeColor='var(--accent)';}
+  else if(healthScore>=75){grade='A';gradeColor='var(--accent)';}
+  else if(healthScore>=65){grade='B';gradeColor='var(--gold)';}
+  else if(healthScore>=50){grade='C';gradeColor='var(--orange)';}
+  else{grade='D';gradeColor='var(--red)';}
+
+  el.innerHTML = `
+    <div style="margin:12px 16px 0;">
+      <div style="background:linear-gradient(135deg,#0a1a00,#071200);border:1px solid rgba(168,255,60,0.2);border-radius:20px;overflow:hidden;position:relative;">
+        <!-- Header -->
+        <div style="padding:14px 16px 12px;border-bottom:1px solid rgba(168,255,60,0.12);">
+          <div style="display:flex;justify-content:space-between;align-items:flex-start;">
+            <div>
+              <div style="font-size:10px;font-weight:800;color:rgba(168,255,60,0.5);text-transform:uppercase;letter-spacing:0.14em;margin-bottom:3px;">📊 Weekly Health Report</div>
+              <div style="font-size:15px;font-weight:900;color:#f4f4f6;letter-spacing:-0.2px;">${days7[0].slice(5).replace('-','/')} – ${days7[6].slice(5).replace('-','/')}</div>
+            </div>
+            <div style="text-align:right;">
+              <div style="font-size:36px;font-weight:900;color:${gradeColor};letter-spacing:-2px;line-height:1;">${grade}</div>
+              <div style="font-size:9px;color:rgba(168,255,60,0.35);font-weight:700;text-transform:uppercase;letter-spacing:0.08em;">Grade</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Stats grid -->
+        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:0;">
+          ${[
+            {label:'Active Days',value:totalActive+'/7',sub:workouts+'W · '+cardioSessions+'C',color:'var(--accent)'},
+            {label:'Avg Sleep',value:avgSleep?avgSleep+'h':'—',sub:sleepDays.length+' nights logged',color:'var(--blue)'},
+            {label:'Mood',value:moodEmoji,sub:moodLabel,color:'var(--gold)'},
+            {label:'Avg Calories',value:avgKcal?avgKcal.toLocaleString():'—',sub:kcalStatus,color:kcalColor},
+            {label:'Health Score',value:healthScore,sub:'Today\'s score',color:'var(--accent)'},
+            {label:'Streak',value:streak+'🔥',sub:'day streak',color:'var(--orange)'},
+          ].map((s,i)=>`
+            <div style="padding:12px 10px;text-align:center;${i%3!==2?'border-right:1px solid rgba(168,255,60,0.08);':''}${i<3?'border-bottom:1px solid rgba(168,255,60,0.08);':''}">
+              <div style="font-size:20px;font-weight:900;color:${s.color};letter-spacing:-0.5px;line-height:1.1;">${s.value}</div>
+              <div style="font-size:9px;font-weight:800;color:rgba(244,244,246,0.5);text-transform:uppercase;letter-spacing:0.06em;margin-top:3px;">${s.label}</div>
+              <div style="font-size:9px;color:rgba(244,244,246,0.3);margin-top:1px;">${s.sub}</div>
+            </div>`).join('')}
+        </div>
+
+        <!-- Insight -->
+        <div style="padding:12px 16px;border-top:1px solid rgba(168,255,60,0.1);">
+          <div style="font-size:11px;color:rgba(244,244,246,0.55);line-height:1.6;font-style:italic;">"${insight}"</div>
+        </div>
+      </div>
+    </div>
+  `;
+}
+
+// ============ MONTHLY GLOW REPORT ============
+function renderMonthlyGlowReport(){
+  const el = document.getElementById('glow-report');
+  if(!el) return;
+
+  const EV2 = loadElevate();
+  const now = new Date();
+  const monthStr = now.toLocaleString('default',{month:'long',year:'numeric'});
+
+  // Last 30 days
+  const days30 = [];
+  for(let i=29;i>=0;i--){ const d=new Date(now); d.setDate(now.getDate()-i); days30.push(d.toISOString().slice(0,10)); }
+
+  // Skin routine compliance — days where at least one routine step was done
+  // We don't have per-day routine logs, so we use skinPhotos as proxy + moodLog as activity signal
+  const skinPhotos = (EV2.skinPhotos||[]).filter(p=>days30.includes(p.date));
+  const skinPhotoCount = skinPhotos.length;
+
+  // Mood over 30 days
+  const moodMap = {'😄':5,'😊':4,'😐':3,'😔':2,'😢':1,'😤':2,'😴':3,'🤩':5,'😰':2,'🥱':3};
+  const moodMonth = (EV2.moodLog||[]).filter(m=>days30.includes(m.date));
+  const avgMood = moodMonth.length ? moodMonth.reduce((a,m)=>a+(moodMap[m.emoji]||3),0)/moodMonth.length : 0;
+  const moodTrend = moodMonth.length >= 2
+    ? moodMap[moodMonth[moodMonth.length-1]?.emoji]||3 > moodMap[moodMonth[0]?.emoji]||3 ? '↑ Improving' : '→ Steady'
+    : '—';
+
+  // Sleep over 30 days
+  const sleepMonth = (EV2.sleepLog||[]).filter(s=>days30.includes(s.date));
+  const avgSleep30 = sleepMonth.length ? Math.round((sleepMonth.reduce((a,s)=>a+s.hours,0)/sleepMonth.length)*10)/10 : 0;
+  const goodSleepNights = sleepMonth.filter(s=>s.hours>=7).length;
+
+  // Skin concerns
+  const concerns = EV2.skinConcerns||[];
+  const skinType = EV2.skinType||'Unknown';
+
+  // Elevate streak
+  const elevStreak = calcElevateStreak();
+
+  // Prescription count
+  const rxCount = (EV2.prescriptions||[]).length;
+
+  // Confidence journal entries this month
+  const confEntries = (EV2.confLog||[]).filter(e=>days30.includes(e.date)).length;
+
+  // Glow score (0–100)
+  let glowScore = 50;
+  if(elevStreak>=7) glowScore+=15; else if(elevStreak>=3) glowScore+=8; else if(elevStreak>=1) glowScore+=3;
+  if(avgSleep30>=8) glowScore+=15; else if(avgSleep30>=7) glowScore+=10; else if(avgSleep30>=6) glowScore+=4;
+  if(avgMood>=4) glowScore+=12; else if(avgMood>=3) glowScore+=6; else if(avgMood>0) glowScore+=2;
+  if(skinPhotoCount>=2) glowScore+=8; else if(skinPhotoCount>=1) glowScore+=4;
+  if(confEntries>=3) glowScore+=5;
+  if(rxCount>0) glowScore+=5;
+  glowScore = Math.min(100, glowScore);
+
+  let glowGrade='',glowColor='';
+  if(glowScore>=88){glowGrade='Glowing ✨';glowColor='var(--purple)';}
+  else if(glowScore>=72){glowGrade='Radiant 💜';glowColor='var(--purple)';}
+  else if(glowScore>=58){glowGrade='Building 🌸';glowColor='var(--gold)';}
+  else{glowGrade='Getting Started 🌱';glowColor='var(--teal)';}
+
+  // Skin insight
+  let skinInsight = '';
+  if(concerns.includes('Acne')||concerns.includes('Breakouts')) skinInsight = 'Acne flagged — consistency in your AM routine is the single biggest lever. Stick to it.';
+  else if(concerns.includes('Dryness')) skinInsight = 'Dryness is a sleep and hydration problem as much as a skincare one. Both logged here — connect the dots.';
+  else if(concerns.includes('Hyperpigmentation')) skinInsight = 'Hyperpigmentation takes 8–12 weeks to shift. The data is building — keep going.';
+  else if(avgSleep30>0&&avgSleep30<6.5) skinInsight = 'Sleep is under 6.5h average. Skin repairs itself in deep sleep — this is showing.';
+  else if(elevStreak>=7) skinInsight = 'Seven days of routine consistency is real progress. Skin responds to discipline, not products.';
+  else skinInsight = 'Your skin, mood and sleep all live in the same system. Improve one and the others follow.';
+
+  el.innerHTML = `
+    <div style="margin:12px 16px 0;">
+      <div style="background:linear-gradient(135deg,#130a1e,#0d0714);border:1px solid rgba(187,127,255,0.2);border-radius:20px;overflow:hidden;position:relative;">
+        <!-- Header -->
+        <div style="padding:14px 16px 12px;border-bottom:1px solid rgba(187,127,255,0.1);">
+          <div style="display:flex;justify-content:space-between;align-items:flex-start;">
+            <div>
+              <div style="font-size:10px;font-weight:800;color:rgba(187,127,255,0.55);text-transform:uppercase;letter-spacing:0.14em;margin-bottom:3px;">✨ Monthly Glow Report</div>
+              <div style="font-size:15px;font-weight:900;color:#f4f4f6;letter-spacing:-0.2px;">${monthStr}</div>
+              <div style="font-size:11px;color:rgba(187,127,255,0.4);margin-top:2px;">${skinType} skin${concerns.length?' · '+concerns.slice(0,2).join(', '):''}</div>
+            </div>
+            <div style="text-align:right;">
+              <div style="font-size:28px;font-weight:900;color:${glowColor};letter-spacing:-1px;line-height:1.1;">${glowScore}</div>
+              <div style="font-size:9px;color:rgba(187,127,255,0.35);font-weight:700;text-transform:uppercase;letter-spacing:0.08em;">Glow Score</div>
+              <div style="font-size:10px;color:${glowColor};font-weight:700;margin-top:2px;">${glowGrade}</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Stats grid -->
+        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:0;">
+          ${[
+            {label:'Elevate Streak',value:elevStreak+'🔥',sub:'days active',color:'var(--purple)'},
+            {label:'Avg Sleep',value:avgSleep30?avgSleep30+'h':'—',sub:goodSleepNights+' nights 7h+',color:'var(--blue)'},
+            {label:'Avg Mood',value:avgMood?avgMood.toFixed(1)+'/5':'—',sub:moodTrend,color:'var(--gold)'},
+            {label:'Skin Logs',value:skinPhotoCount,sub:'progress photos',color:'var(--purple)'},
+            {label:'Prescriptions',value:rxCount,sub:'products tracked',color:'var(--teal)'},
+            {label:'Journal',value:confEntries,sub:'entries this month',color:'var(--purple)'},
+          ].map((s,i)=>`
+            <div style="padding:12px 10px;text-align:center;${i%3!==2?'border-right:1px solid rgba(187,127,255,0.08);':''}${i<3?'border-bottom:1px solid rgba(187,127,255,0.08);':''}">
+              <div style="font-size:20px;font-weight:900;color:${s.color};letter-spacing:-0.5px;line-height:1.1;">${s.value}</div>
+              <div style="font-size:9px;font-weight:800;color:rgba(244,244,246,0.45);text-transform:uppercase;letter-spacing:0.06em;margin-top:3px;">${s.label}</div>
+              <div style="font-size:9px;color:rgba(244,244,246,0.28);margin-top:1px;">${s.sub}</div>
+            </div>`).join('')}
+        </div>
+
+        <!-- Glow score bar -->
+        <div style="padding:10px 16px 0;border-top:1px solid rgba(187,127,255,0.1);">
+          <div style="display:flex;justify-content:space-between;margin-bottom:5px;">
+            <div style="font-size:10px;font-weight:700;color:rgba(187,127,255,0.45);text-transform:uppercase;letter-spacing:0.08em;">Glow Progress</div>
+            <div style="font-size:10px;font-weight:800;color:${glowColor};">${glowScore}/100</div>
+          </div>
+          <div style="height:5px;background:rgba(187,127,255,0.12);border-radius:3px;overflow:hidden;margin-bottom:12px;">
+            <div style="height:100%;width:${glowScore}%;background:linear-gradient(90deg,rgba(187,127,255,0.6),var(--purple));border-radius:3px;transition:width 0.7s cubic-bezier(0.34,1.56,0.64,1);"></div>
+          </div>
+        </div>
+
+        <!-- Skin insight -->
+        <div style="padding:0 16px 14px;">
+          <div style="font-size:11px;color:rgba(244,244,246,0.5);line-height:1.6;font-style:italic;">"${skinInsight}"</div>
+        </div>
+      </div>
+    </div>
+  `;
+}
+
+// ============ BODY COMPOSITION ESTIMATOR ============
+function renderBodyComp(){
+  const el = document.getElementById('body-comp-section');
+  if(!el) return;
+  const bc = S.bodyComp || {sex:'male', measurements:[]};
+  const last = bc.measurements && bc.measurements.length ? bc.measurements[bc.measurements.length-1] : null;
+  const s2 = loadSettings();
+  const heightCm = s2.height || 175;
+
+  let bfPct = null, leanMass = null, fatMass = null;
+  if(last){
+    const h = heightCm;
+    if(bc.sex==='male'){
+      // US Navy formula male: %BF = 86.010×log10(waist−neck) − 70.041×log10(height) + 36.76
+      if(last.waist && last.neck && last.waist > last.neck){
+        bfPct = Math.round((86.010*Math.log10(last.waist-last.neck) - 70.041*Math.log10(h) + 36.76)*10)/10;
+      }
+    } else {
+      // US Navy formula female: %BF = 163.205×log10(waist+hip−neck) − 97.684×log10(height) − 78.387
+      if(last.waist && last.neck && last.hip){
+        bfPct = Math.round((163.205*Math.log10(last.waist+last.hip-last.neck) - 97.684*Math.log10(h) - 78.387)*10)/10;
+      }
+    }
+    if(bfPct !== null && last.bodyweight){
+      fatMass = Math.round((bfPct/100)*last.bodyweight*10)/10;
+      leanMass = Math.round((last.bodyweight - fatMass)*10)/10;
+    }
+    bfPct = bfPct !== null ? Math.max(3, Math.min(60, bfPct)) : null;
+  }
+
+  // Body fat category
+  let bfCategory='', bfColor='var(--text3)';
+  if(bfPct !== null){
+    if(bc.sex==='male'){
+      if(bfPct<6){bfCategory='Essential Fat';bfColor='var(--blue)';}
+      else if(bfPct<14){bfCategory='Athletic';bfColor='var(--accent)';}
+      else if(bfPct<18){bfCategory='Fit';bfColor='var(--accent)';}
+      else if(bfPct<25){bfCategory='Average';bfColor='var(--gold)';}
+      else{bfCategory='Above Average';bfColor='var(--orange)';}
+    } else {
+      if(bfPct<14){bfCategory='Essential Fat';bfColor='var(--blue)';}
+      else if(bfPct<21){bfCategory='Athletic';bfColor='var(--accent)';}
+      else if(bfPct<25){bfCategory='Fit';bfColor='var(--accent)';}
+      else if(bfPct<32){bfCategory='Average';bfColor='var(--gold)';}
+      else{bfCategory='Above Average';bfColor='var(--orange)';}
+    }
+  }
+
+  // History sparkline (last 6 entries)
+  const history = (bc.measurements||[]).slice(-6);
+  const bfHistory = history.map(m=>{
+    if(!m.waist||!m.neck) return null;
+    if(bc.sex==='male' && m.waist>m.neck){
+      return Math.max(3,Math.min(60,Math.round((86.010*Math.log10(m.waist-m.neck)-70.041*Math.log10(heightCm)+36.76)*10)/10));
+    } else if(bc.sex==='female' && m.waist&&m.hip&&m.neck){
+      return Math.max(3,Math.min(60,Math.round((163.205*Math.log10(m.waist+m.hip-m.neck)-97.684*Math.log10(heightCm)-78.387)*10)/10));
+    }
+    return null;
+  }).filter(v=>v!==null);
+
+  el.innerHTML = `
+    <div style="background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:16px;margin-bottom:12px;">
+      <!-- Sex toggle -->
+      <div style="display:flex;gap:6px;margin-bottom:14px;">
+        <button onclick="setBodyCompSex('male')" style="flex:1;padding:8px;border-radius:10px;border:1px solid ${bc.sex==='male'?'var(--accent)':'var(--border)'};background:${bc.sex==='male'?'var(--accent-glow2)':'var(--surface2)'};color:${bc.sex==='male'?'var(--accent)':'var(--text3)'};font-family:var(--fn);font-size:11px;font-weight:800;cursor:pointer;transition:all 0.12s;">♂ Male</button>
+        <button onclick="setBodyCompSex('female')" style="flex:1;padding:8px;border-radius:10px;border:1px solid ${bc.sex==='female'?'var(--purple)':'var(--border)'};background:${bc.sex==='female'?'rgba(187,127,255,0.08)':'var(--surface2)'};color:${bc.sex==='female'?'var(--purple)':'var(--text3)'};font-family:var(--fn);font-size:11px;font-weight:800;cursor:pointer;transition:all 0.12s;">♀ Female</button>
+      </div>
+
+      ${bfPct !== null ? `
+      <!-- Result display -->
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-bottom:14px;">
+        <div style="text-align:center;padding:10px;background:var(--surface2);border-radius:12px;">
+          <div style="font-size:24px;font-weight:900;color:${bfColor};letter-spacing:-0.5px;">${bfPct}%</div>
+          <div style="font-size:9px;font-weight:800;color:var(--text3);text-transform:uppercase;letter-spacing:0.08em;margin-top:3px;">Body Fat</div>
+          <div style="font-size:10px;color:${bfColor};font-weight:700;margin-top:2px;">${bfCategory}</div>
+        </div>
+        <div style="text-align:center;padding:10px;background:var(--surface2);border-radius:12px;">
+          <div style="font-size:24px;font-weight:900;color:var(--accent);letter-spacing:-0.5px;">${leanMass!==null?leanMass+'kg':'—'}</div>
+          <div style="font-size:9px;font-weight:800;color:var(--text3);text-transform:uppercase;letter-spacing:0.08em;margin-top:3px;">Lean Mass</div>
+        </div>
+        <div style="text-align:center;padding:10px;background:var(--surface2);border-radius:12px;">
+          <div style="font-size:24px;font-weight:900;color:var(--orange);letter-spacing:-0.5px;">${fatMass!==null?fatMass+'kg':'—'}</div>
+          <div style="font-size:9px;font-weight:800;color:var(--text3);text-transform:uppercase;letter-spacing:0.08em;margin-top:3px;">Fat Mass</div>
+        </div>
+      </div>
+      ${bfHistory.length >= 2 ? `
+      <div style="font-size:10px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:6px;">Trend — last ${bfHistory.length} readings</div>
+      <div style="display:flex;align-items:flex-end;gap:4px;height:32px;margin-bottom:12px;">
+        ${(()=>{const mn=Math.min(...bfHistory),mx=Math.max(...bfHistory),range=mx-mn||1;return bfHistory.map((v,i)=>`<div style="flex:1;background:var(--accent);border-radius:2px;height:${Math.max(20,Math.round(((v-mn)/range)*100))}%;opacity:${0.4+i*(0.6/bfHistory.length)};"></div>`).join('');})()}
+      </div>` : ''}` : ''}
+
+      <!-- Input form -->
+      <div style="font-size:10px;font-weight:800;color:var(--text3);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:8px;">Log Measurements (cm)</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr${bc.sex==='female'?' 1fr':''};gap:8px;margin-bottom:10px;">
+        <div>
+          <div style="font-size:10px;color:var(--text3);margin-bottom:3px;">Waist</div>
+          <input id="bc-waist" type="number" min="50" max="200" step="0.1" placeholder="e.g. 82" style="width:100%;padding:9px 10px;border-radius:10px;border:1px solid var(--border);background:var(--surface2);color:var(--text);font-family:var(--fn);font-size:13px;font-weight:700;box-sizing:border-box;">
+        </div>
+        <div>
+          <div style="font-size:10px;color:var(--text3);margin-bottom:3px;">Neck</div>
+          <input id="bc-neck" type="number" min="20" max="60" step="0.1" placeholder="e.g. 38" style="width:100%;padding:9px 10px;border-radius:10px;border:1px solid var(--border);background:var(--surface2);color:var(--text);font-family:var(--fn);font-size:13px;font-weight:700;box-sizing:border-box;">
+        </div>
+        ${bc.sex==='female'?`<div>
+          <div style="font-size:10px;color:var(--text3);margin-bottom:3px;">Hip</div>
+          <input id="bc-hip" type="number" min="50" max="200" step="0.1" placeholder="e.g. 96" style="width:100%;padding:9px 10px;border-radius:10px;border:1px solid var(--border);background:var(--surface2);color:var(--text);font-family:var(--fn);font-size:13px;font-weight:700;box-sizing:border-box;">
+        </div>`:''}
+      </div>
+      <div style="margin-bottom:10px;">
+        <div style="font-size:10px;color:var(--text3);margin-bottom:3px;">Bodyweight (kg) — optional for mass breakdown</div>
+        <input id="bc-bw" type="number" min="30" max="300" step="0.1" placeholder="e.g. 82.5" style="width:100%;padding:9px 10px;border-radius:10px;border:1px solid var(--border);background:var(--surface2);color:var(--text);font-family:var(--fn);font-size:13px;font-weight:700;box-sizing:border-box;">
+      </div>
+      <button onclick="logBodyComp()" style="width:100%;padding:12px;border-radius:12px;border:none;background:var(--accent);color:#071a00;font-family:var(--fn);font-size:13px;font-weight:800;cursor:pointer;letter-spacing:0.04em;">Calculate & Save</button>
+      <div style="font-size:10px;color:var(--text3);text-align:center;margin-top:8px;">US Navy formula · Height: ${heightCm}cm from profile</div>
+    </div>
+  `;
+}
+
+function setBodyCompSex(sex){
+  if(!S.bodyComp) S.bodyComp={sex:'male',measurements:[]};
+  S.bodyComp.sex = sex;
+  save();
+  renderBodyComp();
+}
+
+function logBodyComp(){
+  const waist = parseFloat(document.getElementById('bc-waist')?.value)||0;
+  const neck  = parseFloat(document.getElementById('bc-neck')?.value)||0;
+  const hip   = parseFloat(document.getElementById('bc-hip')?.value)||0;
+  const bw    = parseFloat(document.getElementById('bc-bw')?.value)||0;
+  if(!waist||!neck){ toast('Enter waist and neck measurements'); return; }
+  if(!S.bodyComp) S.bodyComp={sex:'male',measurements:[]};
+  S.bodyComp.measurements.push({date:today(),waist,neck,hip:hip||0,bodyweight:bw||0});
+  if(S.bodyComp.measurements.length>20) S.bodyComp.measurements=S.bodyComp.measurements.slice(-20);
+  save();
+  renderBodyComp();
+  toast('Body composition logged ✅');
+  haptic('success');
+}
+
+// ============ RECOVERY SCORE ============
+function calcRecoveryScore(){
+  const EV2 = loadElevate();
+  let score = 60; // baseline
+
+  // Sleep — most weight (up to +30 / -25)
+  const lastSleep = EV2.sleepLog && EV2.sleepLog.length
+    ? [...EV2.sleepLog].sort((a,b)=>b.date.localeCompare(a.date))[0]
+    : null;
+  if(lastSleep && lastSleep.date === today()){
+    const h = lastSleep.hours;
+    if(h >= 9) score += 25;
+    else if(h >= 8) score += 20;
+    else if(h >= 7) score += 12;
+    else if(h >= 6) score += 0;
+    else if(h >= 5) score -= 12;
+    else score -= 25;
+    // Sleep quality
+    const q = lastSleep.quality || 'okay';
+    if(q==='great') score += 8;
+    else if(q==='okay') score += 0;
+    else if(q==='poor') score -= 10;
+  } else if(lastSleep){
+    // Yesterday's sleep still counts but less
+    score += 5;
+  } else {
+    score -= 10; // No sleep logged
+  }
+
+  // Soreness (up to +15 / -20)
+  const soreness = S.soreness || {date:'',level:0};
+  if(soreness.date === today()){
+    if(soreness.level===1) score += 15;      // Fresh
+    else if(soreness.level===2) score += 8;  // Mild
+    else if(soreness.level===3) score += 0;  // Moderate
+    else if(soreness.level===4) score -= 12; // High
+    else if(soreness.level===5) score -= 20; // Very high
+  }
+
+  // Mood (up to +10 / -10)
+  const moodMap = {'😄':5,'😊':4,'😐':3,'😔':2,'😢':1,'😤':2,'😴':3,'🤩':5,'😰':2,'🥱':3};
+  const todayMood = EV2.moodLog && EV2.moodLog.find(m=>m.date===today());
+  if(todayMood){
+    const ms = moodMap[todayMood.emoji]||3;
+    score += (ms-3)*4; // -8 to +8
+  }
+
+  // Recent workload — heavy training days reduce recovery
+  const yesterday = new Date(); yesterday.setDate(yesterday.getDate()-1);
+  const yStr = yesterday.toISOString().slice(0,10);
+  const trainedYesterday = S.hist.some(h=>h.date===yStr&&h.type==='workout');
+  if(trainedYesterday) score -= 8;
+
+  return Math.max(0, Math.min(100, Math.round(score)));
+}
+
+function renderRecoveryScore(){
+  const el = document.getElementById('recovery-card-home');
+  if(!el) return;
+
+  const score = calcRecoveryScore();
+  const soreness = S.soreness || {date:'',level:0};
+  const todaySoreness = soreness.date === today() ? soreness.level : 0;
+
+  let label='', color='', advice='', emoji='';
+  if(score>=80){label='Optimal';color='var(--accent)';emoji='🟢';advice='Your body is ready. Push hard today.';}
+  else if(score>=65){label='Good';color='var(--accent)';emoji='🟡';advice='Good to train. Moderate to high intensity.';}
+  else if(score>=50){label='Moderate';color='var(--gold)';emoji='🟡';advice='Train but manage volume. Listen to your body.';}
+  else if(score>=35){label='Low';color='var(--orange)';emoji='🟠';advice='Light training or active recovery recommended.';}
+  else{label='Poor';color='var(--red)';emoji='🔴';advice='Rest day. Sleep and nutrition are the priority.';}
+
+  const sorenessLabels=['—','Fresh 💪','Mild 😊','Moderate 😐','High 😬','Very High 🔥'];
+  const sorenessColors=['var(--text3)','var(--accent)','var(--gold)','var(--orange)','var(--red)','var(--red)'];
+
+  el.innerHTML = `
+    <div style="margin:0 16px 12px;background:var(--surface);border:1px solid var(--border);border-radius:16px;overflow:hidden;">
+      <div style="padding:12px 14px;display:flex;align-items:center;justify-content:space-between;">
+        <div>
+          <div style="font-size:10px;font-weight:800;color:var(--text3);text-transform:uppercase;letter-spacing:0.1em;margin-bottom:3px;">${emoji} Recovery Score</div>
+          <div style="display:flex;align-items:baseline;gap:6px;">
+            <div style="font-size:32px;font-weight:900;color:${color};letter-spacing:-1.5px;line-height:1;">${score}</div>
+            <div style="font-size:12px;font-weight:800;color:${color};">${label}</div>
+          </div>
+          <div style="font-size:11px;color:var(--text3);margin-top:3px;max-width:180px;line-height:1.4;">${advice}</div>
+        </div>
+        <div style="text-align:right;">
+          <div style="font-size:10px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:0.06em;margin-bottom:6px;">Soreness</div>
+          <div style="display:flex;gap:4px;justify-content:flex-end;">
+            ${[1,2,3,4,5].map(n=>`
+              <div onclick="setSoreness(${n})" style="width:26px;height:26px;border-radius:8px;border:1.5px solid ${todaySoreness===n?sorenessColors[n]:'var(--border)'};background:${todaySoreness===n?`rgba(${n<=2?'168,255,60':n<=3?'255,209,102':n<=4?'255,107,53':'255,79,106'},0.12)`:'var(--surface2)'};cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:900;color:${todaySoreness===n?sorenessColors[n]:'var(--text3)'};">${n}</div>
+            `).join('')}
+          </div>
+          <div style="font-size:10px;color:var(--text3);margin-top:4px;">${todaySoreness?sorenessLabels[todaySoreness]:'Tap to rate'}</div>
+        </div>
+      </div>
+      <!-- Score bar -->
+      <div style="height:3px;background:var(--surface3);">
+        <div style="height:100%;width:${score}%;background:${color};transition:width 0.7s cubic-bezier(0.34,1.56,0.64,1);"></div>
+      </div>
+    </div>
+  `;
+}
+
+function setSoreness(level){
+  if(!S.soreness) S.soreness={date:'',level:0};
+  S.soreness = {date:today(), level};
+  save();
+  renderRecoveryScore();
+  haptic('light');
+  toast(['','Fresh — ready to go! 💪','Mild soreness — train smart','Moderate — manage your volume','High soreness — go easy','Very high — rest day recommended'][level]);
+}
 
 // ============ ONBOARDING ============
 let obStep = 0;
@@ -7029,9 +7879,21 @@ function renderStreakCalendar(){
   const startOffset = (firstDay + 6) % 7;
   const pfx = year+'-'+(String(month+1).padStart(2,'0'));
   const workoutDates = new Set(S.hist.filter(h=>h.type==='workout'&&h.date.startsWith(pfx)).map(h=>parseInt(h.date.slice(8,10))));
-  const cardioDates = new Set(S.clog.filter(c=>c.date.startsWith(pfx)).map(c=>parseInt(c.date.slice(8,10))));
+  const cardioDates = new Set((S.clog||[]).filter(c=>c.date.startsWith(pfx)).map(c=>parseInt(c.date.slice(8,10))));
   const todayDay = now.getDate();
   const streak = calcStreak();
+
+  // Identify grace days — past days with no activity that are inside an active streak window
+  const activeDateNums = new Set([...workoutDates,...cardioDates]);
+  const graceDays = new Set();
+  for(let d=1;d<todayDay;d++){
+    if(!activeDateNums.has(d)){
+      // Check if surrounded by active days (grace day candidate)
+      const prev=activeDateNums.has(d-1)||d===1;
+      const next=activeDateNums.has(d+1)||d===todayDay;
+      if(prev&&next) graceDays.add(d);
+    }
+  }
   // Stats for this month
   const wDays = workoutDates.size;
   const cDays = cardioDates.size;
@@ -7044,14 +7906,16 @@ function renderStreakCalendar(){
     const hasW = workoutDates.has(d);
     const hasC = cardioDates.has(d);
     const isFuture = d > todayDay;
-    let bg, ring='';
+    const isGrace = graceDays.has(d);
+    let bg, ring='', title='Day '+d;
     if(hasW && hasC) bg='linear-gradient(135deg,#a8ff3c,#ff6b35)';
     else if(hasW) bg='#a8ff3c';
     else if(hasC) bg='#ff6b35';
+    else if(isGrace){ bg='var(--surface3)'; ring='box-shadow:0 0 0 1.5px rgba(255,209,102,0.5);'; title='Grace day 🛡️'; }
     else if(isFuture) bg='rgba(255,255,255,0.03)';
     else bg='var(--surface3)';
     if(isToday) ring='box-shadow:0 0 0 1.5px var(--accent);';
-    cells += `<div title="Day ${d}" style="width:100%;aspect-ratio:1;border-radius:3px;background:${bg};${ring}opacity:${isFuture?0.3:1};"></div>`;
+    cells += `<div title="${title}" style="width:100%;aspect-ratio:1;border-radius:3px;background:${bg};${ring}opacity:${isFuture?0.3:1};position:relative;">${isGrace?`<div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:7px;">🛡️</div>`:''}${isToday&&!hasW&&!hasC?`<div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;"><div style="width:4px;height:4px;border-radius:50%;background:var(--accent);"></div></div>`:''}` + '</div>';
   }
   el.innerHTML = `
     <div style="background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:12px 14px;margin-bottom:12px;">
@@ -7075,6 +7939,9 @@ function renderStreakCalendar(){
         </div>
         <div style="display:flex;align-items:center;gap:4px;font-size:10px;color:var(--text3);">
           <div style="width:10px;height:10px;border-radius:2px;background:linear-gradient(135deg,#a8ff3c,#ff6b35);"></div>Both
+        </div>
+        <div style="display:flex;align-items:center;gap:4px;font-size:10px;color:var(--text3);">
+          <span style="font-size:10px;">🛡️</span>Grace day
         </div>
       </div>
     </div>`;
@@ -8246,15 +9113,34 @@ function renderQuoteBottom(){
 // ============ END NEW HOME FEATURES ============
 
 function calcStreak(){
-  const workoutDates=[...new Set(S.hist.filter(h=>h.type==='workout').map(h=>h.date))].sort((a,b)=>b.localeCompare(a));
+  const workoutDates=[...new Set([
+    ...S.hist.filter(h=>h.type==='workout').map(h=>h.date),
+    ...(S.clog||[]).map(c=>c.date)
+  ])].sort((a,b)=>b.localeCompare(a));
   if(!workoutDates.length) return 0;
-  let streak=0, check=new Date();
+  let streak=0, check=new Date(), graceUsed=false;
   check.setHours(0,0,0,0);
-  for(let i=0;i<workoutDates.length;i++){
-    const d=new Date(workoutDates[i]+'T12:00:00');
-    const diff=Math.round((check-d)/(1000*60*60*24));
-    if(diff===0||diff===1){ streak++; check=d; }
-    else break;
+  // Allow today to be missed without breaking streak
+  const todayStr=today();
+  const hasToday=workoutDates[0]===todayStr;
+  if(!hasToday){ check.setDate(check.getDate()-1); } // start check from yesterday if nothing logged today
+  for(let i=0;i<60;i++){
+    const iso=check.toISOString().slice(0,10);
+    const hasActivity=workoutDates.includes(iso);
+    if(hasActivity){
+      streak++;
+      check.setDate(check.getDate()-1);
+    } else {
+      // Grace day: allow one missed day per 7-day window
+      if(!graceUsed && streak>0 && streak%7!==0){
+        graceUsed=true;
+        check.setDate(check.getDate()-1);
+        // Reset grace availability after next 7 days
+        if(streak%7===6) graceUsed=false;
+      } else {
+        break;
+      }
+    }
   }
   return streak;
 }
@@ -8335,6 +9221,7 @@ renderWorkout = function(){
   _origRW();
   renderStreakBanner();
   renderHealthScore();
+  renderRecoveryScore();
   setTimeout(()=>animateCards('exc-list'),50);
 };
 
