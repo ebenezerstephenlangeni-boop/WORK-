@@ -3117,6 +3117,24 @@ input:focus, select:focus, textarea:focus {
   </div>
 </div>
 
+<!-- ROUTINE EDITOR MODAL -->
+<div class="overlay" id="routine-editor-modal" onclick="closeM('routine-editor-modal')">
+  <div class="sheet" onclick="event.stopPropagation()">
+    <div class="handle"></div>
+    <div class="sheet-inner">
+      <div class="sheet-title" id="routine-editor-title">EDIT ROUTINE</div>
+      <div id="routine-editor-steps" style="max-height:40vh;overflow-y:auto;margin-bottom:12px;"></div>
+      <div style="font-size:11px;font-weight:800;color:var(--text3);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:8px;">Add Custom Step</div>
+      <input id="routine-new-name" type="text" placeholder="Step name (e.g. Vitamin C serum)" style="width:100%;padding:10px 12px;border-radius:10px;border:1px solid var(--border);background:var(--surface2);color:var(--text);font-family:var(--fn);font-size:13px;margin-bottom:8px;box-sizing:border-box;">
+      <div style="display:flex;gap:8px;margin-bottom:12px;">
+        <input id="routine-new-tip" type="text" placeholder="Tip (optional)" style="flex:1;padding:10px 12px;border-radius:10px;border:1px solid var(--border);background:var(--surface2);color:var(--text);font-family:var(--fn);font-size:13px;box-sizing:border-box;">
+        <input id="routine-new-time" type="text" placeholder="Time" style="width:80px;padding:10px 12px;border-radius:10px;border:1px solid var(--border);background:var(--surface2);color:var(--text);font-family:var(--fn);font-size:13px;box-sizing:border-box;">
+      </div>
+      <button onclick="addRoutineStep()" style="width:100%;padding:13px;border-radius:12px;border:none;background:var(--accent);color:#071a00;font-family:var(--fn);font-size:13px;font-weight:800;cursor:pointer;">+ Add Step</button>
+    </div>
+  </div>
+</div>
+
 <!-- MEAL PICKER MODAL -->
 <div class="overlay" id="meal-picker-modal" onclick="closeM('meal-picker-modal')">
   <div class="sheet" onclick="event.stopPropagation()">
@@ -3466,6 +3484,17 @@ if(!S.stepDate)S.stepDate=today();
 if(!S.mealPlan)S.mealPlan={Mon:[],Tue:[],Wed:[],Thu:[],Fri:[],Sat:[],Sun:[]};
 if(!S.bodyComp)S.bodyComp={sex:'male',measurements:[]};
 if(!S.soreness)S.soreness={date:'',level:0};
+// Patch exercises missing uid or muscle (from old loadSplitDay bug)
+S.wex=S.wex.map(e=>{
+  const src=EXS.find(x=>x.id===e.id);
+  return {
+    ...( src ? src : {}),
+    ...e,
+    uid: e.uid||uid2(),
+    muscle: e.muscle||(src?src.muscle:''),
+    icon: e.icon||(src?src.icon:'🏋️'),
+  };
+});
 // Daily reset
 if(S.wdate!==today()){
   // Save food summary before resetting
@@ -3567,7 +3596,7 @@ function addWODToWorkout(planIdx){
   plan.ids.forEach(id=>{
     const ex=EXS.find(e=>e.id===id);
     if(ex&&!S.wex.find(w=>w.id===ex.id)){
-      S.wex.push({...ex,uid:uid2(),sets:[{reps:'',weight:'',done:false}]});
+      S.wex.push({...ex, uid:uid2(), sets:[{reps:'',weight:'',done:false}]});
     }
   });
   save();renderWorkout();
@@ -5821,7 +5850,10 @@ function renderSkinPillar(){
     <div class="routine-card">
       <div class="routine-header">
         <div class="routine-title">☀️ Morning</div>
-        <div class="routine-streak">${morningDone}/${EV.morningRoutine.length} done</div>
+        <div style="display:flex;align-items:center;gap:8px;">
+          <div class="routine-streak">${morningDone}/${EV.morningRoutine.length} done</div>
+          <button onclick="openRoutineEditor('morning')" style="padding:4px 10px;border-radius:8px;border:1px solid var(--border);background:var(--surface2);color:var(--text3);font-family:var(--fn);font-size:10px;font-weight:800;cursor:pointer;letter-spacing:0.04em;">EDIT</button>
+        </div>
       </div>
       ${EV.morningRoutine.map((step,i)=>`
         <div class="routine-step" onclick="toggleRoutineStep('morning',${i})">
@@ -5840,7 +5872,10 @@ function renderSkinPillar(){
     <div class="routine-card">
       <div class="routine-header">
         <div class="routine-title">🌙 Evening</div>
-        <div class="routine-streak">${eveningDone}/${EV.eveningRoutine.length} done</div>
+        <div style="display:flex;align-items:center;gap:8px;">
+          <div class="routine-streak">${eveningDone}/${EV.eveningRoutine.length} done</div>
+          <button onclick="openRoutineEditor('evening')" style="padding:4px 10px;border-radius:8px;border:1px solid var(--border);background:var(--surface2);color:var(--text3);font-family:var(--fn);font-size:10px;font-weight:800;cursor:pointer;letter-spacing:0.04em;">EDIT</button>
+        </div>
       </div>
       ${EV.eveningRoutine.map((step,i)=>`
         <div class="routine-step" onclick="toggleRoutineStep('evening',${i})">
@@ -5876,8 +5911,9 @@ function renderSkinPillar(){
     </div>
 
     <!-- Ingredient library -->
-    <div class="sec-head">INGREDIENT LIBRARY</div>
+    <div class="sec-head" id="ingredient-library-head">INGREDIENT LIBRARY</div>
     <div style="background:var(--surface);border:1px solid var(--border);border-radius:14px;overflow:hidden;margin-bottom:12px;">
+      ${window._activeConcern ? `<div style="padding:10px 14px;background:rgba(187,127,255,0.08);border-bottom:1px solid rgba(187,127,255,0.15);font-size:11px;color:var(--purple);font-weight:700;">✦ Highlighted for: ${window._activeConcern} — <span onclick="window._activeConcern=null;renderElevateContent();" style="cursor:pointer;text-decoration:underline;color:var(--text3);">clear</span></div>` : ''}
       ${[
         {name:'Niacinamide',type:'Vitamin B3',does:'Fades dark spots, controls oil, minimises pores, strengthens skin barrier. Works well with almost everything.',good:['Oily','Combination','Sensitive'],avoid:'None — very well tolerated',conc:'5–10%'},
         {name:'Salicylic Acid',type:'BHA Exfoliant',does:'Penetrates pores to dissolve oil and dead skin. Best for acne and blackheads. Use 2–3x per week maximum.',good:['Oily','Combination','Acne-prone'],avoid:'Sensitive or dry skin — can over-strip',conc:'0.5–2%'},
@@ -5887,10 +5923,13 @@ function renderSkinPillar(){
         {name:'AHA (Glycolic/Lactic)',type:'Exfoliant',does:'Resurfaces skin texture, fades scars, brightens. Glycolic is stronger, lactic is gentler. Use at night, always use SPF.',good:['Dry','Dull','Uneven tone'],avoid:'Active acne, very sensitive skin',conc:'5–10%'},
         {name:'Benzoyl Peroxide',type:'Antibacterial',does:'Kills acne bacteria directly. Fast-acting for spot treatment. Bleaches fabric — be careful on pillowcases.',good:['Oily','Acne-prone'],avoid:'Dry or sensitive skin. Do not mix with retinol',conc:'2.5–5%'},
         {name:'Ceramides',type:'Barrier lipid',does:'Repairs and maintains the skin barrier. Essential for dry and sensitive skin. Keeps moisture in and irritants out.',good:['Dry','Sensitive','Eczema-prone'],avoid:'Nothing — universally beneficial',conc:'Effective at any %'},
-      ].map((ing,i)=>`
-        <div style="padding:12px 14px;border-bottom:${i<7?'1px solid var(--border)':'none'};">
+      ].map((ing,i)=>{
+        const highlighted = window._activeConcern && (CONCERN_INGREDIENTS[window._activeConcern]||[]).includes(ing.name);
+        return `
+        <div style="padding:12px 14px;border-bottom:${i<7?'1px solid var(--border)':'none'};background:${highlighted?'rgba(187,127,255,0.07)':'transparent'};position:relative;">
+          ${highlighted?`<div style="position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--purple);border-radius:0 0 0 0;"></div>`:''}
           <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:4px;">
-            <div style="font-size:13px;font-weight:800;color:var(--purple);">${ing.name}</div>
+            <div style="font-size:13px;font-weight:800;color:${highlighted?'var(--purple)':'var(--purple)'};">${ing.name}${highlighted?' ✦':''}</div>
             <div style="font-size:9px;font-weight:700;color:var(--purple);background:rgba(187,127,255,0.1);border:1px solid rgba(187,127,255,0.2);border-radius:20px;padding:2px 8px;">${ing.type}</div>
           </div>
           <div style="font-size:12px;color:var(--text2);line-height:1.65;margin-bottom:5px;">${ing.does}</div>
@@ -5899,7 +5938,8 @@ function renderSkinPillar(){
             <div style="font-size:10px;color:var(--text3);">Conc: ${ing.conc}</div>
           </div>
           <div style="font-size:10px;color:rgba(255,79,106,0.7);margin-top:3px;">⚠ ${ing.avoid}</div>
-        </div>`).join('')}
+        </div>`;
+      }).join('')}
     </div>
 
     <!-- Doctor prescriptions -->
@@ -8428,10 +8468,11 @@ function loadSplitDay(dayIdx){
   const sp=JSON.parse(saved);
   const day=sp.schedule[dayIdx];
   if(!day||!day.exIds.length){ toast('Rest day'); return; }
-  // Add all exercises for this day to workout
   day.exIds.forEach(id=>{
     const ex=EXS.find(e=>e.id===id);
-    if(ex&&!S.wex.find(e=>e.id===id)) S.wex.push({id:ex.id,name:ex.name,icon:ex.icon,bg:ex.bg,sets:[]});
+    if(ex&&!S.wex.find(e=>e.id===id)){
+      S.wex.push({...ex, uid:uid2(), sets:[{reps:'',weight:'',done:false}]});
+    }
   });
   save(); haptic('success');
   toast(day.focus+' session loaded 💪');
@@ -8479,18 +8520,41 @@ const CONCERN_RECS={
   'Dullness':'AHA exfoliant + Vitamin C serum + more hydration. Sleep and water intake affect glow significantly.',
   'Under-eye circles':'Caffeine eye cream + Vitamin C + Retinol (eye-safe formula). Check iron levels — deficiency causes dark circles.',
 };
+
+// Concern → ingredient names that are most relevant
+const CONCERN_INGREDIENTS={
+  'Acne':['Salicylic Acid','Niacinamide','Benzoyl Peroxide'],
+  'Dark spots':['Vitamin C','Niacinamide','Retinol'],
+  'Wrinkles':['Retinol','Vitamin C','Hyaluronic Acid'],
+  'Dryness':['Hyaluronic Acid','Ceramides'],
+  'Oiliness':['Salicylic Acid','Niacinamide'],
+  'Redness':['Ceramides','Hyaluronic Acid'],
+  'Uneven tone':['Vitamin C','Niacinamide','AHA (Glycolic/Lactic)'],
+  'Large pores':['Salicylic Acid','Niacinamide'],
+  'Dullness':['AHA (Glycolic/Lactic)','Vitamin C','Hyaluronic Acid'],
+  'Under-eye circles':['Vitamin C','Retinol'],
+};
+
 function showConcernRecs(concern){
-  const rec=CONCERN_RECS[concern];
+  const rec = CONCERN_RECS[concern];
   if(!rec) return;
-  const el=document.getElementById('elevate-content');
-  if(!el) return;
-  const old=document.getElementById('concern-banner');
-  if(old) old.remove();
-  const banner=document.createElement('div');
-  banner.id='concern-banner';
-  banner.style.cssText='background:rgba(187,127,255,0.12);border:1px solid rgba(187,127,255,0.3);border-radius:12px;padding:12px 14px;margin-bottom:10px;position:relative;';
-  banner.innerHTML='<div style="font-size:12px;font-weight:800;color:var(--purple);margin-bottom:4px;">'+concern+' — recommended routine</div><div style="font-size:11px;color:var(--text2);line-height:1.65;">'+rec+'</div><button onclick="document.getElementById(\'concern-banner\').remove()" style="position:absolute;top:8px;right:10px;background:none;border:none;color:var(--text3);font-size:16px;cursor:pointer;line-height:1;">✕</button>';
-  if(el.firstChild) el.insertBefore(banner,el.firstChild);
+
+  // Store active concern for ingredient highlighting
+  window._activeConcern = concern;
+
+  // Re-render skin pillar to refresh ingredient highlights
+  renderElevateContent();
+
+  // Scroll to ingredient library after render
+  setTimeout(()=>{
+    const head = document.getElementById('ingredient-library-head');
+    if(head){
+      head.scrollIntoView({behavior:'smooth', block:'start'});
+      // Flash the section header
+      head.style.color = 'var(--purple)';
+      setTimeout(()=>{ head.style.color = ''; }, 1200);
+    }
+  }, 120);
 }
 function addPrescription(){
   EV=loadElevate();
@@ -8528,6 +8592,53 @@ function delSkinPhoto(idx){
   EV=loadElevate(); EV.skinPhotos.splice(idx,1); saveElevate(EV); renderElevateContent();
 }
 // ============ END SKIN HELPERS ============
+
+// ── ROUTINE EDITOR ──
+let _editingRoutine = 'morning';
+function openRoutineEditor(which){
+  _editingRoutine = which;
+  EV = loadElevate();
+  document.getElementById('routine-editor-title').textContent = (which==='morning'?'☀️ MORNING':'🌙 EVENING') + ' ROUTINE';
+  renderRoutineEditorSteps();
+  openM('routine-editor-modal');
+}
+function renderRoutineEditorSteps(){
+  const steps = EV[_editingRoutine+'Routine'];
+  const el = document.getElementById('routine-editor-steps');
+  if(!el) return;
+  el.innerHTML = steps.map((s,i)=>`
+    <div style="display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid var(--border2);">
+      <div style="flex:1;">
+        <div style="font-size:13px;font-weight:700;color:var(--text);">${s.name}</div>
+        <div style="font-size:11px;color:var(--text3);">${s.tip||''}${s.time?' · '+s.time:''}</div>
+      </div>
+      <button onclick="removeRoutineStep(${i})" style="width:28px;height:28px;border-radius:8px;border:none;background:var(--surface3);color:var(--red);font-size:15px;cursor:pointer;flex-shrink:0;">×</button>
+    </div>`).join('') || '<div style="font-size:12px;color:var(--text3);padding:10px 0;">No steps yet — add one below</div>';
+}
+function addRoutineStep(){
+  const name = document.getElementById('routine-new-name')?.value?.trim();
+  if(!name){ toast('Enter a step name'); return; }
+  const tip = document.getElementById('routine-new-tip')?.value?.trim()||'';
+  const time = document.getElementById('routine-new-time')?.value?.trim()||'30 sec';
+  EV = loadElevate();
+  EV[_editingRoutine+'Routine'].push({id:'c'+uid2(),name,tip,time,done:false});
+  saveElevate(EV);
+  document.getElementById('routine-new-name').value='';
+  document.getElementById('routine-new-tip').value='';
+  document.getElementById('routine-new-time').value='';
+  renderRoutineEditorSteps();
+  renderElevateContent();
+  toast(name+' added ✅');
+  haptic('success');
+}
+function removeRoutineStep(idx){
+  EV = loadElevate();
+  EV[_editingRoutine+'Routine'].splice(idx,1);
+  saveElevate(EV);
+  renderRoutineEditorSteps();
+  renderElevateContent();
+  haptic('light');
+}
 // ============ REST TIMER ============
 let tInt=null,tTot=90,tLeft=90;
 function startTimer(s){clearInterval(tInt);tTot=s;tLeft=s;updTimer();document.getElementById('rest-ov').classList.add('open');tInt=setInterval(()=>{tLeft--;updTimer();if(tLeft<=0){clearInterval(tInt);toast('Rest done! Back to it 💪');closeTimer();}},1000);}
