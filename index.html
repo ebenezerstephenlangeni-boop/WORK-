@@ -2467,9 +2467,12 @@ input:focus, select:focus, textarea:focus {
   <!-- Library panel -->
   <div id="expanel-library" style="display:flex;flex-direction:column;min-height:0;flex:1;">
     <div class="ex-search-wrap" style="flex-shrink:0;">
-      <div class="sbox">
-        <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-        <input type="text" id="ex-s" placeholder="Search exercises…" oninput="filterEx()"/>
+      <div style="display:flex;gap:8px;align-items:center;padding:0 16px 8px;">
+        <div class="sbox" style="flex:1;">
+          <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+          <input type="text" id="ex-s" placeholder="Search exercises…" oninput="filterEx()" ontouchstart="this.focus()" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+        </div>
+        <button onclick="openM('custom-ex-modal')" style="padding:9px 13px;border-radius:12px;border:1px solid var(--accent);background:var(--accent-glow2);color:var(--accent);font-family:var(--fn);font-size:11px;font-weight:800;white-space:nowrap;cursor:pointer;flex-shrink:0;">+ Custom</button>
       </div>
     </div>
     <div class="filter-wrap" style="flex-shrink:0;"><div class="fscroll" id="ex-pills"></div></div>
@@ -3110,9 +3113,46 @@ input:focus, select:focus, textarea:focus {
       <div class="sheet-title">SELECT EXERCISE</div>
       <div class="sbox" style="margin-bottom:12px;">
         <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-        <input type="text" id="pk-s" placeholder="Search…" oninput="renderPicker()"/>
+        <input type="text" id="pk-s" placeholder="Search…" oninput="renderPicker()" ontouchstart="this.focus()" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
       </div>
       <div id="pk-list"></div>
+    </div>
+  </div>
+</div>
+
+<!-- CUSTOM EXERCISE MODAL -->
+<div class="overlay" id="custom-ex-modal" onclick="closeM('custom-ex-modal')">
+  <div class="sheet" onclick="event.stopPropagation()">
+    <div class="handle"></div>
+    <div class="sheet-inner">
+      <div class="sheet-title">CREATE EXERCISE</div>
+      <div style="display:flex;flex-direction:column;gap:10px;">
+        <div>
+          <div style="font-size:10px;font-weight:800;color:var(--text3);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:4px;">Exercise Name *</div>
+          <input id="cex-name" type="text" placeholder="e.g. Dumbbell Chest Press" style="width:100%;padding:10px 12px;border-radius:10px;border:1px solid var(--border);background:var(--surface2);color:var(--text);font-family:var(--fn);font-size:13px;box-sizing:border-box;">
+        </div>
+        <div style="display:flex;gap:8px;">
+          <div style="flex:1;">
+            <div style="font-size:10px;font-weight:800;color:var(--text3);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:4px;">Muscle Group *</div>
+            <select id="cex-muscle" style="width:100%;padding:10px 12px;border-radius:10px;border:1px solid var(--border);background:var(--surface2);color:var(--text);font-family:var(--fn);font-size:13px;box-sizing:border-box;">
+              ${['Chest','Back','Legs','Shoulders','Biceps','Triceps','Core','Mobility','Calisthenics','CrossFit','Sport'].map(m=>`<option value="${m}">${m}</option>`).join('')}
+            </select>
+          </div>
+          <div style="flex:1;">
+            <div style="font-size:10px;font-weight:800;color:var(--text3);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:4px;">Type</div>
+            <select id="cex-type" style="width:100%;padding:10px 12px;border-radius:10px;border:1px solid var(--border);background:var(--surface2);color:var(--text);font-family:var(--fn);font-size:13px;box-sizing:border-box;">
+              <option value="strength">Strength</option>
+              <option value="cardio">Cardio</option>
+              <option value="mobility">Mobility</option>
+            </select>
+          </div>
+        </div>
+        <div>
+          <div style="font-size:10px;font-weight:800;color:var(--text3);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:4px;">Description (optional)</div>
+          <input id="cex-desc" type="text" placeholder="Brief description of the exercise" style="width:100%;padding:10px 12px;border-radius:10px;border:1px solid var(--border);background:var(--surface2);color:var(--text);font-family:var(--fn);font-size:13px;box-sizing:border-box;">
+        </div>
+        <button onclick="saveCustomExercise()" style="width:100%;padding:13px;border-radius:12px;border:none;background:var(--accent);color:#071a00;font-family:var(--fn);font-size:13px;font-weight:800;cursor:pointer;margin-top:4px;">Save to Library</button>
+      </div>
     </div>
   </div>
 </div>
@@ -3450,6 +3490,35 @@ const EXS=[
   {id:132,name:"Medicine Ball Slam",muscle:"Sport",type:"strength",icon:"💥",bg:"#1a1a00",desc:"Total body explosive power. Essential for combat and field athletes.",steps:["Hold med ball overhead, feet shoulder-width","Slam as hard as possible into ground — full body involvement","Bend to pick up on bounce","Chain reps for conditioning or reset for power"],tags:["Sport","Power","Full body","Explosive"]},
   {id:133,name:"Lateral Bound",muscle:"Sport",type:"strength",icon:"↔️",bg:"#1a1a00",desc:"Single-leg lateral jump. Builds agility and lateral power.",steps:["Balance on right leg with slight knee bend","Jump laterally off single leg","Land on opposite leg only — absorb and stabilise","Hold 1 second, then jump back"],tags:["Sport","Agility","Lateral","Legs"]},
   {id:134,name:"Farmer's Carry",muscle:"Sport",type:"strength",icon:"🧳",bg:"#1a1a00",desc:"Walk with heavy load. Builds grip, core and functional strength.",steps:["Hold heavy dumbbells or kettlebells at sides","Walk with tall posture — shoulders back, no lean","Maintain grip and steady breathing throughout","Set distance 20-40m or time 30-60 seconds"],tags:["Sport","Grip","Core","Functional"]},
+
+  // ── ADDITIONAL DUMBBELL / COMPOUND / MACHINE ──
+  {id:201,name:"Dumbbell Bench Press",muscle:"Chest",type:"strength",icon:"🏋️",bg:"#1a2a0a",desc:"Dumbbell pressing for chest. Greater range of motion than barbell.",steps:["Lie flat, dumbbells at chest level","Press up and slightly inward to full lockout","Lower with control — full stretch at bottom","Keep feet flat, core tight"],tags:["Compound","Dumbbell","Chest","Push"]},
+  {id:202,name:"Incline Dumbbell Press",muscle:"Chest",type:"strength",icon:"🏋️",bg:"#1a2a0a",desc:"Upper chest dumbbell pressing. 30–45 degree incline.",steps:["Set bench to 30–45 degree incline","Press dumbbells up and together","Lower to upper chest with full control","Squeeze at top — full lockout"],tags:["Compound","Dumbbell","Upper Chest","Push"]},
+  {id:203,name:"Decline Push-Up",muscle:"Chest",type:"strength",icon:"💪",bg:"#1a2a0a",desc:"Feet elevated push-up hits upper chest harder.",steps:["Place feet on bench, hands on floor wider than shoulders","Lower chest to floor with control","Press back to full extension","Keep body straight — no sagging hips"],tags:["Bodyweight","Chest","Upper","Push"]},
+  {id:204,name:"Chest Dip",muscle:"Chest",type:"strength",icon:"⬇️",bg:"#1a2a0a",desc:"Forward-lean dip for chest focus.",steps:["Grip parallel bars with slight forward lean","Lower until elbows at 90 degrees — feel chest stretch","Press up to full lockout","Lean further forward for more chest emphasis"],tags:["Bodyweight","Chest","Triceps","Compound"]},
+  {id:205,name:"Dumbbell Pullover",muscle:"Chest",type:"strength",icon:"🏋️",bg:"#1a2a0a",desc:"Chest and lat stretch movement. Expands the ribcage.",steps:["Lie perpendicular on bench, dumbbell held above chest","Lower dumbbell behind head in an arc","Feel deep chest and lat stretch","Pull back up to starting position"],tags:["Dumbbell","Chest","Lats","Stretch"]},
+  {id:206,name:"Dumbbell Shoulder Press",muscle:"Shoulders",type:"strength",icon:"🙌",bg:"#12122a",desc:"Seated or standing dumbbell overhead press for full delt development.",steps:["Hold dumbbells at shoulder height, palms forward","Press directly overhead to full lockout","Lower with control — don't drop below ear level","Keep core braced, avoid lower back arch"],tags:["Compound","Dumbbell","Shoulders","Press"]},
+  {id:207,name:"Cable Lateral Raise",muscle:"Shoulders",type:"strength",icon:"🙌",bg:"#12122a",desc:"Cable lateral raise — constant tension makes it superior to dumbbell version.",steps:["Stand beside cable set at ankle height","Raise arm out to side to shoulder height","Lead with elbow, not wrist","Lower slowly against resistance"],tags:["Cable","Shoulders","Side Delt","Isolation"]},
+  {id:208,name:"Rear Delt Fly",muscle:"Shoulders",type:"strength",icon:"🙌",bg:"#12122a",desc:"Rear deltoid isolation. Essential for shoulder health and posture.",steps:["Bend forward at hips, dumbbells hanging","Open arms wide to the sides","Lead with elbows, squeeze rear delts at top","Lower slowly — don't use momentum"],tags:["Dumbbell","Rear Delt","Posture","Isolation"]},
+  {id:209,name:"Shrug",muscle:"Shoulders",type:"strength",icon:"🏋️",bg:"#12122a",desc:"Trap isolation exercise. Builds the neck and upper trap.",steps:["Hold barbell or dumbbells at sides","Shrug shoulders straight up toward ears","Hold 1 second at top — squeeze traps","Lower slowly and fully"],tags:["Traps","Barbell","Isolation","Shoulders"]},
+  {id:210,name:"Dumbbell Bicep Curl",muscle:"Biceps",type:"strength",icon:"💪",bg:"#2a0a18",desc:"Classic dumbbell curl — alternating or simultaneous.",steps:["Stand with dumbbells at sides, palms forward","Curl one or both arms toward shoulders","Don't swing — isolate the bicep","Lower fully before next rep"],tags:["Isolation","Dumbbell","Biceps","Arms"]},
+  {id:211,name:"Cable Curl",muscle:"Biceps",type:"strength",icon:"💪",bg:"#2a0a18",desc:"Cable curl with constant tension throughout the range.",steps:["Stand at cable machine, bar or rope at low position","Curl with elbows pinned to sides","Full contraction at top — don't let elbows drift","Slow controlled descent"],tags:["Cable","Biceps","Isolation","Constant Tension"]},
+  {id:212,name:"Incline Dumbbell Curl",muscle:"Biceps",type:"strength",icon:"💪",bg:"#2a0a18",desc:"Incline position creates maximum bicep stretch at bottom.",steps:["Set bench to 45–60 degree incline","Lie back, let arms hang fully extended","Curl both dumbbells to shoulders","Feel full stretch at bottom between reps"],tags:["Dumbbell","Biceps","Long Head","Isolation"]},
+  {id:213,name:"Close-Grip Bench Press",muscle:"Triceps",type:"strength",icon:"🏋️",bg:"#1a2a1a",desc:"Tricep-focused bench press. Elbows tucked to sides.",steps:["Grip bar shoulder-width or slightly narrower","Lower bar to lower chest, elbows tucked in","Press up — lead with the triceps","Full lockout at top, don't flare elbows"],tags:["Barbell","Triceps","Compound","Push"]},
+  {id:214,name:"Cable Overhead Tricep Extension",muscle:"Triceps",type:"strength",icon:"🏋️",bg:"#1a2a1a",desc:"Overhead extension via cable — hits the long head of tricep.",steps:["Set cable high, grip rope behind head","Extend arms forward and overhead","Full lockout at end of movement","Return slowly — feel deep tricep stretch"],tags:["Cable","Triceps","Long Head","Isolation"]},
+  {id:215,name:"Diamond Push-Up",muscle:"Triceps",type:"strength",icon:"💎",bg:"#1a2a1a",desc:"Bodyweight tricep isolation — hands in diamond shape.",steps:["Form diamond with hands under chest","Lower chest to hands, elbows tucked","Press up through triceps to full lockout","Keep core rigid throughout"],tags:["Bodyweight","Triceps","Push","No Equipment"]},
+  {id:216,name:"Hack Squat",muscle:"Legs",type:"strength",icon:"🦵",bg:"#1e1a08",desc:"Machine squat variation. Great for quads with less lower back stress.",steps:["Position shoulders under pads, feet forward on platform","Unhook safety, lower until thighs past parallel","Drive through heels to full extension","Don't lock knees aggressively at top"],tags:["Machine","Quads","Lower Body","Compound"]},
+  {id:217,name:"Walking Lunge",muscle:"Legs",type:"strength",icon:"🦵",bg:"#1e1a08",desc:"Moving lunge variation. Better for glutes and balance than static lunge.",steps:["Hold dumbbells or use bodyweight","Step forward into lunge, back knee near floor","Drive front foot to stand and step directly into next lunge","Continue walking forward for reps or distance"],tags:["Dumbbell","Legs","Glutes","Unilateral"]},
+  {id:218,name:"Dumbbell Romanian Deadlift",muscle:"Legs",type:"strength",icon:"🦿",bg:"#1a0a1a",desc:"Dumbbell RDL — easier to set up, same hamstring benefit.",steps:["Hold dumbbells in front of thighs, slight knee bend","Push hips back as dumbbells lower close to legs","Feel hamstring stretch — go as deep as flexibility allows","Drive hips forward to return to standing"],tags:["Dumbbell","Hamstrings","Hinge","Glutes"]},
+  {id:219,name:"Leg Extension",muscle:"Legs",type:"strength",icon:"🦵",bg:"#1e1a08",desc:"Quad isolation machine. Great finisher after heavy compound work.",steps:["Sit in machine, pad across front of ankles","Extend legs to full lockout — squeeze quads","Hold briefly at top","Lower slowly — don't drop the weight"],tags:["Machine","Quads","Isolation","Lower Body"]},
+  {id:220,name:"Glute Kickback",muscle:"Legs",type:"strength",icon:"🍑",bg:"#1e1a08",desc:"Cable or bodyweight glute isolation.",steps:["Attach ankle strap to cable, face the machine","Kick leg straight back, squeezing glute hard","Don't use momentum — isolate the glute","Control the return — don't let weight stack crash"],tags:["Cable","Glutes","Isolation","Women's"]},
+  {id:221,name:"Sumo Deadlift",muscle:"Back",type:"strength",icon:"🏋️",bg:"#1a0a0a",desc:"Wide stance deadlift. More quad-dominant, less lower back stress.",steps:["Wide stance — toes pointed out 45 degrees","Grip bar inside legs, back flat","Drive floor away — keep chest up","Hip hinge to lockout — squeeze glutes hard at top"],tags:["Compound","Barbell","Legs","Back"]},
+  {id:222,name:"T-Bar Row",muscle:"Back",type:"strength",icon:"🏋️",bg:"#1a0a0a",desc:"Chest-supported or landmine row for back thickness.",steps:["Load one end of barbell into landmine or T-bar","Hinge forward, grip handle with both hands","Row to chest — lead with elbows","Lower with full control — full stretch at bottom"],tags:["Barbell","Back","Compound","Thickness"]},
+  {id:223,name:"Single-Arm Cable Row",muscle:"Back",type:"strength",icon:"🏋️",bg:"#1a0a0a",desc:"Unilateral cable row — corrects left-right imbalances.",steps:["Sit or stand at cable machine, single handle","Pull handle to hip leading with elbow","Squeeze shoulder blade at end of movement","Fully extend arm before next rep"],tags:["Cable","Back","Unilateral","Thickness"]},
+  {id:224,name:"Chest-Supported Row",muscle:"Back",type:"strength",icon:"🏋️",bg:"#1a0a0a",desc:"Incline bench dumbbell row — eliminates lower back from equation.",steps:["Set bench to 30–45 degree incline","Lie chest-down, hold dumbbells hanging","Row to hips, elbows drive back","No cheating — all back"],tags:["Dumbbell","Back","Supported","Thickness"]},
+  {id:225,name:"Hanging Leg Raise",muscle:"Core",type:"strength",icon:"🧘",bg:"#0a201a",desc:"Advanced hanging core exercise. Full range hip flexion.",steps:["Dead hang from pull-up bar","Raise legs to parallel or above — straight or bent knee","Control the lowering — don't swing","Use ab contraction not momentum"],tags:["Bodyweight","Core","Lower Abs","Advanced"]},
+  {id:226,name:"Cable Crunch",muscle:"Core",type:"strength",icon:"🧘",bg:"#0a201a",desc:"Weighted crunch via cable. Best way to add resistance to ab work.",steps:["Kneel at cable machine, rope at high position","Hold rope behind head, flex forward","Crunch elbows toward knees — exhale hard","Return slowly to full stretch"],tags:["Cable","Core","Abs","Weighted"]},
+  {id:227,name:"Pallof Press",muscle:"Core",type:"strength",icon:"🧘",bg:"#0a201a",desc:"Anti-rotation core exercise. Best for building functional core stability.",steps:["Stand beside cable machine at chest height","Hold handle at chest, brace core","Press hands straight out — resist rotation","Hold 2 seconds, return — repeat"],tags:["Cable","Core","Anti-rotation","Functional"]},
 ];
 
 const CTYPES=[
@@ -3484,6 +3553,7 @@ if(!S.stepDate)S.stepDate=today();
 if(!S.mealPlan)S.mealPlan={Mon:[],Tue:[],Wed:[],Thu:[],Fri:[],Sat:[],Sun:[]};
 if(!S.bodyComp)S.bodyComp={sex:'male',measurements:[]};
 if(!S.soreness)S.soreness={date:'',level:0};
+if(!S.customEx)S.customEx=[];
 // Patch exercises missing uid or muscle (from old loadSplitDay bug)
 S.wex=S.wex.map(e=>{
   const src=EXS.find(x=>x.id===e.id);
@@ -3509,7 +3579,14 @@ if(S.stepDate!==today()){S.steps=0;S.stepDate=today();save();}
 function save(){try{localStorage.setItem('ft4',JSON.stringify(S));}catch(e){}}
 function uid2(){return Math.random().toString(36).slice(2,8);}
 function toast(m){const t=document.getElementById('toast');t.textContent=m;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2200);}
-function openM(id){document.getElementById(id).classList.add('open');}
+function openM(id){
+  const el=document.getElementById(id);
+  if(!el)return;
+  el.classList.add('open');
+  // Init drag on this sheet each time it opens
+  const sheet=el.querySelector('.sheet');
+  if(sheet) initSheetDrag(sheet,id);
+}
 function closeM(id){document.getElementById(id).classList.remove('open');}
 function fmtD(secs){const m=Math.floor(secs/60),s=secs%60;return m+':'+(s<10?'0':'')+s;}
 function fmtDate(iso){const d=new Date(iso+'T12:00:00');return DS[d.getDay()]+' '+d.getDate()+' '+MS[d.getMonth()];}
@@ -3942,24 +4019,40 @@ function finishWorkout(){
 function openPicker(){document.getElementById('pk-s').value='';renderPicker();openM('pk-modal');}
 function renderPicker(){
   const q=(document.getElementById('pk-s').value||'').toLowerCase();
-  const list=EXS.filter(e=>!q||e.name.toLowerCase().includes(q)||e.muscle.toLowerCase().includes(q));
+  const allEx = getExList();
+  const list=allEx.filter(e=>!q||e.name.toLowerCase().includes(q)||e.muscle.toLowerCase().includes(q)||(e.tags||[]).some(t=>t.toLowerCase().includes(q)));
   const tc={strength:'cg',cardio:'cb',mobility:'co'};
   document.getElementById('pk-list').innerHTML=list.map(ex=>`
     <div class="ex-row" onclick="addExW(${ex.id});closeM('pk-modal');">
-      <div class="er-ico" style="background:${ex.bg};">${ex.icon}</div>
-      <div class="er-info"><div class="er-name">${ex.name}</div><div class="er-sub">${ex.muscle}</div></div>
-      <span class="chip ${tc[ex.type]}">${ex.type}</span>
+      <div class="er-ico" style="background:${ex.bg||'#1a1a1a'};">${ex.icon||'💪'}</div>
+      <div class="er-info"><div class="er-name">${ex.name}${ex.custom?'<span style="font-size:9px;color:var(--gold);font-weight:800;margin-left:4px;">CUSTOM</span>':''}</div><div class="er-sub">${ex.muscle}</div></div>
+      <span class="chip ${tc[ex.type]||'cg'}">${ex.type||'strength'}</span>
     </div>`).join('');
 }
-function addExW(id){const ex=EXS.find(e=>e.id===id);if(!ex)return;S.wex.push({...ex,uid:uid2(),sets:[{reps:'',weight:'',done:false}]});closeM('pk-modal');save();renderWorkout();toast(ex.name+' added!');}
+function addExW(id){
+  const ex = getExList().find(e=>e.id===id);
+  if(!ex)return;
+  S.wex.push({...ex,uid:uid2(),sets:[{reps:'',weight:'',done:false}]});
+  closeM('pk-modal');save();renderWorkout();toast(ex.name+' added!');
+}
 
 // ============ EXERCISES ============
+function getExList(){
+  // Merge base EXS with custom exercises saved in state
+  const custom = (S.customEx||[]);
+  return [...EXS, ...custom];
+}
+
 function renderEx(){
+  const allEx = getExList();
   document.getElementById('ex-pills').innerHTML=MUSF.map(m=>`<button class="fpill ${S.exf===m?'active':''}" onclick="setExF('${m}')">${m}</button>`).join('');
+  // Sync search box with state
+  const searchEl = document.getElementById('ex-s');
+  if(searchEl && searchEl.value !== (S.exs||'')) searchEl.value = S.exs||'';
   const q=(S.exs||'').toLowerCase();
-  const list=EXS.filter(ex=>{
+  const list=allEx.filter(ex=>{
     const mo=S.exf==='All'||ex.muscle===S.exf;
-    const so=!q||ex.name.toLowerCase().includes(q)||ex.muscle.toLowerCase().includes(q);
+    const so=!q||ex.name.toLowerCase().includes(q)||ex.muscle.toLowerCase().includes(q)||(ex.tags||[]).some(t=>t.toLowerCase().includes(q));
     return mo&&so;
   });
   const tc={strength:'cg',cardio:'cb',mobility:'co'};
@@ -3967,12 +4060,12 @@ function renderEx(){
   const eduHtml="";
   const exRows=list.map(ex=>`
     <div class="ex-row" onclick="openExD(${ex.id})">
-      <div class="er-ico" style="background:${ex.bg};">${ex.icon}</div>
+      <div class="er-ico" style="background:${ex.bg||'#1a1a1a'};">${ex.icon||'💪'}</div>
       <div class="er-info">
-        <div class="er-name">${ex.name}${hasPO(ex.name)?'<span class="pb-badge">PB</span>':''}</div>
-        <div class="er-sub">${ex.muscle} · ${ex.tags[0]}</div>
+        <div class="er-name">${ex.name}${hasPO(ex.name)?'<span class="pb-badge">PB</span>':''}${ex.custom?'<span style="font-size:9px;color:var(--gold);font-weight:800;margin-left:4px;">CUSTOM</span>':''}</div>
+        <div class="er-sub">${ex.muscle} · ${(ex.tags||['Custom'])[0]}</div>
       </div>
-      <span class="chip ${tc[ex.type]}">${ex.type}</span>
+      <span class="chip ${tc[ex.type]||'cg'}">${ex.type||'strength'}</span>
     </div>`).join('')||'<div style="text-align:center;padding:40px;color:var(--text3);font-size:13px;">No results</div>';
   document.getElementById('ex-grid').innerHTML = eduHtml + exRows;
 }
@@ -4009,7 +4102,36 @@ function nextExEdu(){
   renderEx();
 }
 function setExF(m){S.exf=m;save();renderEx();}
-function filterEx(){S.exs=document.getElementById('ex-s').value;save();renderEx();}
+function filterEx(){S.exs=document.getElementById('ex-s').value;renderEx();}
+
+function saveCustomExercise(){
+  const name = document.getElementById('cex-name')?.value?.trim();
+  if(!name){ toast('Exercise name is required'); return; }
+  const muscle = document.getElementById('cex-muscle')?.value||'Chest';
+  const type = document.getElementById('cex-type')?.value||'strength';
+  const desc = document.getElementById('cex-desc')?.value?.trim()||'Custom exercise';
+  if(!S.customEx) S.customEx=[];
+  // Check for duplicate
+  if([...EXS,...S.customEx].find(e=>e.name.toLowerCase()===name.toLowerCase())){
+    toast('Exercise already exists in library'); return;
+  }
+  const newId = 10000 + S.customEx.length + 1;
+  const icons = {Chest:'🏋️',Back:'🏋️',Legs:'🦵',Shoulders:'🙌',Biceps:'💪',Triceps:'🏋️',Core:'🧘',Mobility:'🧘',Calisthenics:'🔝',CrossFit:'⚡',Sport:'🏅'};
+  const bgs = {Chest:'#1a2a0a',Back:'#1a0a0a',Legs:'#1e1a08',Shoulders:'#12122a',Biceps:'#2a0a18',Triceps:'#1a2a1a',Core:'#0a201a',Mobility:'#2a1a0a',Calisthenics:'#0a1a2a',CrossFit:'#1a0a1a',Sport:'#1a1a00'};
+  S.customEx.push({
+    id: newId, name, muscle, type, custom: true,
+    icon: icons[muscle]||'💪', bg: bgs[muscle]||'#1a1a1a',
+    desc, steps:['Perform the exercise with proper form'], tags:[muscle,'Custom']
+  });
+  save();
+  closeM('custom-ex-modal');
+  document.getElementById('cex-name').value='';
+  document.getElementById('cex-desc').value='';
+  S.exf='All'; S.exs='';
+  renderEx();
+  toast(name+' added to library ✅');
+  haptic('success');
+}
 function openExD(id){
   const ex=EXS.find(e=>e.id===id);if(!ex)return;
   const po=S.poLog[ex.name];
@@ -4352,12 +4474,18 @@ async function aiParseMacros(){
   if(!text){ toast('Type what you ate first'); return; }
   const key = localStorage.getItem('gemini_key');
   const statusEl = document.getElementById('ai-food-status');
+  const parseBtn = document.querySelector('[onclick="aiParseMacros()"]');
+
+  // Disable button to prevent double-tap freeze
+  if(parseBtn){ parseBtn.disabled=true; parseBtn.textContent='...'; }
   if(statusEl){ statusEl.style.display='block'; statusEl.textContent='Analysing...'; statusEl.style.color='var(--accent)'; }
+
   if(!key){
-    // Fallback: use local lookup for common foods
     localParseMacros(text);
+    if(parseBtn){ parseBtn.disabled=false; parseBtn.textContent='Parse →'; }
     return;
   }
+
   const prompt = `You are a nutrition expert. Parse this meal description and return ONLY a JSON object with nutritional data.
 
 Meal: "${text}"
@@ -4372,18 +4500,23 @@ Return ONLY valid JSON (no markdown, no explanation):
 }
 
 Use accurate nutritional data. All numbers should be integers.`;
+
   try {
+    // 8 second timeout — prevents indefinite freeze
+    const controller = new AbortController();
+    const timeout = setTimeout(()=>controller.abort(), 8000);
+
     const res = await fetch(
       'https://generativelanguage.googleapis.com/v1/models/gemini-1.5-flash:generateContent?key='+key.trim(),
-      { method:'POST', headers:{'Content-Type':'application/json'},
+      { method:'POST', headers:{'Content-Type':'application/json'}, signal:controller.signal,
         body:JSON.stringify({contents:[{parts:[{text:prompt}]}],generationConfig:{temperature:0.1,maxOutputTokens:200}}) }
     );
+    clearTimeout(timeout);
     const data = await res.json();
     if(!res.ok) throw new Error(data?.error?.message||'API error');
     const raw = data.candidates?.[0]?.content?.parts?.[0]?.text||'';
     const clean = raw.replace(/```json|```/g,'').trim();
     const parsed = JSON.parse(clean);
-    // Fill the form
     const setV=(id,v)=>{const el=document.getElementById(id);if(el)el.value=v;};
     setV('fn', parsed.name||text);
     setV('fk', parsed.kcal||0);
@@ -4393,9 +4526,13 @@ Use accurate nutritional data. All numbers should be integers.`;
     if(statusEl){ statusEl.textContent=`✓ ${parsed.kcal} kcal · P:${parsed.protein}g C:${parsed.carbs}g F:${parsed.fat}g`; statusEl.style.color='var(--accent)'; }
     haptic('success');
   } catch(err){
-    // Fallback to local lookup
+    // Never freeze — always fallback gracefully
     localParseMacros(text);
-    if(statusEl){ statusEl.textContent='Using local database (add API key for better accuracy)'; statusEl.style.color='var(--text3)'; }
+    const msg = err.name==='AbortError' ? 'Timeout — using local database' : 'Using local database (check API key)';
+    if(statusEl){ statusEl.textContent=msg; statusEl.style.color='var(--text3)'; }
+  } finally {
+    // Always re-enable button
+    if(parseBtn){ parseBtn.disabled=false; parseBtn.textContent='Parse →'; }
   }
 }
 
@@ -8654,11 +8791,12 @@ function initApp(){
   const d=new Date();
   const greetEl=document.getElementById('hdr-greeting');
   if(greetEl){ const s=loadSettings(); greetEl.textContent=getGreeting()+(s.name?', '+s.name.split(' ')[0].toUpperCase():''); }
-  // Health Score rendered inline in today-summary volt card
   const dateEl=document.getElementById('hdr-date');
   if(dateEl)dateEl.textContent=DS[d.getDay()]+', '+MS[d.getMonth()]+' '+d.getDate();
   const sw=document.getElementById('sw');sw.classList.remove('gone');sw.style.display='flex';
   renderWorkout();renderEx();renderNut();
+  // Bug 4: sheet drag-to-dismiss on all modals
+  setTimeout(initAllSheetDrags, 300);
 }
 document.addEventListener('DOMContentLoaded',()=>{
   if('serviceWorker' in navigator)navigator.serviceWorker.register('sw.js').catch(()=>{});
@@ -9269,7 +9407,54 @@ function countUp(el, target, duration=600){
   requestAnimationFrame(step);
 }
 
-// ============ SWIPE TO DELETE ============
+// ============ SHEET DRAG-TO-DISMISS ============
+function initSheetDrag(sheetEl, overlayId){
+  let startY=0, curY=0, dragging=false;
+  const DISMISS_THRESHOLD = 80; // px drag before dismiss
+
+  sheetEl.addEventListener('touchstart', e=>{
+    // Only initiate from the handle or top 60px of sheet
+    const touch = e.touches[0];
+    const rect = sheetEl.getBoundingClientRect();
+    if(touch.clientY - rect.top > 60) return; // ignore drags starting lower
+    startY = touch.clientY;
+    curY = 0;
+    dragging = true;
+    sheetEl.style.transition = 'none';
+  }, {passive:true});
+
+  sheetEl.addEventListener('touchmove', e=>{
+    if(!dragging) return;
+    curY = e.touches[0].clientY - startY;
+    if(curY < 0){ curY=0; return; } // don't allow dragging up
+    sheetEl.style.transform = `translateY(${curY}px)`;
+  }, {passive:true});
+
+  sheetEl.addEventListener('touchend', ()=>{
+    if(!dragging) return;
+    dragging = false;
+    sheetEl.style.transition = 'transform 0.32s cubic-bezier(0.32,0.72,0,1)';
+    if(curY > DISMISS_THRESHOLD){
+      sheetEl.style.transform = 'translateY(100%)';
+      setTimeout(()=>{
+        closeM(overlayId);
+        sheetEl.style.transform = '';
+      }, 320);
+    } else {
+      sheetEl.style.transform = '';
+    }
+    curY = 0;
+  });
+}
+
+// Init drag-dismiss on all overlays after DOM ready
+function initAllSheetDrags(){
+  document.querySelectorAll('.overlay').forEach(overlay=>{
+    const sheet = overlay.querySelector('.sheet');
+    if(sheet && overlay.id) initSheetDrag(sheet, overlay.id);
+  });
+}
+document.addEventListener('DOMContentLoaded', initAllSheetDrags);
 function initSwipe(el, onDelete){
   let startX=0, dx=0, swiped=false;
   const content=el.querySelector('.swipe-content');
