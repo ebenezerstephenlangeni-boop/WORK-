@@ -161,21 +161,17 @@ body {
   scrollbar-width: none;
 }
 
-/* ── GLOBAL PRESS STATE ──
-   Any tappable element with onclick gets a press feel.
-   Uses active pseudo which works reliably on iOS Safari */
-[onclick]:active {
-  opacity: 0.72;
-}
-
-/* ── INTERACTIVE ELEMENTS — specific press states override global ── */
+/* ── PRESS STATES — scoped to actual controls only, not container divs ── */
+button:active         { opacity: 0.75; }
 .tb:active            { opacity: 0.6; }
-.btn-accent:active    { transform: scale(0.97); opacity: 0.88; box-shadow: none; }
+.btn-accent:active    { transform: scale(0.97); opacity: 0.88; }
 .btn-ghost:active     { border-color: var(--accent); color: var(--accent); }
-.today-card:active    { opacity: 0.7; }
+.today-card:active    { opacity: 0.75; }
 .ex-row:active        { background: var(--surface2); }
 .food-row:active      { opacity: 0.75; }
 .opt:active           { opacity: 0.75; }
+.pressable:active     { opacity: 0.75; }
+.coach-ft-strip:active { opacity: 0.7; }
 
 /* ── WILL-CHANGE for elements that transform on press ── */
 .btn-accent, .tb, .today-card, .ico-btn, .t-btn, .done-btn {
@@ -2697,187 +2693,174 @@ input:focus, select:focus, textarea:focus {
 <!-- SETTINGS SLIDE-OVER -->
 <div class="settings-overlay" id="settings-overlay" onclick="this.classList.remove('open')">
   <div class="settings-panel" onclick="event.stopPropagation()">
-    <div class="settings-panel-header">
-      <div class="settings-panel-title">Settings</div>
-      <button class="settings-close-btn" onclick="document.getElementById('settings-overlay').classList.remove('open')">✕</button>
-    </div>
-    <div class="settings-panel-body">
-  <div style="padding:calc(var(--safe-top,0px) + 16px) 22px 0;display:flex;align-items:flex-end;justify-content:space-between;flex-shrink:0;background:var(--bg);">
-    <div>
-      <div style="font-family:var(--fn);font-size:26px;font-weight:800;color:var(--text);letter-spacing:-1px;line-height:1;">Settings</div>
-      <div style="font-family:var(--fn);font-size:11px;color:var(--text4);font-weight:500;margin-top:3px;">Preferences &amp; profile</div>
-    </div>
-    <button onclick="toggleTheme()" style="width:34px;height:34px;border-radius:11px;background:var(--surface);border:0.5px solid var(--border);display:flex;align-items:center;justify-content:center;cursor:pointer;margin-bottom:4px;">
-      <svg width="15" height="15" fill="none" stroke="var(--text3)" stroke-width="1.8" viewBox="0 0 24 24"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>
-    </button>
-  </div>
-  <div style="flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;">
-    <div class="scroll-body">
 
-      <!-- Profile -->
-      <div style="font-family:var(--fn);font-size:9px;font-weight:700;color:#333;text-transform:uppercase;letter-spacing:0.14em;margin:14px 16px 10px;">PROFILE</div>
-      <div class="sett-card">
-        <div class="sett-avatar" id="sett-avatar">👤</div>
-        <div class="sett-row" style="border-top:none;">
-          <label class="fl-lbl" style="margin-bottom:6px;">Your Name</label>
-          <input type="text" id="sett-name" placeholder="e.g. King" oninput="saveSettings()"/>
+    <!-- Header -->
+    <div style="display:flex;align-items:center;justify-content:space-between;padding:16px 20px 14px;border-bottom:0.5px solid var(--border2);flex-shrink:0;">
+      <div style="font-family:var(--fn);font-size:20px;font-weight:800;color:var(--text);letter-spacing:-0.5px;">Settings</div>
+      <button onclick="document.getElementById('settings-overlay').classList.remove('open')" style="width:30px;height:30px;border-radius:50%;background:var(--surface2);border:0.5px solid var(--border);display:flex;align-items:center;justify-content:center;cursor:pointer;">
+        <svg width="12" height="12" fill="none" stroke="var(--text2)" stroke-width="2.5" viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+    </div>
+
+    <!-- Body -->
+    <div style="flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:0 0 60px;">
+
+      <!-- Profile section -->
+      <div style="font-family:var(--fn);font-size:9px;font-weight:700;color:var(--text4);text-transform:uppercase;letter-spacing:0.14em;padding:16px 20px 8px;">Profile</div>
+      <div style="margin:0 16px;background:var(--surface);border:0.5px solid var(--border);border-radius:16px;overflow:hidden;">
+        <div style="padding:12px 14px;border-bottom:0.5px solid var(--border2);">
+          <div style="font-family:var(--fn);font-size:10px;font-weight:700;color:var(--text4);margin-bottom:6px;">Name</div>
+          <input type="text" id="sett-name" placeholder="Your name" oninput="saveSettings()" style="width:100%;background:none;border:none;font-family:var(--fn);font-size:15px;font-weight:700;color:var(--text);outline:none;"/>
         </div>
-        <div class="grid2" style="gap:10px;padding:0 0 10px;">
-          <div><label class="fl-lbl" style="margin-bottom:6px;">Weight (kg)</label><input type="number" id="sett-weight" placeholder="75" min="30" max="300" step="0.5" oninput="saveSettings()"/></div>
-          <div><label class="fl-lbl" style="margin-bottom:6px;">Height (cm)</label><input type="number" id="sett-height" placeholder="170" oninput="saveSettings()"/></div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;border-bottom:0.5px solid var(--border2);">
+          <div style="padding:12px 14px;border-right:0.5px solid var(--border2);">
+            <div style="font-family:var(--fn);font-size:10px;font-weight:700;color:var(--text4);margin-bottom:6px;">Weight (kg)</div>
+            <input type="number" id="sett-weight" placeholder="75" min="30" max="300" step="0.5" oninput="saveSettings()" style="width:100%;background:none;border:none;font-family:var(--fn);font-size:15px;font-weight:700;color:var(--text);outline:none;"/>
+          </div>
+          <div style="padding:12px 14px;">
+            <div style="font-family:var(--fn);font-size:10px;font-weight:700;color:var(--text4);margin-bottom:6px;">Height (cm)</div>
+            <input type="number" id="sett-height" placeholder="170" oninput="saveSettings()" style="width:100%;background:none;border:none;font-family:var(--fn);font-size:15px;font-weight:700;color:var(--text);outline:none;"/>
+          </div>
         </div>
-        <div class="grid2" style="gap:10px;padding:0 0 10px;">
-          <div><label class="fl-lbl" style="margin-bottom:6px;">Age</label><input type="number" id="sett-age" placeholder="25" min="13" max="99" oninput="saveSettings()"/></div>
-          <div><label class="fl-lbl" style="margin-bottom:6px;">Sex</label>
-            <select id="sett-sex" onchange="saveSettings()">
+        <div style="display:grid;grid-template-columns:1fr 1fr;border-bottom:0.5px solid var(--border2);">
+          <div style="padding:12px 14px;border-right:0.5px solid var(--border2);">
+            <div style="font-family:var(--fn);font-size:10px;font-weight:700;color:var(--text4);margin-bottom:6px;">Age</div>
+            <input type="number" id="sett-age" placeholder="25" min="13" max="99" oninput="saveSettings()" style="width:100%;background:none;border:none;font-family:var(--fn);font-size:15px;font-weight:700;color:var(--text);outline:none;"/>
+          </div>
+          <div style="padding:12px 14px;">
+            <div style="font-family:var(--fn);font-size:10px;font-weight:700;color:var(--text4);margin-bottom:6px;">Sex</div>
+            <select id="sett-sex" onchange="saveSettings()" style="width:100%;background:none;border:none;font-family:var(--fn);font-size:15px;font-weight:700;color:var(--text);outline:none;-webkit-appearance:none;">
               <option value="male">Male</option>
               <option value="female">Female</option>
             </select>
           </div>
         </div>
-        <div class="sett-row">
-          <label class="fl-lbl" style="margin-bottom:6px;">Activity Level</label>
-          <select id="sett-activity" onchange="saveSettings()">
-            <option value="sedentary">Sedentary (desk job, no exercise)</option>
-            <option value="light">Light (1–3 days/week)</option>
-            <option value="moderate">Moderate (3–5 days/week)</option>
-            <option value="active">Active (6–7 days/week)</option>
-            <option value="veryactive">Very Active (hard training daily)</option>
+        <div style="padding:12px 14px;border-bottom:0.5px solid var(--border2);">
+          <div style="font-family:var(--fn);font-size:10px;font-weight:700;color:var(--text4);margin-bottom:6px;">Goal</div>
+          <select id="sett-goal" onchange="saveSettings()" style="width:100%;background:none;border:none;font-family:var(--fn);font-size:14px;font-weight:700;color:var(--text);outline:none;-webkit-appearance:none;">
+            <option value="build">Build Muscle</option>
+            <option value="cut">Lose Fat</option>
+            <option value="aggressive-cut">Aggressive Cut</option>
+            <option value="maintain">Maintain</option>
+            <option value="strength">Increase Strength</option>
+            <option value="endurance">Improve Endurance</option>
           </select>
         </div>
-        <div class="sett-row">
-          <label class="fl-lbl" style="margin-bottom:6px;">Target Weight (kg) — optional</label>
-          <input type="number" id="sett-target-weight" placeholder="e.g. 75" step="0.5" oninput="saveSettings()"/>
-        </div>
-      <div class="sett-row">
-          <label class="fl-lbl" style="margin-bottom:6px;">Goal</label>
-          <select id="sett-goal" onchange="saveSettings()">
-            <option value="build">💪 Build Muscle</option>
-            <option value="cut">🔥 Lose Fat</option>
-            <option value="aggressive-cut">⚡ Aggressive Cut</option>
-            <option value="maintain">⚖️ Maintain</option>
-            <option value="strength">🏋️ Increase Strength</option>
-            <option value="endurance">🏃 Improve Endurance</option>
+        <div style="padding:12px 14px;">
+          <div style="font-family:var(--fn);font-size:10px;font-weight:700;color:var(--text4);margin-bottom:6px;">Activity Level</div>
+          <select id="sett-activity" onchange="saveSettings()" style="width:100%;background:none;border:none;font-family:var(--fn);font-size:13px;font-weight:700;color:var(--text);outline:none;-webkit-appearance:none;">
+            <option value="sedentary">Sedentary — desk job, no exercise</option>
+            <option value="light">Light — 1–3 days/week</option>
+            <option value="moderate">Moderate — 3–5 days/week</option>
+            <option value="active">Active — 6–7 days/week</option>
+            <option value="veryactive">Very Active — hard training daily</option>
           </select>
         </div>
       </div>
 
-      <!-- Nutrition Targets -->
-      <div style="font-family:var(--fn);font-size:9px;font-weight:700;color:#333;text-transform:uppercase;letter-spacing:0.14em;margin:14px 16px 10px;">NUTRITION TARGETS</div>
-      <div class="sett-card">
-        <div class="sett-row" style="border-top:none;">
-          <label class="fl-lbl" style="margin-bottom:6px;">Daily Calories (kcal)</label>
-          <input type="number" id="sett-kcal" placeholder="2000" min="1000" max="6000" oninput="saveSettings()"/>
+      <!-- Nutrition targets -->
+      <div style="font-family:var(--fn);font-size:9px;font-weight:700;color:var(--text4);text-transform:uppercase;letter-spacing:0.14em;padding:16px 20px 8px;">Nutrition Targets</div>
+      <div style="margin:0 16px;background:var(--surface);border:0.5px solid var(--border);border-radius:16px;overflow:hidden;">
+        <div style="padding:12px 14px;border-bottom:0.5px solid var(--border2);">
+          <div style="font-family:var(--fn);font-size:10px;font-weight:700;color:var(--text4);margin-bottom:6px;">Daily Calories (kcal)</div>
+          <input type="number" id="sett-kcal" placeholder="2000" oninput="saveSettings()" style="width:100%;background:none;border:none;font-family:var(--fn);font-size:15px;font-weight:700;color:var(--text);outline:none;"/>
         </div>
-        <div class="grid3" style="gap:10px;padding:0 0 12px;">
-          <div><label class="fl-lbl" style="margin-bottom:6px;">Protein (g)</label><input type="number" id="sett-protein" placeholder="150" oninput="saveSettings()"/></div>
-          <div><label class="fl-lbl" style="margin-bottom:6px;">Carbs (g)</label><input type="number" id="sett-carbs" placeholder="200" oninput="saveSettings()"/></div>
-          <div><label class="fl-lbl" style="margin-bottom:6px;">Fat (g)</label><input type="number" id="sett-fat" placeholder="65" oninput="saveSettings()"/></div>
+        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;border-bottom:0.5px solid var(--border2);">
+          <div style="padding:12px 10px;border-right:0.5px solid var(--border2);">
+            <div style="font-family:var(--fn);font-size:10px;font-weight:700;color:var(--prot);margin-bottom:6px;">Protein (g)</div>
+            <input type="number" id="sett-protein" placeholder="150" oninput="saveSettings()" style="width:100%;background:none;border:none;font-family:var(--fn);font-size:15px;font-weight:700;color:var(--text);outline:none;"/>
+          </div>
+          <div style="padding:12px 10px;border-right:0.5px solid var(--border2);">
+            <div style="font-family:var(--fn);font-size:10px;font-weight:700;color:var(--carb);margin-bottom:6px;">Carbs (g)</div>
+            <input type="number" id="sett-carbs" placeholder="200" oninput="saveSettings()" style="width:100%;background:none;border:none;font-family:var(--fn);font-size:15px;font-weight:700;color:var(--text);outline:none;"/>
+          </div>
+          <div style="padding:12px 10px;">
+            <div style="font-family:var(--fn);font-size:10px;font-weight:700;color:var(--fat);margin-bottom:6px;">Fat (g)</div>
+            <input type="number" id="sett-fat" placeholder="65" oninput="saveSettings()" style="width:100%;background:none;border:none;font-family:var(--fn);font-size:15px;font-weight:700;color:var(--text);outline:none;"/>
+          </div>
         </div>
-        <div class="sett-row">
-          <label class="fl-lbl" style="margin-bottom:6px;">Daily Water Goal (glasses)</label>
-          <input type="number" id="sett-water" placeholder="8" min="1" max="20" oninput="saveSettings()"/>
+        <div style="padding:12px 14px;border-bottom:0.5px solid var(--border2);">
+          <div style="font-family:var(--fn);font-size:10px;font-weight:700;color:var(--text4);margin-bottom:6px;">Daily Water Goal (glasses)</div>
+          <input type="number" id="sett-water" placeholder="8" min="1" max="20" oninput="saveSettings()" style="width:100%;background:none;border:none;font-family:var(--fn);font-size:15px;font-weight:700;color:var(--text);outline:none;"/>
         </div>
-        <button class="sett-calc-btn" onclick="autoCalcMacros()">⚡ Auto-calculate from body weight & goal</button>
+        <div style="padding:10px 14px;">
+          <button onclick="autoCalcMacros()" style="width:100%;padding:11px;border-radius:10px;background:var(--accent-muted);border:0.5px solid rgba(168,255,60,0.2);font-family:var(--fn);font-size:12px;font-weight:800;color:var(--accent);cursor:pointer;">Auto-calculate from body stats</button>
+        </div>
       </div>
 
       <!-- Training -->
-      <div style="font-family:var(--fn);font-size:9px;font-weight:700;color:#333;text-transform:uppercase;letter-spacing:0.14em;margin:14px 16px 10px;">TRAINING</div>
-      <div class="sett-card">
-        <div class="sett-row" style="border-top:none;">
-          <div class="sett-row-label">Default Rest Timer</div>
-          <div class="sett-row-val">
-            <select id="sett-rest" onchange="saveSettings()" style="width:auto;padding:6px 10px;font-size:13px;">
-              <option value="60">60 sec</option>
-              <option value="90" selected>90 sec</option>
-              <option value="120">2 min</option>
-              <option value="180">3 min</option>
-              <option value="240">4 min</option>
-            </select>
-          </div>
+      <div style="font-family:var(--fn);font-size:9px;font-weight:700;color:var(--text4);text-transform:uppercase;letter-spacing:0.14em;padding:16px 20px 8px;">Training</div>
+      <div style="margin:0 16px;background:var(--surface);border:0.5px solid var(--border);border-radius:16px;overflow:hidden;">
+        <div style="display:flex;align-items:center;justify-content:space-between;padding:14px;border-bottom:0.5px solid var(--border2);">
+          <div style="font-family:var(--fn);font-size:13px;font-weight:700;color:var(--text);">Rest Timer</div>
+          <select id="sett-rest" onchange="saveSettings()" style="background:var(--surface2);border:0.5px solid var(--border);border-radius:8px;padding:6px 10px;font-family:var(--fn);font-size:12px;font-weight:700;color:var(--text);outline:none;">
+            <option value="60">60 sec</option>
+            <option value="90" selected>90 sec</option>
+            <option value="120">2 min</option>
+            <option value="180">3 min</option>
+            <option value="240">4 min</option>
+          </select>
         </div>
-        <div class="sett-row">
-          <div class="sett-row-label">Daily Step Goal</div>
-          <div class="sett-row-val">
-            <select id="sett-steps" onchange="saveSettings()" style="width:auto;padding:6px 10px;font-size:13px;">
-              <option value="5000">5,000</option>
-              <option value="7500">7,500</option>
-              <option value="10000" selected>10,000</option>
-              <option value="12500">12,500</option>
-              <option value="15000">15,000</option>
-            </select>
-          </div>
+        <div style="display:flex;align-items:center;justify-content:space-between;padding:14px;">
+          <div style="font-family:var(--fn);font-size:13px;font-weight:700;color:var(--text);">Step Goal</div>
+          <select id="sett-steps" onchange="saveSettings()" style="background:var(--surface2);border:0.5px solid var(--border);border-radius:8px;padding:6px 10px;font-family:var(--fn);font-size:12px;font-weight:700;color:var(--text);outline:none;">
+            <option value="5000">5,000</option>
+            <option value="7500">7,500</option>
+            <option value="10000" selected>10,000</option>
+            <option value="12500">12,500</option>
+            <option value="15000">15,000</option>
+          </select>
         </div>
       </div>
 
       <!-- Appearance -->
-      <div style="font-family:var(--fn);font-size:9px;font-weight:700;color:#333;text-transform:uppercase;letter-spacing:0.14em;margin:14px 16px 10px;">APPEARANCE</div>
-      <div class="sett-card">
-        <div class="sett-row" style="border-top:none;">
-          <div class="sett-row-label">Theme</div>
-          <div class="sett-row-val">
-            <button class="sett-theme-btn" onclick="toggleTheme()">
-              <svg id="sett-theme-ico" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>
-              <span id="sett-theme-txt">Dark Mode</span>
-            </button>
-          </div>
+      <div style="font-family:var(--fn);font-size:9px;font-weight:700;color:var(--text4);text-transform:uppercase;letter-spacing:0.14em;padding:16px 20px 8px;">Appearance</div>
+      <div style="margin:0 16px;background:var(--surface);border:0.5px solid var(--border);border-radius:16px;overflow:hidden;">
+        <div style="display:flex;align-items:center;justify-content:space-between;padding:14px;">
+          <div style="font-family:var(--fn);font-size:13px;font-weight:700;color:var(--text);">Theme</div>
+          <button onclick="toggleTheme()" style="display:flex;align-items:center;gap:6px;padding:7px 12px;background:var(--surface2);border:0.5px solid var(--border);border-radius:10px;cursor:pointer;">
+            <svg id="sett-theme-ico" width="14" height="14" fill="none" stroke="var(--text2)" stroke-width="1.8" viewBox="0 0 24 24"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>
+            <span id="sett-theme-txt" style="font-family:var(--fn);font-size:12px;font-weight:700;color:var(--text2);">Dark Mode</span>
+          </button>
         </div>
       </div>
 
-      <!-- Data -->
-      <div style="font-family:var(--fn);font-size:9px;font-weight:700;color:#333;text-transform:uppercase;letter-spacing:0.14em;margin:14px 16px 10px;">DATA</div>
-      <div class="sett-card">
-        <div class="sett-row" style="border-top:none;">
-          <button class="sett-danger-btn" onclick="clearTodayData()" style="color:var(--orange);border-color:rgba(255,140,58,0.3);">
-            🗑️ Clear Today's Logs
-          </button>
+      <!-- AI -->
+      <div style="font-family:var(--fn);font-size:9px;font-weight:700;color:var(--text4);text-transform:uppercase;letter-spacing:0.14em;padding:16px 20px 8px;">AI Features</div>
+      <div style="margin:0 16px;background:var(--surface);border:0.5px solid var(--border);border-radius:16px;overflow:hidden;">
+        <div style="padding:12px 14px;">
+          <div style="font-family:var(--fn);font-size:10px;font-weight:700;color:var(--text4);margin-bottom:6px;">Gemini API Key</div>
+          <input type="password" id="sett-api-key" placeholder="Paste your API key here" oninput="saveSettings()" style="width:100%;background:none;border:none;font-family:var(--fn);font-size:13px;font-weight:600;color:var(--text);outline:none;"/>
+          <div style="font-family:var(--fn);font-size:10px;color:var(--text4);margin-top:6px;">Powers Coach FT, food scanner and AI meal logging</div>
         </div>
-        <div class="sett-row">
-          <button class="sett-danger-btn" onclick="confirmResetAll()" style="color:var(--red);border-color:rgba(255,79,106,0.3);">
-            Reset All Data
-          </button>
+      </div>
+
+      <!-- Account -->
+      <div style="font-family:var(--fn);font-size:9px;font-weight:700;color:var(--text4);text-transform:uppercase;letter-spacing:0.14em;padding:16px 20px 8px;">Account</div>
+      <div style="margin:0 16px;background:var(--surface);border:0.5px solid var(--border);border-radius:16px;overflow:hidden;">
+        <!-- Redo onboarding -->
+        <div style="padding:10px 14px;border-bottom:0.5px solid var(--border2);">
+          <button onclick="redoOnboarding()" style="width:100%;padding:11px;border-radius:10px;background:var(--accent-muted);border:0.5px solid rgba(168,255,60,0.2);font-family:var(--fn);font-size:12px;font-weight:800;color:var(--accent);cursor:pointer;">Redo setup questionnaire</button>
+        </div>
+        <div style="padding:10px 14px;border-bottom:0.5px solid var(--border2);">
+          <button onclick="clearTodayData()" style="width:100%;padding:11px;border-radius:10px;background:rgba(255,107,53,0.08);border:0.5px solid rgba(255,107,53,0.2);font-family:var(--fn);font-size:12px;font-weight:800;color:var(--orange);cursor:pointer;">Clear today's logs</button>
+        </div>
+        <div style="padding:10px 14px;">
+          <button onclick="confirmResetAll()" style="width:100%;padding:11px;border-radius:10px;background:rgba(255,79,106,0.08);border:0.5px solid rgba(255,79,106,0.2);font-family:var(--fn);font-size:12px;font-weight:800;color:var(--red);cursor:pointer;">Reset all data</button>
         </div>
       </div>
 
       <!-- About -->
-      <div style="font-family:var(--fn);font-size:9px;font-weight:700;color:#333;text-transform:uppercase;letter-spacing:0.14em;margin:14px 16px 10px;">ABOUT</div>
-      <div class="sett-card" style="margin-bottom:30px;">
-        <div class="sett-row" style="border-top:none;justify-content:center;flex-direction:column;align-items:center;padding:20px;gap:6px;">
-          <div style="font-family:var(--fn);font-size:28px;font-weight:900;color:var(--accent);letter-spacing:-1px;">FT</div>
-          <div style="font-family:var(--fn);font-size:14px;font-weight:800;letter-spacing:0.15em;text-transform:uppercase;color:var(--text2);">FitTrack</div>
-          <div style="font-size:12px;color:var(--text3);margin-top:2px;">Version 1.0 · PWA</div>
-          <div style="font-size:11px;color:var(--text3);margin-top:4px;">Train. Track. Transform.</div>
-        </div>
+      <div style="margin:16px 16px 0;background:var(--surface);border:0.5px solid var(--border);border-radius:16px;padding:20px;display:flex;flex-direction:column;align-items:center;gap:4px;">
+        <div style="font-family:var(--fn);font-size:26px;font-weight:900;color:var(--accent);letter-spacing:-1px;">FT</div>
+        <div style="font-family:var(--fn);font-size:13px;font-weight:800;letter-spacing:0.12em;text-transform:uppercase;color:var(--text2);">FitTrack</div>
+        <div style="font-family:var(--fn);font-size:11px;color:var(--text4);margin-top:2px;">Version 1.0 · PWA</div>
+        <div style="font-family:var(--fn);font-size:11px;color:var(--text4);">Train. Track. Transform.</div>
       </div>
 
-    </div>
-  </div>
-  </div>
-  </div>
-</div>
-
-
-
-
-<!-- PWA INSTALL PROMPT -->
-<div id="pwa-prompt" style="display:none;position:fixed;bottom:calc(var(--safe-bot,0px) + 80px);left:16px;right:16px;z-index:600;background:var(--surface);border:1px solid rgba(168,255,60,0.3);border-radius:18px;padding:16px;box-shadow:0 8px 32px rgba(0,0,0,0.5);">
-  <div style="display:flex;align-items:center;gap:12px;">
-    <svg width="40" height="40" viewBox="0 0 120 120" style="flex-shrink:0;">
-      <polygon points="60,4 108,30 108,90 60,116 12,90 12,30" fill="none" stroke="#a8ff3c" stroke-width="3"/>
-      <path d="M67 22 L50 58 L62 58 L53 98 L70 58 L58 58 Z" fill="#a8ff3c"/>
-    </svg>
-    <div style="flex:1;min-width:0;">
-      <div style="font-family:var(--fn);font-size:14px;font-weight:800;color:var(--text);">Add FitTrack to Home Screen</div>
-      <div style="font-size:11px;color:var(--text3);margin-top:2px;">Install for the full app experience</div>
-    </div>
-    <button onclick="dismissPWA()" style="background:none;border:none;color:var(--text3);font-size:18px;cursor:pointer;padding:4px;flex-shrink:0;">✕</button>
-  </div>
-  <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:12px;">
-    <button onclick="dismissPWA()" style="background:var(--surface2);border:1px solid var(--border2);border-radius:12px;padding:10px;color:var(--text2);font-family:var(--fn);font-size:12px;font-weight:700;cursor:pointer;">Not now</button>
-    <button onclick="installPWA()" style="background:linear-gradient(135deg,#a8ff3c,#7acc1e);border:none;border-radius:12px;padding:10px;color:#0c0c0e;font-family:var(--fn);font-size:12px;font-weight:800;cursor:pointer;letter-spacing:0.04em;">Install App</button>
-  </div>
-</div>
-
+    </div><!-- end body -->
+  </div><!-- end panel -->
+</div><!-- end overlay -->
 <!-- TAB BAR — 5 tabs: Home · Train · Cardio · Fuel · You -->
 <div class="tab-bar">
   <button class="tb active" id="tb-w" onclick="go('w',this)">
@@ -3805,8 +3788,10 @@ function renderPicker(){
   const tc={strength:'cg',cardio:'cb',mobility:'co'};
   document.getElementById('pk-list').innerHTML=list.map(ex=>`
     <div class="ex-row" onclick="addExW(${ex.id});closeM('pk-modal');">
-      <div class="er-ico" style="background:${ex.bg||'#1a1a1a'};">${ex.icon||'💪'}</div>
-      <div class="er-info"><div class="er-name">${ex.name}${ex.custom?'<span style="font-size:9px;color:var(--gold);font-weight:800;margin-left:4px;">CUSTOM</span>':''}</div><div class="er-sub">${ex.muscle}</div></div>
+      <div class="er-ico" style="background:${ex.bg||'var(--surface2)'};color:rgba(255,255,255,0.7);">
+        ${getExIcon(ex)}
+      </div>
+      <div class="er-info"><div class="er-name">${ex.name}${ex.custom?'<span style="font-size:9px;color:var(--gold);font-weight:800;margin-left:4px;">CUSTOM</span>':''}</div><div class="er-sub">${ex.muscle} · ${(ex.tags||['Strength'])[0]}</div></div>
       <span class="chip ${tc[ex.type]||'cg'}">${ex.type||'strength'}</span>
     </div>`).join('');
 }
@@ -3818,8 +3803,114 @@ function addExW(id){
 }
 
 // ============ EXERCISES ============
+// ── EXERCISE ICON SYSTEM ──
+// Returns an SVG string based on muscle group and tags
+function getExIcon(ex){
+  const name=(ex.name||'').toLowerCase();
+  const m=(ex.muscle||'').toLowerCase();
+
+  // Each returns a 32x32 viewBox human silhouette pose
+  const s=(d)=>`<svg viewBox="0 0 32 32" fill="currentColor" width="18" height="18">${d}</svg>`;
+  const head=(cx,cy)=>`<circle cx="${cx}" cy="${cy}" r="2.4"/>`;
+  const stick=(parts)=>parts.join('');
+
+  // BENCH PRESS — figure lying flat pressing bar up
+  if(name.includes('bench press')||name.includes('chest press'))
+    return s(head(16,6)+`<path d="M10 9h12l1 3-4 1v2h-10v-2l-4-1z"/><line x1="8" y1="14" x2="6" y2="20" stroke="white" stroke-width="1.5" fill="none"/><line x1="24" y1="14" x2="26" y2="20" stroke="white" stroke-width="1.5" fill="none"/><line x1="4" y1="9" x2="28" y2="9" stroke="white" stroke-width="2" fill="none"/><rect x="2" y="7" width="3" height="4" rx="1"/><rect x="27" y="7" width="3" height="4" rx="1"/>`);
+
+  // DEADLIFT — figure bent hinging from floor
+  if(name.includes('deadlift'))
+    return s(head(22,5)+`<path d="M20 8c-2 0-3 1-3 2l-2 4-8 3 1 2 8-3 3 2 3-1V8z"/><line x1="18" y1="17" x2="16" y2="24" stroke="white" stroke-width="1.5" fill="none"/><line x1="21" y1="16" x2="22" y2="24" stroke="white" stroke-width="1.5" fill="none"/><rect x="2" y="22" width="28" height="2" rx="1"/><rect x="2" y="20" width="4" height="5" rx="1"/><rect x="26" y="20" width="4" height="5" rx="1"/>`);
+
+  // SQUAT — figure in deep squat
+  if(name.includes('squat'))
+    return s(head(16,4)+`<path d="M16 7c-1.5 0-2.5 1-2.5 2l-1 3-4 3 1 2 4-2 2 2v4h1v-4l2-2 4 2 1-2-4-3-1-3c0-1-1-2-2.5-2z"/><line x1="9" y1="22" x2="11" y2="17" stroke="white" stroke-width="1.5" fill="none"/><line x1="23" y1="22" x2="21" y2="17" stroke="white" stroke-width="1.5" fill="none"/>`);
+
+  // PULL-UP — hanging from bar pulling up
+  if(name.includes('pull-up')||name.includes('pullup')||name.includes('chin'))
+    return s(`<rect x="3" y="2" width="26" height="2.5" rx="1.2"/>`+head(16,9)+`<path d="M14 12c-1 0-2 1-2 2v4h-3v2h3v4h3v-4h-1v-4h4v4h-1v4h3v-4h3v-2h-3v-4c0-1-1-2-2-2z"/><line x1="12" y1="4.5" x2="12" y2="12" stroke="white" stroke-width="1.5" fill="none"/><line x1="20" y1="4.5" x2="20" y2="12" stroke="white" stroke-width="1.5" fill="none"/>`);
+
+  // ROW — bent over rowing
+  if(name.includes('row')||(name.includes('pull')&&m==='back'))
+    return s(head(22,5)+`<path d="M20 8c-1.5 0-2.5 1-2.5 2l-1 4-9 1v2l9-1 3 1V8z"/><line x1="18" y1="18" x2="17" y2="25" stroke="white" stroke-width="1.5" fill="none"/><line x1="22" y1="17" x2="23" y2="25" stroke="white" stroke-width="1.5" fill="none"/><line x1="4" y1="12" x2="14" y2="12" stroke="white" stroke-width="2" fill="none"/><rect x="2" y="10" width="3" height="4" rx="1"/>`);
+
+  // CURL — standing bicep curl
+  if(name.includes('curl'))
+    return s(head(16,4)+`<path d="M14 7c-1.5 0-2.5 1-2.5 2v6h-4l1 2 3-1v6h4v-6l3 1 1-2h-4V9c0-1-1-2-2.5-2z"/><path d="M10 16c0 2 1.5 3 2 3"/>`);
+
+  // OVERHEAD PRESS — pressing bar overhead
+  if(name.includes('overhead')||name.includes('shoulder press')||name.includes('military'))
+    return s(head(16,8)+`<path d="M13 11c-1.5 0-2.5 1-2.5 2v5h-4V16H4v-3h2l1-1.5h4l1 2h8l1-2h4l1 1.5h2v3h-2.5v2h-4v-5c0-1-1-2-2.5-2h-6z"/><line x1="13" y1="19" x2="13" y2="28" stroke="white" stroke-width="1.5" fill="none"/><line x1="19" y1="19" x2="19" y2="28" stroke="white" stroke-width="1.5" fill="none"/><line x1="4" y1="8" x2="28" y2="8" stroke="white" stroke-width="2" fill="none"/><rect x="2" y="6" width="3" height="4" rx="1"/><rect x="27" y="6" width="3" height="4" rx="1"/>`);
+
+  // PUSH-UP — in push-up position
+  if(name.includes('push-up')||name.includes('pushup'))
+    return s(head(25,9)+`<path d="M23 12c-2 0-3 1-3 1.5l-14 2v2l14-2 1 1 3-1V12z"/><line x1="6" y1="15.5" x2="5" y2="20" stroke="white" stroke-width="1.5" fill="none"/><line x1="9" y1="15" x2="9" y2="20" stroke="white" stroke-width="1.5" fill="none"/><line x1="22" y1="14" x2="21" y2="19" stroke="white" stroke-width="1.5" fill="none"/>`);
+
+  // LUNGE — split stance
+  if(name.includes('lunge'))
+    return s(head(18,4)+`<path d="M16 7c-1.5 0-2.5 1-2.5 2l-1 5-4 2 1 2 4-2 2 3-2 5h3l2-6 3 3 1 5h3l-2-7-3-3-.5-4.5c0-1-1-2-2.5-2h-2z"/>`);
+
+  // HIP THRUST — glute bridge
+  if(name.includes('hip thrust')||name.includes('glute bridge'))
+    return s(head(7,8)+`<path d="M5 11c-1 0-2 1-2 2v3h3l1 3 5-1 5 1 4-3v-3h-3l-3 2-4-1-3-2z"/><line x1="5" y1="18" x2="4" y2="24" stroke="white" stroke-width="1.5" fill="none"/><line x1="17" y1="17" x2="19" y2="24" stroke="white" stroke-width="1.5" fill="none"/><line x1="2" y1="27" x2="30" y2="27" stroke="white" stroke-width="1.5" fill="none"/>`);
+
+  // PLANK — horizontal plank position
+  if(name.includes('plank')||name.includes('crunch')||name.includes('sit-up')||(m==='core'&&name.includes('ab')))
+    return s(head(26,10)+`<path d="M24 13c-1.5 0-2.5 1-2.5 1.5l-17 3v2l17-3 1 1 3-1V13z"/><line x1="5" y1="17.5" x2="4" y2="22" stroke="white" stroke-width="1.5" fill="none"/><line x1="8" y1="17" x2="8" y2="22" stroke="white" stroke-width="1.5" fill="none"/><line x1="23" y1="15" x2="22" y2="20" stroke="white" stroke-width="1.5" fill="none"/>`);
+
+  // LATERAL RAISE / FLY — arms spread wide
+  if(name.includes('lateral raise')||name.includes('fly')||name.includes('rear delt'))
+    return s(head(16,5)+`<path d="M14 8c-1.5 0-2.5 1-2.5 2v5h-1v2h1v6h5v-6h1v-2h-1V10c0-1-1-2-2.5-2z"/><line x1="3" y1="16" x2="11.5" y2="12" stroke="white" stroke-width="2" fill="none"/><line x1="29" y1="16" x2="20.5" y2="12" stroke="white" stroke-width="2" fill="none"/><rect x="1" y="14" width="3" height="4" rx="1"/><rect x="28" y="14" width="3" height="4" rx="1"/>`);
+
+  // DIPS — parallel bar dip
+  if(name.includes('dip'))
+    return s(head(16,7)+`<path d="M14 10c-1.5 0-2.5 1-2.5 2v4l-2 5h3l2-4h2l2 4h3l-2-5V12c0-1-1-2-2.5-2h-3z"/><line x1="8" y1="10" x2="8" y2="24" stroke="white" stroke-width="2" fill="none"/><line x1="24" y1="10" x2="24" y2="24" stroke="white" stroke-width="2" fill="none"/><line x1="6" y1="10" x2="26" y2="10" stroke="white" stroke-width="1.5" fill="none"/>`);
+
+  // RUNNING
+  if(name.includes('run')||name.includes('sprint')||name.includes('jog')||m==='cardio')
+    return s(head(20,4)+`<path d="M18 7c-1.5 0-2.5 1-2.5 2l-1 4-6 2 1 2 6-2 2-3 1 4-4 7h3l3-6 2 4 1 5h3l-2-8-1-4 2-4c.5-1 0-2-1-2.5L18 7z"/>`);
+
+  // CALF RAISE
+  if(name.includes('calf'))
+    return s(head(16,4)+`<path d="M14 7c-1.5 0-2.5 1-2.5 2v8h-1l-1 6h3l1-5h5l1 5h3l-1-6h-1V9c0-1-1-2-2.5-2z"/><line x1="11" y1="23" x2="9" y2="28" stroke="white" stroke-width="1.5" fill="none"/><line x1="21" y1="23" x2="23" y2="28" stroke="white" stroke-width="1.5" fill="none"/>`);
+
+  // YOGA / STRETCH / MOBILITY
+  if(name.includes('stretch')||name.includes('yoga')||m==='mobility')
+    return s(head(16,4)+`<path d="M16 7c-1.5 0-2.5 1-2.5 2l-1 3-5 4 1.5 2 5-3.5v3l-3 6h3l2-5h2l2 5h3l-3-6v-3l5 3.5 1.5-2-5-4-1-3c0-1-1-2-2.5-2h-2z"/>`);
+
+  // FARMER CARRY
+  if(name.includes('carry')||name.includes('farmer'))
+    return s(head(16,4)+`<path d="M14 7c-1.5 0-2.5 1-2.5 2v8h-1l-1 7h3l1-6h5l1 6h3l-1-7h-1V9c0-1-1-2-2.5-2z"/><rect x="3" y="14" width="3" height="8" rx="1.5"/><rect x="26" y="14" width="3" height="8" rx="1.5"/><line x1="6" y1="17" x2="11.5" y2="16" stroke="white" stroke-width="1.5" fill="none"/><line x1="26" y1="17" x2="20.5" y2="16" stroke="white" stroke-width="1.5" fill="none"/>`);
+
+  // SHOULDER press standing
+  if(m==='shoulders'||name.includes('press'))
+    return s(head(16,5)+`<path d="M13 8c-1.5 0-2.5 1-2.5 2v5h-4V13H4v-3h2l1-1h4l1.5 2h7l1.5-2h4l1 1h2v3h-2.5v2h-4V10c0-1-1-2-2.5-2h-6z"/><line x1="13" y1="17" x2="12" y2="27" stroke="white" stroke-width="1.5" fill="none"/><line x1="19" y1="17" x2="20" y2="27" stroke="white" stroke-width="1.5" fill="none"/>`);
+
+  // BACK / general pull
+  if(m==='back')
+    return s(head(16,4)+`<path d="M13 7c-1.5 0-2.5 1-2.5 2v4l-5 3 1 2 5-3v9h5v-9l5 3 1-2-5-3V9c0-1-1-2-2.5-2h-2z"/><path d="M13 11h6v3l-3 1-3-1v-3z" opacity=".5"/>`);
+
+  // CHEST
+  if(m==='chest')
+    return s(head(16,4)+`<path d="M12 7c-2 0-4 1-4 3v4l-3 1 .5 2 3.5-1v7h4v-3h3v3h4v-7l3.5 1 .5-2-3-1V10c0-2-2-3-4-3h-4z"/>`);
+
+  // BICEPS / ARMS — flexing pose
+  if(m==='biceps'||m==='arms')
+    return s(head(16,4)+`<path d="M14 7c-1.5 0-2.5 1-2.5 2v4h-4l-1 2 5-0.5 2 2v6h4v-6l2 .5 5 0-1-2h-4V9c0-1-1-2-2.5-2h-3z"/>`);
+
+  // TRICEPS
+  if(m==='triceps')
+    return s(head(16,4)+`<path d="M14 7c-1.5 0-2.5 1-2.5 2v3l-5 5 2 1.5 4-3.5v8h4v-8l4 3.5 2-1.5-5-5V9c0-1-1-2-2.5-2h-1z"/>`);
+
+  // LEGS
+  if(m==='legs')
+    return s(head(16,4)+`<path d="M13 7c-1.5 0-2.5 1-2.5 2v6h-1l-2 9h3l2-7h5l2 7h3l-2-9h-1V9c0-1-1-2-2.5-2h-4z"/>`);
+
+  // DEFAULT — figure standing with barbell
+  return s(head(16,4)+`<path d="M14 7c-1.5 0-2.5 1-2.5 2v7h-1l-1 8h3l1-6h5l1 6h3l-1-8h-1V9c0-1-1-2-2.5-2z"/><line x1="5" y1="13" x2="27" y2="13" stroke="white" stroke-width="2" fill="none"/><rect x="3" y="11" width="3" height="4" rx="1"/><rect x="26" y="11" width="3" height="4" rx="1"/>`);
+}
+
 function getExList(){
-  // Merge base EXS with custom exercises saved in state
   const custom = (S.customEx||[]);
   return [...EXS, ...custom];
 }
@@ -3841,13 +3932,15 @@ function renderEx(){
   const eduHtml="";
   const exRows=list.map(ex=>`
     <div class="ex-row" onclick="openExD(${ex.id})">
-      <div class="er-ico" style="background:${ex.bg||'#1a1a1a'};">${ex.icon||'💪'}</div>
+      <div class="er-ico" style="background:${ex.bg||'var(--surface2)'};color:rgba(255,255,255,0.7);">
+        ${getExIcon(ex)}
+      </div>
       <div class="er-info">
         <div class="er-name">${ex.name}${hasPO(ex.name)?'<span class="pb-badge">PB</span>':''}${ex.custom?'<span style="font-size:9px;color:var(--gold);font-weight:800;margin-left:4px;">CUSTOM</span>':''}</div>
-        <div class="er-sub">${ex.muscle} · ${(ex.tags||['Custom'])[0]}</div>
+        <div class="er-sub">${ex.muscle} · ${(ex.tags||['Strength'])[0]}</div>
       </div>
       <span class="chip ${tc[ex.type]||'cg'}">${ex.type||'strength'}</span>
-    </div>`).join('')||'<div style="text-align:center;padding:40px;color:var(--text3);font-size:13px;">No results</div>';
+    </div>`).join('')||'<div style="text-align:center;padding:40px;font-family:var(--fn);color:var(--text4);font-size:13px;">No results</div>';
   document.getElementById('ex-grid').innerHTML = eduHtml + exRows;
 }
 
@@ -4988,6 +5081,9 @@ function saveSettings(){
     steps: parseInt(document.getElementById('sett-steps')?.value)||10000,
   };
   localStorage.setItem('ft_settings', JSON.stringify(s));
+  // Save API key separately
+  const apiKey = document.getElementById('sett-api-key')?.value?.trim();
+  if(apiKey) localStorage.setItem('gemini_key', apiKey);
   // Apply live changes
   GK = s.kcal; GP = s.protein; GC = s.carbs; GF = s.fat; GW = s.water;
   GSTEPS = s.steps;
@@ -5015,6 +5111,9 @@ function renderSettings(){
   setVal('sett-water', s.water);
   setVal('sett-rest', s.rest);
   setVal('sett-steps', s.steps);
+  // Load API key
+  const savedKey = localStorage.getItem('gemini_key');
+  if(savedKey) setVal('sett-api-key', savedKey);
   // Update theme button text
   updateSettThemeBtn();
   // Avatar emoji based on goal
@@ -5314,7 +5413,7 @@ function renderCoachMessages(){
   if(!el) return;
   el.innerHTML = coachMessages.map(m => {
     const txt = m.text.split('\n').join('<br>');
-    const avatar = m.role==='bot' ? '<div class="coach-avatar">🤖</div>' : '';
+    const avatar = m.role==='bot' ? `<div class="coach-avatar" style="width:28px;height:28px;border-radius:8px;background:var(--accent-muted);border:0.5px solid rgba(168,255,60,0.2);display:flex;align-items:center;justify-content:center;flex-shrink:0;"><svg width="14" height="14" fill="none" stroke="var(--accent)" stroke-width="1.8" viewBox="0 0 24 24"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg></div>` : '';
     return '<div class="coach-msg ' + m.role + '">' + avatar + '<div class="coach-bubble">' + txt + '</div></div>';
   }).join('');
   el.scrollTop = el.scrollHeight;
@@ -5326,7 +5425,7 @@ function showCoachTyping(){
   const typing = document.createElement('div');
   typing.className = 'coach-msg bot';
   typing.id = 'coach-typing';
-  typing.innerHTML = '<div class="coach-avatar">🤖</div><div class="coach-typing"><span></span><span></span><span></span></div>';
+  typing.innerHTML = '<div class="coach-avatar" style="width:28px;height:28px;border-radius:8px;background:var(--accent-muted);border:0.5px solid rgba(168,255,60,0.2);display:flex;align-items:center;justify-content:center;flex-shrink:0;"><svg width="14" height="14" fill="none" stroke="var(--accent)" stroke-width="1.8" viewBox="0 0 24 24"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg></div><div class="coach-typing"><span></span><span></span><span></span></div>';
   el.appendChild(typing);
   el.scrollTop = el.scrollHeight;
 }
@@ -5371,14 +5470,18 @@ async function sendCoachMsg(){
   showCoachTyping();
 
   const context = buildCoachContext();
-  const history = coachMessages.slice(-8).filter(m=>m.role!=='system').map(m=>({
+  // History = last 8 messages excluding the one we just added (it gets added below)
+  const history = coachMessages.slice(-9, -1).filter(m=>m.role!=='system').map(m=>({
     role: m.role==='user'?'user':'model',
     parts:[{text: m.text}]
   }));
 
   try {
-    // Build contents — history + current message
-    const contents = [
+    // Inject context as a priming exchange so the model has Coach FT personality
+    // v1 doesn't support system_instruction as top-level — prime via first turn
+    const primedHistory = [
+      { role: 'user', parts: [{ text: 'You are Coach FT. Here is your context:\n\n' + context + '\n\nAcknowledge briefly.' }] },
+      { role: 'model', parts: [{ text: 'Got it. Ready to coach.' }] },
       ...history,
       { role: 'user', parts: [{ text: msg }] }
     ];
@@ -5389,9 +5492,8 @@ async function sendCoachMsg(){
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          system_instruction: { parts: [{ text: context }] },
-          contents,
-          generationConfig: { temperature: 0.7, maxOutputTokens: 400 }
+          contents: primedHistory,
+          generationConfig: { temperature: 0.7, maxOutputTokens: 500 }
         })
       }
     );
@@ -7762,6 +7864,26 @@ function obGoTo(step){
   haptic('light');
 }
 
+function redoOnboarding(){
+  // Close settings
+  document.getElementById('settings-overlay').classList.remove('open');
+  // Clear onboarding flag so it runs fresh
+  localStorage.removeItem('fittrack_v3');
+  localStorage.removeItem('ft_onboarded');
+  // Reset obData
+  obData = {};
+  obIdx = 0;
+  // Show onboarding
+  const ob = document.getElementById('onboarding');
+  if(ob){
+    ob.style.display = 'flex';
+    ob.style.opacity = '1';
+    ob.style.transform = 'none';
+    renderObScreen(0);
+  }
+  haptic('medium');
+}
+
 function checkOnboarding(){
   const done = localStorage.getItem('fittrack_v3') || localStorage.getItem('ft_onboarded');
   const ob = document.getElementById('onboarding');
@@ -7771,8 +7893,6 @@ function checkOnboarding(){
     if(ob) ob.style.display='none'; // hidden until splash CTA tapped
   }
 }
-
-// ============ END ONBOARDING ============
 
 // ============ PWA INSTALL ============
 let deferredInstallPrompt = null;
@@ -8238,49 +8358,61 @@ let savedSplit = null;
 function renderSplits(){
   const el = document.getElementById('splits-content');
   if(!el) return;
-  const s = loadSettings();
   const saved = localStorage.getItem('ft_split');
   if(saved){ try{ savedSplit=JSON.parse(saved); }catch(e){} }
+
+  const splitIcons = {
+    ppl: '<svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M18 8h1a4 4 0 010 8h-1M2 8h16v9a4 4 0 01-4 4H6a4 4 0 01-4-4V8z"/></svg>',
+    upper_lower: '<svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="13 17 18 12 13 7"/><polyline points="6 17 11 12 6 7"/></svg>',
+    full_body: '<svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg>',
+    bro: '<svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/></svg>',
+    calisthenics: '<svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/></svg>'
+  };
 
   el.innerHTML = `
     <div style="padding:14px 16px 100px;">
       ${savedSplit ? `
-        <div style="background:rgba(168,255,60,0.06);border:1px solid rgba(168,255,60,0.2);border-radius:14px;padding:12px 14px;margin-bottom:16px;display:flex;align-items:center;justify-content:space-between;">
+        <div style="background:var(--accent-muted);border:0.5px solid rgba(168,255,60,0.25);border-radius:14px;padding:12px 14px;margin-bottom:14px;display:flex;align-items:center;justify-content:space-between;">
           <div>
-            <div style="font-size:10px;font-weight:800;color:var(--accent);text-transform:uppercase;letter-spacing:0.1em;margin-bottom:2px;">Active Split</div>
-            <div style="font-size:14px;font-weight:800;color:var(--text);">${savedSplit.icon} ${savedSplit.name}</div>
+            <div style="font-family:var(--fn);font-size:9px;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:0.12em;margin-bottom:3px;">Active Split</div>
+            <div style="font-family:var(--fn);font-size:14px;font-weight:800;color:var(--text);">${savedSplit.name}</div>
+            <div style="font-family:var(--fn);font-size:10px;color:var(--text4);margin-top:1px;">${savedSplit.days} training days/week</div>
           </div>
-          <button onclick="clearSplit()" style="background:none;border:1px solid var(--border);border-radius:10px;padding:5px 10px;color:var(--text3);font-size:11px;cursor:pointer;">Change</button>
+          <button onclick="clearSplit()" style="background:var(--surface);border:0.5px solid var(--border);border-radius:10px;padding:6px 12px;color:var(--text3);font-family:var(--fn);font-size:11px;font-weight:700;cursor:pointer;">Change</button>
         </div>
-        <!-- Today's session from split -->
         ${renderTodaySplit()}
       ` : ''}
 
-      <div style="font-size:10px;font-weight:800;color:var(--text3);text-transform:uppercase;letter-spacing:0.12em;margin-bottom:12px;">Choose a Split</div>
+      <div style="font-family:var(--fn);font-size:9px;font-weight:700;color:var(--text4);text-transform:uppercase;letter-spacing:0.14em;margin-bottom:10px;">Choose a split</div>
 
-      ${SPLIT_TEMPLATES.map(sp=>`
-        <div style="background:var(--surface);border:1px solid ${savedSplit&&savedSplit.id===sp.id?'rgba(168,255,60,0.4)':'var(--border)'};border-radius:16px;padding:14px;margin-bottom:10px;">
+      ${SPLIT_TEMPLATES.map(sp=>{
+        const isActive = savedSplit && savedSplit.id===sp.id;
+        return `
+        <div style="background:var(--surface);border:0.5px solid ${isActive?'rgba(168,255,60,0.3)':'var(--border)'};border-radius:14px;padding:14px;margin-bottom:8px;">
           <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;">
             <div style="display:flex;align-items:center;gap:10px;">
-              <span style="font-size:22px;">${sp.icon}</span>
+              <div style="width:34px;height:34px;border-radius:10px;background:${isActive?'var(--accent-muted)':'var(--surface2)'};border:0.5px solid ${isActive?'rgba(168,255,60,0.2)':'var(--border)'};display:flex;align-items:center;justify-content:center;color:${isActive?'var(--accent)':'var(--text3)'};">
+                ${splitIcons[sp.id]||splitIcons.ppl}
+              </div>
               <div>
-                <div style="font-size:14px;font-weight:800;color:var(--text);">${sp.name}</div>
-                <div style="font-size:11px;color:var(--text3);">${sp.days} training days/week</div>
+                <div style="font-family:var(--fn);font-size:13px;font-weight:800;color:var(--text);">${sp.name}</div>
+                <div style="font-family:var(--fn);font-size:10px;color:var(--text4);">${sp.days} days/week</div>
               </div>
             </div>
-            <button onclick="activateSplit('${sp.id}')" style="background:${savedSplit&&savedSplit.id===sp.id?'var(--accent)':'var(--surface2)'};border:1px solid ${savedSplit&&savedSplit.id===sp.id?'transparent':'var(--border2)'};border-radius:20px;padding:6px 14px;color:${savedSplit&&savedSplit.id===sp.id?'#0c0c0e':'var(--text2)'};font-family:var(--fn);font-size:11px;font-weight:800;cursor:pointer;white-space:nowrap;">
-              ${savedSplit&&savedSplit.id===sp.id?'✓ Active':'Use this'}
+            <button onclick="activateSplit('${sp.id}')" style="background:${isActive?'var(--accent)':'var(--surface2)'};border:0.5px solid ${isActive?'transparent':'var(--border)'};border-radius:20px;padding:7px 14px;color:${isActive?'#0c0c0e':'var(--text2)'};font-family:var(--fn);font-size:11px;font-weight:800;cursor:pointer;white-space:nowrap;">
+              ${isActive?'Active':'Use this'}
             </button>
           </div>
-          <div style="font-size:12px;color:var(--text3);margin-bottom:10px;">${sp.desc}</div>
+          <div style="font-family:var(--fn);font-size:11px;color:var(--text4);line-height:1.5;margin-bottom:10px;">${sp.desc}</div>
           <div style="display:flex;gap:4px;flex-wrap:wrap;">
             ${sp.schedule.filter(d=>d.focus!=='Rest').map(d=>`
-              <div style="background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:4px 10px;font-size:10px;font-weight:700;color:var(--text2);">${d.day.slice(0,3)}: ${d.focus}</div>`).join('')}
+              <div style="background:var(--surface2);border:0.5px solid var(--border);border-radius:6px;padding:3px 8px;font-family:var(--fn);font-size:9px;font-weight:700;color:var(--text3);">${d.day.slice(0,3).toUpperCase()} — ${d.focus}</div>`).join('')}
           </div>
-        </div>`).join('')}
+        </div>`;
+      }).join('')}
 
-      <div style="font-size:10px;font-weight:800;color:var(--text3);text-transform:uppercase;letter-spacing:0.12em;margin:20px 0 12px;">Or Build Your Own</div>
-      <button onclick="openCustomSplit()" style="width:100%;background:var(--surface);border:1px dashed var(--border2);border-radius:14px;padding:14px;color:var(--text2);font-family:var(--fn);font-size:13px;font-weight:700;cursor:pointer;">
+      <div style="font-family:var(--fn);font-size:9px;font-weight:700;color:var(--text4);text-transform:uppercase;letter-spacing:0.14em;margin:16px 0 10px;">Custom</div>
+      <button onclick="openCustomSplit()" style="width:100%;background:var(--surface);border:0.5px dashed var(--border2);border-radius:14px;padding:14px;color:var(--text3);font-family:var(--fn);font-size:13px;font-weight:700;cursor:pointer;">
         + Create Custom Split
       </button>
     </div>`;
@@ -8288,23 +8420,32 @@ function renderSplits(){
 
 function renderTodaySplit(){
   if(!savedSplit) return '';
-  const dayIdx = new Date().getDay(); // 0=Sun
-  // Map: 0=Sun→rest, 1=Mon→day0, etc
-  const dayMap=[6,0,1,2,3,4,5]; // Mon=0 in our split
+  const dayIdx = new Date().getDay();
+  const dayMap=[6,0,1,2,3,4,5];
   const todaySchedule = savedSplit.schedule[dayMap[dayIdx]];
-  if(!todaySchedule||todaySchedule.focus==='Rest') return '<div style="background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:12px 14px;margin-bottom:16px;font-size:13px;color:var(--text3);text-align:center;">Rest day today — recover well 💤</div>';
+  if(!todaySchedule || todaySchedule.focus==='Rest'){
+    return `<div style="background:var(--surface);border:0.5px solid var(--border);border-radius:14px;padding:14px;margin-bottom:14px;text-align:center;">
+      <div style="font-family:var(--fn);font-size:12px;font-weight:700;color:var(--text4);">Rest day — recover well</div>
+    </div>`;
+  }
   const exs = todaySchedule.exIds.map(id=>EXS.find(e=>e.id===id)).filter(Boolean);
   return `
-    <div style="background:var(--surface);border:1px solid var(--border);border-radius:14px;overflow:hidden;margin-bottom:16px;">
-      <div style="background:rgba(168,255,60,0.06);padding:10px 14px;border-bottom:1px solid var(--border);">
-        <div style="font-size:10px;font-weight:800;color:var(--accent);text-transform:uppercase;letter-spacing:0.1em;">Today — ${todaySchedule.focus}</div>
+    <div style="background:var(--surface);border:0.5px solid rgba(168,255,60,0.2);border-radius:14px;overflow:hidden;margin-bottom:14px;">
+      <div style="background:var(--accent-muted);padding:10px 14px;display:flex;align-items:center;justify-content:space-between;">
+        <div>
+          <div style="font-family:var(--fn);font-size:9px;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:0.12em;">Today</div>
+          <div style="font-family:var(--fn);font-size:13px;font-weight:800;color:var(--text);margin-top:1px;">${todaySchedule.focus}</div>
+        </div>
+        <button onclick="loadSplitDay(${dayMap[dayIdx]})" style="background:var(--accent);border:none;border-radius:10px;padding:7px 14px;color:#0c0c0e;font-family:var(--fn);font-size:11px;font-weight:800;cursor:pointer;">Start session</button>
       </div>
-      ${exs.map(ex=>`
-        <div style="display:flex;align-items:center;gap:10px;padding:10px 14px;border-bottom:1px solid var(--border);">
-          <div style="width:32px;height:32px;border-radius:8px;background:${ex.bg};display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0;">${ex.icon}</div>
-          <div style="flex:1;font-size:13px;font-weight:700;color:var(--text);">${ex.name}</div>
-          <button onclick="addExToWorkout(${ex.id})" style="background:var(--accent);border:none;border-radius:10px;padding:5px 12px;color:#0c0c0e;font-family:var(--fn);font-size:11px;font-weight:800;cursor:pointer;">Add</button>
+      ${exs.slice(0,4).map(ex=>`
+        <div style="display:flex;align-items:center;gap:10px;padding:9px 14px;border-top:0.5px solid var(--border2);">
+          <div style="width:28px;height:28px;border-radius:7px;background:${ex.bg||'var(--surface2)'};display:flex;align-items:center;justify-content:center;flex-shrink:0;color:rgba(255,255,255,0.7);">
+            ${getExIcon(ex)}
+          </div>
+          <div style="font-family:var(--fn);font-size:12px;font-weight:700;color:var(--text2);flex:1;">${ex.name}</div>
         </div>`).join('')}
+      ${exs.length>4?`<div style="padding:8px 14px;font-family:var(--fn);font-size:10px;color:var(--text4);border-top:0.5px solid var(--border2);">+${exs.length-4} more exercises</div>`:''}
     </div>`;
 }
 
@@ -8314,7 +8455,7 @@ function activateSplit(id){
   savedSplit = sp;
   localStorage.setItem('ft_split', JSON.stringify(sp));
   haptic('success');
-  toast(sp.name+' activated 💪');
+  toast(sp.name+' activated');
   renderSplits();
 }
 function clearSplit(){
@@ -8340,21 +8481,35 @@ function renderMyPlans(){
   if(!el) return;
   const saved=localStorage.getItem('ft_split');
   if(!saved){
-    el.innerHTML='<div class="empty-rich" style="padding:40px 16px;"><div class="empty-rich-icon" style="font-size:28px;">📋</div><div class="empty-rich-title">No plan active</div><div class="empty-rich-sub">Go to Splits tab and choose a training split.</div></div>';
+    el.innerHTML=`<div style="padding:60px 24px;text-align:center;">
+      <div style="font-family:var(--fn);font-size:14px;font-weight:800;color:var(--text2);margin-bottom:8px;">No plan active</div>
+      <div style="font-family:var(--fn);font-size:12px;color:var(--text4);margin-bottom:20px;">Choose a training split first</div>
+      <button onclick="setExTab('splits')" style="background:var(--accent);border:none;border-radius:12px;padding:11px 24px;color:#0c0c0e;font-family:var(--fn);font-size:13px;font-weight:800;cursor:pointer;">Browse Splits</button>
+    </div>`;
     return;
   }
   const sp=JSON.parse(saved);
+  const dayIdx=new Date().getDay();
+  const dayMap=[6,0,1,2,3,4,5];
+  const todayPlanIdx=dayMap[dayIdx];
+
   el.innerHTML=`<div style="padding:14px 16px 100px;">
-    <div style="font-size:10px;font-weight:800;color:var(--text3);text-transform:uppercase;letter-spacing:0.12em;margin-bottom:12px;">Your Active Plan</div>
-    ${sp.schedule.map((d,i)=>`
-      <div style="background:var(--surface);border:1px solid ${d.focus==='Rest'?'var(--border)':'rgba(168,255,60,0.15)'};border-radius:14px;padding:12px 14px;margin-bottom:8px;display:flex;align-items:center;gap:12px;">
-        <div style="width:40px;height:40px;border-radius:10px;background:${d.focus==='Rest'?'var(--surface2)':'rgba(168,255,60,0.08)'};display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;color:${d.focus==='Rest'?'var(--text3)':'var(--accent)'};flex-shrink:0;">${d.day.slice(0,3)}</div>
-        <div style="flex:1;">
-          <div style="font-size:13px;font-weight:800;color:${d.focus==='Rest'?'var(--text3)':'var(--text)'};">${d.focus}</div>
-          ${d.muscles.length?'<div style="font-size:11px;color:var(--text3);">'+d.muscles.join(' · ')+'</div>':''}
+    <div style="font-family:var(--fn);font-size:9px;font-weight:700;color:var(--text4);text-transform:uppercase;letter-spacing:0.14em;margin-bottom:10px;">${sp.name}</div>
+    ${sp.schedule.map((d,i)=>{
+      const isToday=i===todayPlanIdx;
+      const isRest=d.focus==='Rest';
+      return `
+      <div style="background:${isToday?'var(--accent-muted)':'var(--surface)'};border:0.5px solid ${isToday?'rgba(168,255,60,0.3)':isRest?'var(--border2)':'var(--border)'};border-radius:14px;padding:12px 14px;margin-bottom:8px;display:flex;align-items:center;gap:12px;">
+        <div style="width:38px;height:38px;border-radius:10px;background:${isToday?'rgba(168,255,60,0.15)':isRest?'var(--surface2)':'var(--surface2)'};display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+          <div style="font-family:var(--fn);font-size:10px;font-weight:800;color:${isToday?'var(--accent)':isRest?'var(--text4)':'var(--text3)'};">${d.day.slice(0,3).toUpperCase()}</div>
         </div>
-        ${d.focus!=='Rest'?'<button onclick="loadSplitDay('+i+')" style="background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:5px 12px;font-family:var(--fn);font-size:11px;font-weight:700;color:var(--text2);cursor:pointer;">Start</button>':''}
-      </div>`).join('')}
+        <div style="flex:1;">
+          <div style="font-family:var(--fn);font-size:13px;font-weight:800;color:${isToday?'var(--text)':isRest?'var(--text4)':'var(--text2)'};">${d.focus}${isToday?' <span style="font-size:9px;font-weight:700;color:var(--accent);background:rgba(168,255,60,0.15);padding:2px 6px;border-radius:4px;margin-left:6px;">TODAY</span>':''}</div>
+          ${d.muscles.length?`<div style="font-family:var(--fn);font-size:10px;color:var(--text4);margin-top:1px;">${d.muscles.join(' · ')}</div>`:''}
+        </div>
+        ${!isRest?`<button onclick="loadSplitDay(${i})" style="background:${isToday?'var(--accent)':'var(--surface2)'};border:0.5px solid ${isToday?'transparent':'var(--border)'};border-radius:10px;padding:6px 12px;font-family:var(--fn);font-size:11px;font-weight:700;color:${isToday?'#0c0c0e':'var(--text2)'};cursor:pointer;">Start</button>`:''}
+      </div>`;
+    }).join('')}
   </div>`;
 }
 function loadSplitDay(dayIdx){
@@ -8370,7 +8525,7 @@ function loadSplitDay(dayIdx){
     }
   });
   save(); haptic('success');
-  toast(day.focus+' session loaded 💪');
+  toast(day.focus+' session loaded');
   go('w',document.getElementById('tb-w'));
 }
 // ============ END WORKOUT SPLITS ============
