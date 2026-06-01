@@ -24,6 +24,8 @@
   /* Backgrounds */
   --bg:         #0a0a0a;
   --bg2:        #080808;
+  --obs:        #080808;
+  --obs-skin:   #060608;
   --surface:    #0f0f0f;
   --surface2:   #111111;
   --surface3:   #141414;
@@ -84,6 +86,8 @@
 [data-theme="light"] {
   --bg:         #f5f5f7;
   --bg2:        #ebebee;
+  --obs:        #ffffff;
+  --obs-skin:   #f8f0ff;
   --surface:    #ffffff;
   --surface2:   #f8f8fa;
   --surface3:   #efeff2;
@@ -97,9 +101,16 @@
   --text:   #0c0c0e;
   --text2:  #50505e;
   --text3:  #9090a0;
-  --text4:  #d0d0dc;
+  --text4:  #c0c0cc;
   --sh:    0 2px 12px rgba(0,0,0,0.08);
   --sh-g:  0 4px 20px var(--accent-glow);
+  /* Pillar backgrounds adapt */
+  --purple-bg:  #f5eeff;
+  --purple-border: rgba(120,60,180,0.2);
+  --sage-bg:    #eefaf5;
+  --amber-bg:   #fff8e8;
+  --teal-bg:    #e8faf8;
+  --orange-bg:  #fff3ee;
 }
 
 /* ── RESET ── */
@@ -108,6 +119,7 @@
   margin: 0; padding: 0;
   -webkit-tap-highlight-color: transparent;
   -webkit-touch-callout: none;
+  touch-action: manipulation;
 }
 html {
   background: #0a0a0a;
@@ -133,9 +145,70 @@ body {
 }
 .status-bar { height: var(--safe-top); background: var(--bg); flex-shrink: 0; }
 .app-shell  { flex: 1; display: flex; flex-direction: column; overflow: hidden; min-height: 0; }
-.screen     { flex: 1; overflow-y: auto; overflow-x: hidden; -webkit-overflow-scrolling: touch; }
+.screen     { flex: 1; overflow-y: auto; overflow-x: hidden; -webkit-overflow-scrolling: touch; overscroll-behavior-y: contain; }
 .screen::-webkit-scrollbar { display: none; }
 .gone { display: none !important; }
+
+/* ── SCROLL CONTAINERS — native feel ── */
+[style*="overflow-y:auto"], [style*="overflow-y: auto"] {
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior-y: contain;
+  scrollbar-width: none;
+}
+[style*="overflow-x:auto"], [style*="overflow-x: auto"] {
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior-x: contain;
+  scrollbar-width: none;
+}
+
+/* ── GLOBAL PRESS STATE ──
+   Any tappable element with onclick gets a press feel.
+   Uses active pseudo which works reliably on iOS Safari */
+[onclick]:active {
+  opacity: 0.72;
+}
+
+/* ── INTERACTIVE ELEMENTS — specific press states override global ── */
+.tb:active            { opacity: 0.6; }
+.btn-accent:active    { transform: scale(0.97); opacity: 0.88; box-shadow: none; }
+.btn-ghost:active     { border-color: var(--accent); color: var(--accent); }
+.today-card:active    { opacity: 0.7; }
+.ex-row:active        { background: var(--surface2); }
+.food-row:active      { opacity: 0.75; }
+.opt:active           { opacity: 0.75; }
+
+/* ── WILL-CHANGE for elements that transform on press ── */
+.btn-accent, .tb, .today-card, .ico-btn, .t-btn, .done-btn {
+  will-change: transform;
+}
+
+/* ── SCREEN TRANSITIONS ── */
+.screen {
+  animation: screenFadeIn 0.18s ease both;
+}
+@keyframes screenFadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+/* ── ONBOARDING BUTTON PRESS ── */
+#ob-next-btn:active   { transform: scale(0.97); opacity: 0.88; }
+#ob-back-btn:active   { opacity: 0.7; }
+
+/* ── METRIC CARD COUNT-UP ANIMATION ── */
+@keyframes countUp {
+  from { opacity: 0; transform: translateY(6px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.metric-count {
+  animation: countUp 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+}
+
+/* ── CHIP PRESS STATE ── */
+.coach-ft-strip:active { opacity: 0.7; }
+
+/* Pressable — apply to any card that should respond to touch */
+.pressable:active { opacity: 0.75; transform: scale(0.99); }
 
 /* ── TAB BAR — styled like the reference ── */
 .tab-bar {
@@ -384,7 +457,7 @@ select option { background: var(--surface2); }
   background: var(--surface2); border: 1.5px solid var(--border2);
   border-radius: var(--r2); padding: 12px 24px;
   color: var(--text2); font-family: var(--fn); font-size: 14px; font-weight: 700;
-  cursor: pointer; transition: all 0.15s; letter-spacing: 0.04em;
+  cursor: pointer;  letter-spacing: 0.04em;
 }
 .t-btn:active { transform: scale(0.93); }
 .t-btn.skip { background: var(--accent); color: #0c0c0e; border-color: transparent; box-shadow: var(--sh-g); }
@@ -446,14 +519,14 @@ select option { background: var(--surface2); }
   color: var(--blue); background: var(--blue-bg);
   border: 1px solid rgba(77,168,255,0.2);
   border-radius: 20px; padding: 5px 12px;
-  cursor: pointer; transition: all 0.15s;
+  cursor: pointer; 
   letter-spacing: 0.06em; text-transform: uppercase;
 }
 .rest-btn:active { transform: scale(0.92); }
 .ico-btn {
   background: var(--surface3); border: 1px solid var(--border2);
   color: var(--text3); cursor: pointer; padding: 8px;
-  border-radius: var(--r3); transition: all 0.15s;
+  border-radius: var(--r3); 
   display: flex; align-items: center; justify-content: center;
 }
 .ico-btn:active { color: var(--red); background: var(--red-bg); transform: scale(0.9); }
@@ -488,7 +561,7 @@ select option { background: var(--surface2); }
   border-radius: var(--r3); color: var(--text);
   font-family: var(--fn); font-size: 16px; font-weight: 700;
   width: 58px; padding: 7px 6px; text-align: center; outline: none;
-  transition: all 0.15s;
+  
 }
 .ninp:focus { border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-glow2); }
 
@@ -1056,7 +1129,7 @@ select option { background: var(--surface2); }
   letter-spacing: 0.08em; text-transform: uppercase;
   background: var(--accent); color: #0c0c0e;
   margin-top: 10px; border-radius: 0 0 var(--r2) var(--r2);
-  cursor: pointer; transition: all 0.15s;
+  cursor: pointer; 
 }
 .wod-add-btn:active { opacity: 0.85; }
 
@@ -1413,7 +1486,7 @@ tr.set-flash    { animation: setRowFlash 0.55s ease both; }
   border: 1px solid rgba(127,255,58,0.2);
   border-radius: 20px; padding: 5px 12px;
   cursor: pointer; letter-spacing: 0.06em; text-transform: uppercase;
-  white-space: nowrap; transition: all 0.15s;
+  white-space: nowrap; 
 }
 .sugg-item-add:active { background: var(--accent); color: #0c0c0e; }
 
@@ -1492,7 +1565,7 @@ tr.set-flash    { animation: setRowFlash 0.55s ease both; }
   background: var(--surface2); border: 1px solid var(--border2);
   border-radius: 20px; padding: 7px 14px;
   font-family: var(--fn); font-size: 13px; font-weight: 700;
-  color: var(--text2); cursor: pointer; transition: all 0.15s;
+  color: var(--text2); cursor: pointer; 
   letter-spacing: 0.04em;
 }
 .sett-theme-btn:active { background: var(--surface3); }
@@ -1502,7 +1575,7 @@ tr.set-flash    { animation: setRowFlash 0.55s ease both; }
   border-radius: 10px; padding: 11px;
   font-family: var(--fn); font-size: 12px; font-weight: 700;
   color: var(--accent); cursor: pointer; margin: 0 16px 12px;
-  width: calc(100% - 32px); transition: all 0.15s;
+  width: calc(100% - 32px); 
   letter-spacing: 0.04em; text-align: center;
 }
 .sett-calc-btn:active { background: var(--accent-glow); }
@@ -1510,7 +1583,7 @@ tr.set-flash    { animation: setRowFlash 0.55s ease both; }
   width: 100%; background: transparent;
   border: 1px solid var(--border2); border-radius: 10px;
   padding: 12px; font-family: var(--fn); font-size: 13px; font-weight: 700;
-  cursor: pointer; transition: all 0.15s; text-align: center;
+  cursor: pointer;  text-align: center;
   letter-spacing: 0.02em;
 }
 .sett-danger-btn:active { opacity: 0.7; }
@@ -1553,7 +1626,7 @@ tr.set-flash    { animation: setRowFlash 0.55s ease both; }
   border-radius:20px;padding:6px 12px;color:var(--text3);
   font-family:var(--fn);font-size:10px;font-weight:700;cursor:pointer;
   white-space:nowrap;letter-spacing:0.04em;text-transform:uppercase;
-  transition:all 0.15s;
+  
 }
 .coach-quick-btn:active{background:var(--accent-glow2);color:var(--accent);border-color:rgba(127,255,58,0.3);}
 
@@ -1604,7 +1677,7 @@ tr.set-flash    { animation: setRowFlash 0.55s ease both; }
   background: var(--surface2); border: 1px solid var(--border);
   display: flex; align-items: center; justify-content: center;
   cursor: pointer; font-size: 14px; color: var(--text2);
-  transition: all 0.15s;
+  
 }
 .settings-close-btn:active { transform: scale(0.9); }
 .settings-panel-body {
@@ -1762,7 +1835,7 @@ tr.set-flash    { animation: setRowFlash 0.55s ease both; }
   border-radius:20px;padding:6px 14px;
   font-family:var(--fn);font-size:10px;font-weight:700;
   color:var(--text3);cursor:pointer;
-  transition:all 0.15s;white-space:nowrap;
+  white-space:nowrap;
   letter-spacing:0.05em;text-transform:uppercase;
 }
 .elevate-pillar-btn.active {
@@ -1833,7 +1906,7 @@ tr.set-flash    { animation: setRowFlash 0.55s ease both; }
   background:var(--surface2);border:1px solid var(--border);
   display:flex;flex-direction:column;align-items:center;
   justify-content:center;gap:4px;cursor:pointer;
-  overflow:hidden;position:relative;transition:all 0.15s;
+  overflow:hidden;position:relative;
 }
 .skin-photo-slot:active{border-color:var(--purple);}
 .skin-photo-slot img{width:100%;height:100%;object-fit:cover;}
@@ -1909,7 +1982,7 @@ tr.set-flash    { animation: setRowFlash 0.55s ease both; }
   flex:1;display:flex;flex-direction:column;align-items:center;gap:4px;
   background:var(--surface2);border:1.5px solid var(--border);
   border-radius:12px;padding:10px 6px;cursor:pointer;
-  transition:all 0.15s;
+  
 }
 .mood-btn.active {
   border-color:var(--purple);
@@ -1941,7 +2014,7 @@ tr.set-flash    { animation: setRowFlash 0.55s ease both; }
   flex:1;background:var(--surface2);border:1px solid var(--border);
   border-radius:10px;padding:8px 4px;
   font-size:11px;font-weight:700;color:var(--text3);
-  cursor:pointer;text-align:center;transition:all 0.15s;
+  cursor:pointer;text-align:center;
 }
 .sleep-q-btn.active {
   background:var(--purple-bg);border-color:rgba(187,127,255,0.4);color:var(--purple);
@@ -1996,7 +2069,7 @@ tr.set-flash    { animation: setRowFlash 0.55s ease both; }
   font-family: var(--fn); font-size: 12px; font-weight: 700;
   letter-spacing: 0.08em; text-transform: uppercase;
   cursor: pointer; border-bottom: 2px solid transparent;
-  transition: all 0.15s; position: relative;
+   position: relative;
 }
 .nut-tab.active {
   color: var(--accent);
@@ -2399,7 +2472,7 @@ input:focus, select:focus, textarea:focus {
     <div id="nut-track" class="scroll-body" style="padding-top:0;padding-left:0;padding-right:0;">
 
       <!-- Obsidian macro banner — new design -->
-      <div style="background:#080808;padding:16px 18px 18px;position:relative;overflow:hidden;border-bottom:0.5px solid var(--border2);">
+      <div style="background:var(--obs);padding:16px 18px 18px;position:relative;overflow:hidden;border-bottom:0.5px solid var(--border2);">
         <div style="position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(168,255,60,0.1),transparent);"></div>
         <div style="font-family:var(--fn);font-size:9px;font-weight:700;color:rgba(168,255,60,0.2);text-transform:uppercase;letter-spacing:0.16em;margin-bottom:12px;" id="nut-track-date">Today</div>
         <!-- Remaining as hero -->
@@ -2442,53 +2515,17 @@ input:focus, select:focus, textarea:focus {
       <div id="nut-remaining-lbl" style="display:none;"></div>
       <div style="padding:14px 16px 100px;">
 
-        <!-- Macro progress bars — horizontal, more visual -->
-        <div style="background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:14px;margin-bottom:12px;">
-          <div style="font-size:10px;font-weight:800;color:var(--text3);text-transform:uppercase;letter-spacing:0.1em;margin-bottom:12px;">Macronutrients</div>
-          <!-- Protein -->
-          <div style="margin-bottom:12px;">
-            <div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:5px;">
-              <div style="font-size:12px;font-weight:700;color:#ff4f6a;">Protein</div>
-              <div style="font-family:var(--fn);font-size:15px;font-weight:900;color:#ff4f6a;" id="mp">0g</div>
-            </div>
-            <div style="height:6px;background:var(--surface3);border-radius:3px;overflow:hidden;">
-              <div id="mpb" style="height:100%;background:linear-gradient(90deg,#ff4f6a,#ff8fa3);border-radius:3px;width:0%;transition:width 0.7s cubic-bezier(0.34,1.56,0.64,1);"></div>
-            </div>
-          </div>
-          <!-- Carbs -->
-          <div style="margin-bottom:12px;">
-            <div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:5px;">
-              <div style="font-size:12px;font-weight:700;color:var(--blue);">Carbs</div>
-              <div style="font-family:var(--fn);font-size:15px;font-weight:900;color:var(--blue);" id="mc">0g</div>
-            </div>
-            <div style="height:6px;background:var(--surface3);border-radius:3px;overflow:hidden;">
-              <div id="mcb" style="height:100%;background:linear-gradient(90deg,var(--blue),#82c4ff);border-radius:3px;width:0%;transition:width 0.7s cubic-bezier(0.34,1.56,0.64,1);"></div>
-            </div>
-          </div>
-          <!-- Fat -->
-          <div>
-            <div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:5px;">
-              <div style="font-size:12px;font-weight:700;color:var(--orange);">Fat</div>
-              <div style="font-family:var(--fn);font-size:15px;font-weight:900;color:var(--orange);" id="mf">0g</div>
-            </div>
-            <div style="height:6px;background:var(--surface3);border-radius:3px;overflow:hidden;">
-              <div id="mfb" style="height:100%;background:linear-gradient(90deg,var(--orange),#ffb380);border-radius:3px;width:0%;transition:width 0.7s cubic-bezier(0.34,1.56,0.64,1);"></div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Hydration — compact -->
-        <div style="background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:14px;margin-bottom:12px;">
+        <!-- Hydration -->
+        <div style="background:var(--surface);border:0.5px solid var(--border);border-radius:16px;padding:14px;margin-bottom:12px;">
           <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;">
-            <div style="font-size:13px;font-weight:800;color:var(--text);">💧 Hydration</div>
-            <div style="font-family:var(--fn);font-size:18px;font-weight:900;color:var(--blue);" id="wlbl">0 / 8</div>
+            <div style="font-family:var(--fn);font-size:13px;font-weight:700;color:var(--text);">Hydration</div>
+            <div style="font-family:var(--fn);font-size:18px;font-weight:800;color:var(--blue);" id="wlbl">0 / 8</div>
           </div>
-          <!-- Glass indicators -->
           <div style="display:flex;gap:5px;margin-bottom:12px;" id="water-glasses"></div>
           <div style="display:flex;gap:8px;">
-            <button onclick="addWater(1)" style="flex:1;background:var(--blue-bg);border:1px solid rgba(77,168,255,0.25);border-radius:10px;padding:9px;color:var(--blue);font-family:var(--fn);font-size:12px;font-weight:800;cursor:pointer;transition:all 0.12s;">+1</button>
-            <button onclick="addWater(2)" style="flex:2;background:var(--blue-bg);border:1px solid rgba(77,168,255,0.25);border-radius:10px;padding:9px;color:var(--blue);font-family:var(--fn);font-size:12px;font-weight:800;cursor:pointer;transition:all 0.12s;">+2 glasses</button>
-            <button onclick="addWater(-1)" style="flex:1;background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:9px;color:var(--text3);font-family:var(--fn);font-size:12px;font-weight:700;cursor:pointer;transition:all 0.12s;">-1</button>
+            <button onclick="addWater(1)" style="flex:1;background:var(--surface2);border:0.5px solid var(--border);border-radius:10px;padding:9px;color:var(--blue);font-family:var(--fn);font-size:12px;font-weight:800;cursor:pointer;">+1</button>
+            <button onclick="addWater(2)" style="flex:2;background:var(--surface2);border:0.5px solid var(--border);border-radius:10px;padding:9px;color:var(--blue);font-family:var(--fn);font-size:12px;font-weight:800;cursor:pointer;">+2 glasses</button>
+            <button onclick="addWater(-1)" style="flex:1;background:var(--surface2);border:0.5px solid var(--border);border-radius:10px;padding:9px;color:var(--text3);font-family:var(--fn);font-size:12px;font-weight:700;cursor:pointer;">-1</button>
           </div>
         </div>
 
@@ -2573,8 +2610,8 @@ input:focus, select:focus, textarea:focus {
     <!-- This Week / Deep Dive toggle -->
     <div style="padding:14px 16px 0;flex-shrink:0;">
       <div style="display:flex;background:var(--surface);border:0.5px solid var(--border);border-radius:14px;padding:3px;">
-        <button id="prog-tab-week" onclick="setProgView('week')" style="flex:1;padding:8px;border-radius:11px;background:var(--surface2);font-family:var(--fn);font-size:11px;font-weight:800;color:var(--text);border:none;cursor:pointer;transition:all 0.15s;">This Week</button>
-        <button id="prog-tab-deep" onclick="setProgView('deep')" style="flex:1;padding:8px;border-radius:11px;background:transparent;font-family:var(--fn);font-size:11px;font-weight:700;color:var(--text4);border:none;cursor:pointer;transition:all 0.15s;">Deep Dive</button>
+        <button id="prog-tab-week" onclick="setProgView('week')" style="flex:1;padding:8px;border-radius:11px;background:var(--surface2);font-family:var(--fn);font-size:11px;font-weight:800;color:var(--text);border:none;cursor:pointer;">This Week</button>
+        <button id="prog-tab-deep" onclick="setProgView('deep')" style="flex:1;padding:8px;border-radius:11px;background:transparent;font-family:var(--fn);font-size:11px;font-weight:700;color:var(--text4);border:none;cursor:pointer;">Deep Dive</button>
       </div>
     </div>
 
@@ -3444,13 +3481,20 @@ function go(k,el){
   if(k==='s'){
     document.getElementById('settings-overlay').classList.add('open');
     renderSettings();
+    haptic('light');
     return;
   }
-  // Legacy aliases — links elsewhere in the app that use 'p' or 'el'
+  // Legacy aliases
   if(k==='p'){ k='y'; if(!el) el=document.getElementById('tb-y'); setYouTab('progress'); }
   if(k==='el'){ k='y'; if(!el) el=document.getElementById('tb-y'); setYouTab('elevate'); }
   Object.values(SM).forEach(id=>{const s=document.getElementById(id);if(s){s.classList.add('gone');s.style.display='';}});
-  const s=document.getElementById(SM[k]);if(!s)return;s.classList.remove('gone');s.style.display='flex';
+  const s=document.getElementById(SM[k]);if(!s)return;
+  s.classList.remove('gone');
+  s.style.display='flex';
+  // Trigger fade-in animation
+  s.style.animation='none';
+  s.offsetHeight; // reflow
+  s.style.animation='';
   document.querySelectorAll('.tb').forEach(b=>b.classList.remove('active'));
   if(el) el.classList.add('active');
   haptic('light');
@@ -3538,8 +3582,17 @@ function renderWorkout(){
   const dateGreetEl=document.getElementById('hdr-date-greeting');
   if(dateGreetEl){ const d=new Date(); dateGreetEl.textContent=DS[d.getDay()]+' · '+MS[d.getMonth()]+' '+d.getDate()+' · '+getGreeting(); }
 
-  // Render hero banner (health score, recovery, metrics, workout card, Coach FT)
+  // Render hero banner first
   renderHeroBanner();
+
+  // Animate health score count-up after render
+  requestAnimationFrame(()=>{
+    const scoreEl = document.getElementById('health-score-num');
+    if(scoreEl){
+      const finalScore = calcHealthScore ? calcHealthScore().score : 0;
+      animCountUp(scoreEl, 0, finalScore, 700, 0);
+    }
+  });
 
   // Show/hide workout actions
   const actEl=document.getElementById('workout-actions');
@@ -3896,7 +3949,7 @@ function renderCardio(){
     const weekKcal=weekLog.reduce((a,c)=>a+c.kcal,0);
     const weekSessions=weekLog.length;
     heroEl.innerHTML=`
-      <div style="margin:14px 16px 0;background:#080808;border:1px solid rgba(255,107,53,0.16);border-radius:20px;padding:16px 18px 18px;position:relative;overflow:hidden;">
+      <div style="margin:14px 16px 0;background:var(--obs);border:1px solid rgba(255,107,53,0.16);border-radius:20px;padding:16px 18px 18px;position:relative;overflow:hidden;">
         <div style="position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(255,107,53,0.2),transparent);"></div>
         <div style="font-family:var(--fn);font-size:9px;font-weight:700;color:rgba(255,107,53,0.25);text-transform:uppercase;letter-spacing:0.18em;margin-bottom:12px;">Today's burn</div>
         <div style="display:flex;align-items:flex-end;gap:0;margin-bottom:14px;">
@@ -4438,7 +4491,7 @@ function renderProgHero(){
   const vw=wts.filter(v=>v>0);
   const minW=vw.length?Math.min(...vw)-2:60;const maxW=vw.length?Math.max(...vw)+2:100;
   heroEl.innerHTML=`
-    <div style="background:#080808;border:1px solid rgba(168,255,60,0.12);border-radius:18px;padding:16px 18px 18px;position:relative;overflow:hidden;">
+    <div style="background:var(--obs);border:1px solid rgba(168,255,60,0.12);border-radius:18px;padding:16px 18px 18px;position:relative;overflow:hidden;">
       <div style="position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(168,255,60,0.15),transparent);"></div>
       <div style="font-family:var(--fn);font-size:9px;font-weight:700;color:rgba(168,255,60,0.22);text-transform:uppercase;letter-spacing:0.18em;margin-bottom:12px;">Weight trend</div>
       <div style="display:flex;align-items:flex-end;justify-content:space-between;margin-bottom:12px;">
@@ -4460,7 +4513,7 @@ function renderWeekScores(){
   if(!el)return;
   const days=[];
   for(let i=6;i>=0;i--){const d=new Date();d.setDate(d.getDate()-i);days.push({iso:d.toISOString().slice(0,10),day:DS[d.getDay()]});}
-  const scores=days.map(({iso})=>{if(iso===today())return calcHealthScore?calcHealthScore():0;const h=S.hist.find(x=>x.date===iso&&x.type==='health_score');return h?h.score:0;});
+  const scores=days.map(({iso})=>{if(iso===today())return calcHealthScore?calcHealthScore().score:0;const h=S.hist.find(x=>x.date===iso&&x.type==='health_score');return h?h.score:0;});
   const maxScore=Math.max(...scores,1);
   el.innerHTML=`
     <div style="display:flex;gap:6px;align-items:flex-end;height:52px;margin-bottom:8px;">
@@ -4736,8 +4789,7 @@ Rules:
         }],
         generationConfig: {
           temperature: 0.2,
-          maxOutputTokens: 400,
-          responseMimeType: 'application/json'
+          maxOutputTokens: 400
         }
       })
     }
@@ -5325,15 +5377,21 @@ async function sendCoachMsg(){
   }));
 
   try {
+    // Build contents — history + current message
+    const contents = [
+      ...history,
+      { role: 'user', parts: [{ text: msg }] }
+    ];
+
     const res = await fetch(
       `https://generativelanguage.googleapis.com/v1/models/gemini-1.5-flash:generateContent?key=${key}`,
       {
-        method:'POST',
-        headers:{'Content-Type':'application/json'},
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          system_instruction:{parts:[{text: context}]},
-          contents: history,
-          generationConfig:{ temperature:0.7, maxOutputTokens:300 }
+          system_instruction: { parts: [{ text: context }] },
+          contents,
+          generationConfig: { temperature: 0.7, maxOutputTokens: 400 }
         })
       }
     );
@@ -5341,7 +5399,7 @@ async function sendCoachMsg(){
     if(!res.ok){
       const errMsg = data?.error?.message || 'API error '+res.status;
       removeCoachTyping();
-      addCoachMessage('bot', '⚠️ '+errMsg);
+      addCoachMessage('bot', 'Error: ' + errMsg);
       return;
     }
     const reply = data.candidates?.[0]?.content?.parts?.[0]?.text;
@@ -5362,16 +5420,32 @@ async function sendCoachMsg(){
 
 
 // ============ HAPTICS ============
+// ============ HAPTICS ============
+// iOS Safari doesn't support navigator.vibrate — use AudioContext click instead
+// Android gets real vibration
 function haptic(style='light'){
-  if(!navigator.vibrate) return;
-  const patterns = {
-    light: [10],
-    medium: [20],
-    heavy: [30, 20, 30],
-    success: [10, 50, 10],
-    error: [50, 30, 50],
-  };
-  navigator.vibrate(patterns[style] || [10]);
+  // Android vibration
+  if(navigator.vibrate){
+    const patterns = {
+      light:   [8],
+      medium:  [15],
+      heavy:   [25, 15, 25],
+      success: [8, 40, 8],
+      error:   [40, 20, 40],
+    };
+    navigator.vibrate(patterns[style] || [8]);
+    return;
+  }
+  // iOS — AudioContext click simulates Taptic feel
+  try {
+    const ctx = new (window.AudioContext || window.webkitAudioContext)();
+    const buf = ctx.createBuffer(1, 1, 22050);
+    const src = ctx.createBufferSource();
+    src.buffer = buf;
+    src.connect(ctx.destination);
+    src.start(0);
+    setTimeout(()=>ctx.close(), 100);
+  } catch(e){}
 }
 // ============ END HAPTICS ============
 
@@ -5381,7 +5455,7 @@ function renderHeroBanner(){
   if(!el) return;
   const s = loadSettings();
   const streak = calcStreak();
-  const score = calcHealthScore ? calcHealthScore() : 0;
+  const score = calcHealthScore ? calcHealthScore().score : 0;
   const scoreLabel = score >= 80 ? 'Excellent' : score >= 60 ? 'Good — keep pushing' : score >= 40 ? 'Getting there' : 'Start your day';
 
   // Recovery score
@@ -5484,7 +5558,7 @@ function renderHeroBanner(){
     </div>
 
     <!-- COACH FT STRIP -->
-    <div onclick="openM('coach-modal');initCoach();" style="margin:10px 16px 0;background:var(--surface);border:0.5px solid var(--border);border-radius:14px;padding:12px 14px;display:flex;align-items:center;gap:10px;cursor:pointer;" ontouchstart="this.style.opacity='0.7'" ontouchend="this.style.opacity='1'">
+    <div onclick="openM('coach-modal');initCoach();" class="coach-ft-strip" style="margin:10px 16px 0;background:var(--surface);border:0.5px solid var(--border);border-radius:14px;padding:12px 14px;display:flex;align-items:center;gap:10px;cursor:pointer;">
       <div style="width:30px;height:30px;border-radius:9px;background:var(--accent-muted);border:0.5px solid rgba(168,255,60,0.15);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
         <svg width="14" height="14" fill="none" stroke="var(--accent)" stroke-width="1.8" viewBox="0 0 24 24"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>
       </div>
@@ -5495,6 +5569,16 @@ function renderHeroBanner(){
       <svg width="13" height="13" fill="none" stroke="var(--text4)" stroke-width="2" viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg>
     </div>
   `;
+
+  // Animate metric card bars after render
+  requestAnimationFrame(()=>{
+    // Metric bars fill
+    document.querySelectorAll('.tc-bar-fill').forEach(bar=>{
+      const w = bar.style.width;
+      bar.style.width = '0%';
+      setTimeout(()=>{ bar.style.transition='width 0.7s cubic-bezier(0.34,1.56,0.64,1)'; bar.style.width = w; }, 50);
+    });
+  });
 }
 // ============ END HERO BANNER ============
 
@@ -5639,8 +5723,11 @@ let elevateEduIdx = {skin:0,mind:0,body:0,style:0,learn:0};
 // ── Main render function ──
 function renderElevate(){
   EV = loadElevate();
-  renderMonthlyGlowReport();
-  renderElevateHero();
+  // Glow report is small — only show in Skin pillar now
+  const glowEl = document.getElementById('glow-report');
+  if(glowEl) glowEl.innerHTML = '';
+  const heroEl = document.getElementById('elevate-hero');
+  if(heroEl) heroEl.innerHTML = '';
   renderElevatePillars();
   renderElevateContent();
 }
@@ -5744,7 +5831,7 @@ function renderSkinPillar(){
 
   return `
     <!-- GLOW SCORE BANNER — obsidian, purple border -->
-    <div style="margin:14px 16px 0;background:#060608;border:1px solid rgba(187,127,255,0.18);border-radius:20px;padding:16px 18px 16px;position:relative;overflow:hidden;">
+    <div style="margin:14px 16px 0;background:var(--obs-skin);border:1px solid rgba(187,127,255,0.18);border-radius:20px;padding:16px 18px 16px;position:relative;overflow:hidden;">
       <div style="position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(187,127,255,0.2),transparent);"></div>
       <div style="font-family:var(--fn);font-size:9px;font-weight:700;color:rgba(187,127,255,0.25);text-transform:uppercase;letter-spacing:0.18em;margin-bottom:12px;">Glow score</div>
       <div style="display:flex;align-items:flex-end;justify-content:space-between;margin-bottom:14px;">
@@ -5792,7 +5879,7 @@ function renderSkinPillar(){
         <button onclick="openRoutineEditor('morning')" style="font-family:var(--fn);font-size:10px;font-weight:700;color:#2a2a2a;background:none;border:none;cursor:pointer;">Edit</button>
       </div>
     </div>
-    <div style="margin:0 16px 14px;background:#0a0810;border:0.5px solid rgba(187,127,255,0.1);border-radius:14px;overflow:hidden;">
+    <div style="margin:0 16px 14px;background:var(--obs-skin);border:0.5px solid rgba(187,127,255,0.1);border-radius:14px;overflow:hidden;">
       ${EV.morningRoutine.map((step,i)=>`
         <div onclick="toggleRoutineStep('morning',${i})" style="display:flex;align-items:center;gap:10px;padding:10px 14px;${i<EV.morningRoutine.length-1?'border-bottom:0.5px solid rgba(187,127,255,0.06);':''}cursor:pointer;">
           <div style="width:20px;height:20px;border-radius:6px;flex-shrink:0;background:${step.done?'#1a0a2a':'#120e18'};border:0.5px solid ${step.done?'rgba(187,127,255,0.4)':'rgba(187,127,255,0.12)'};display:flex;align-items:center;justify-content:center;">
@@ -5814,7 +5901,7 @@ function renderSkinPillar(){
         <button onclick="openRoutineEditor('evening')" style="font-family:var(--fn);font-size:10px;font-weight:700;color:#2a2a2a;background:none;border:none;cursor:pointer;">Edit</button>
       </div>
     </div>
-    <div style="margin:0 16px 14px;background:#0a0810;border:0.5px solid rgba(187,127,255,0.1);border-radius:14px;overflow:hidden;">
+    <div style="margin:0 16px 14px;background:var(--obs-skin);border:0.5px solid rgba(187,127,255,0.1);border-radius:14px;overflow:hidden;">
       ${EV.eveningRoutine.map((step,i)=>`
         <div onclick="toggleRoutineStep('evening',${i})" style="display:flex;align-items:center;gap:10px;padding:10px 14px;${i<EV.eveningRoutine.length-1?'border-bottom:0.5px solid rgba(187,127,255,0.06);':''}cursor:pointer;">
           <div style="width:20px;height:20px;border-radius:6px;flex-shrink:0;background:${step.done?'#1a0a2a':'#120e18'};border:0.5px solid ${step.done?'rgba(187,127,255,0.4)':'rgba(187,127,255,0.12)'};display:flex;align-items:center;justify-content:center;">
@@ -5830,7 +5917,7 @@ function renderSkinPillar(){
 
     <!-- SKIN TYPE -->
     <div style="font-family:var(--fn);font-size:9px;font-weight:700;color:#333;text-transform:uppercase;letter-spacing:0.14em;margin:0 16px 10px;">Skin type</div>
-    <div style="margin:0 16px 14px;background:#0a0810;border:0.5px solid rgba(187,127,255,0.1);border-radius:14px;overflow:hidden;">
+    <div style="margin:0 16px 14px;background:var(--obs-skin);border:0.5px solid rgba(187,127,255,0.1);border-radius:14px;overflow:hidden;">
       ${['Oily','Dry','Combination','Sensitive','Normal'].map((t,i,arr)=>`
         <div onclick="setSkinType('${t}')" style="display:flex;align-items:center;justify-content:space-between;padding:10px 14px;${i<arr.length-1?'border-bottom:0.5px solid rgba(187,127,255,0.06);':''}cursor:pointer;background:${(EV.skinType||'')===t?'rgba(187,127,255,0.06)':'transparent'};">
           <div style="font-family:var(--fn);font-size:13px;font-weight:700;color:${(EV.skinType||'')===t?'#f4f4f6':'#555'};">${t}</div>
@@ -5847,7 +5934,7 @@ function renderSkinPillar(){
 
     <!-- INGREDIENT LIBRARY — same purple treatment, keep existing data -->
     <div style="font-family:var(--fn);font-size:9px;font-weight:700;color:#333;text-transform:uppercase;letter-spacing:0.14em;margin:0 16px 10px;" id="ingredient-library-head">Ingredient library</div>
-    <div style="margin:0 16px 80px;background:#0a0810;border:0.5px solid rgba(187,127,255,0.1);border-radius:14px;overflow:hidden;">
+    <div style="margin:0 16px 80px;background:var(--obs-skin);border:0.5px solid rgba(187,127,255,0.1);border-radius:14px;overflow:hidden;">
       ${window._activeConcern ? `<div style="padding:10px 14px;background:rgba(187,127,255,0.06);border-bottom:0.5px solid rgba(187,127,255,0.1);font-family:var(--fn);font-size:11px;color:#bb7fff;font-weight:700;">For: ${window._activeConcern} — <span onclick="window._activeConcern=null;renderElevateContent();" style="cursor:pointer;text-decoration:underline;color:#555;">clear</span></div>` : ''}
       ${[
         {name:'Niacinamide',type:'Vitamin B3',does:'Fades dark spots, controls oil, minimises pores, strengthens skin barrier.',good:['Oily','Combination','Sensitive'],avoid:'None — very well tolerated',conc:'5–10%'},
@@ -6077,7 +6164,7 @@ function renderStylePillar(){
     <div style="background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:14px;margin-bottom:12px;">
       <div style="font-size:12px;color:var(--text3);margin-bottom:12px;line-height:1.5;">Select your body type for personalised fit guidance. This is about clothing, not genetics.</div>
       ${bodyTypes.map(bt=>`
-        <div style="background:${EV.bodyType===bt.id?'var(--purple-bg)':'var(--surface2)'};border:1px solid ${EV.bodyType===bt.id?'rgba(187,127,255,0.4)':'var(--border)'};border-radius:12px;padding:12px;margin-bottom:8px;cursor:pointer;transition:all 0.15s;" onclick="setBodyType('${bt.id}')">
+        <div style="background:${EV.bodyType===bt.id?'var(--purple-bg)':'var(--surface2)'};border:1px solid ${EV.bodyType===bt.id?'rgba(187,127,255,0.4)':'var(--border)'};border-radius:12px;padding:12px;margin-bottom:8px;cursor:pointer;" onclick="setBodyType('${bt.id}')">
           <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:4px;">
             <div style="font-size:14px;font-weight:800;color:${EV.bodyType===bt.id?'var(--purple)':'var(--text)'};">${bt.name}</div>
             ${EV.bodyType===bt.id?'<div style="font-size:10px;font-weight:800;color:var(--purple);background:var(--purple-bg);border:1px solid rgba(187,127,255,0.3);border-radius:20px;padding:2px 8px;letter-spacing:0.06em;">SELECTED</div>':''}
@@ -6500,7 +6587,7 @@ function renderNutGuide(){
     </div>
 
     <!-- Obsidian macro banner -->
-    <div style="background:var(--bg2,#080808);border-radius:18px;padding:16px 18px 18px;margin-bottom:16px;position:relative;overflow:hidden;">
+    <div style="background:var(--obs);border-radius:18px;padding:16px 18px 18px;margin-bottom:16px;position:relative;overflow:hidden;">
       <div style="font-size:9px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:0.16em;margin-bottom:12px;opacity:0.5;">${g.label} · ${g.macros.kcal}</div>
 
       <!-- Macro hierarchy — protein co-lead -->
@@ -7178,7 +7265,7 @@ function renderWeeklyHealthReport(){
 
   el.innerHTML = `
     <div style="margin:12px 16px 0;">
-      <div style="background:#080808;border:1px solid rgba(168,255,60,0.14);border-radius:20px;overflow:hidden;position:relative;">
+      <div style="background:var(--obs);border:1px solid rgba(168,255,60,0.14);border-radius:20px;overflow:hidden;position:relative;">
         <div style="position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(168,255,60,0.18),transparent);"></div>
         <!-- Header -->
         <div style="padding:14px 16px 12px;border-bottom:0.5px solid rgba(168,255,60,0.08);">
@@ -7675,96 +7762,12 @@ function obGoTo(step){
   haptic('light');
 }
 
-function obBack(){ if(obStep>0) obGoTo(obStep-1); }
-
-function obNext(){
-  if(obStep===1){
-    const name = document.getElementById('ob-name')?.value?.trim();
-    const weight = parseFloat(document.getElementById('ob-weight')?.value||0);
-    const height = parseFloat(document.getElementById('ob-height')?.value||0);
-    if(!name){ document.getElementById('ob-name')?.focus(); return; }
-    if(!weight||weight<30){ document.getElementById('ob-weight')?.focus(); return; }
-    if(!height||height<100){ document.getElementById('ob-height')?.focus(); return; }
-    const goal = document.getElementById('ob-goal')?.value||'build';
-    const h = height||170;
-    const age = parseInt(document.getElementById('ob-age')?.value)||25;
-    const sex = document.getElementById('ob-sex')?.value||'male';
-    const activity = document.getElementById('ob-activity')?.value||'moderate';
-    const m = obCalcMacros(weight, goal, h, age, sex, activity);
-    ['ob-kcal','ob-prot','ob-carbs','ob-fat'].forEach((id,i)=>{
-      const el=document.getElementById(id);
-      if(el) el.value=[m.kcal,m.protein,m.carbs,m.fat][i];
-    });
-    obGoTo(2);
-  } else if(obStep===2){
-    // Build summary for slide 3
-    const name = document.getElementById('ob-name')?.value?.trim()||'Athlete';
-    const weight = parseFloat(document.getElementById('ob-weight')?.value||75);
-    const goal = document.getElementById('ob-goal')?.value||'build';
-    const kcal = parseInt(document.getElementById('ob-kcal')?.value||2000);
-    const prot = parseInt(document.getElementById('ob-prot')?.value||150);
-    const goalLabels = {build:'Build Muscle 💪',cut:'Lose Fat 🔥','aggressive-cut':'Aggressive Cut ⚡',maintain:'Maintain ⚖️',strength:'Increase Strength 🏋️',endurance:'Improve Endurance 🏃'};
-    const sumEl = document.getElementById('ob-summary');
-    if(sumEl) sumEl.innerHTML = [
-      ['Name', name],
-      ['Weight', parseFloat(document.getElementById('ob-weight')?.value||75)+'kg · '+parseFloat(document.getElementById('ob-height')?.value||170)+'cm'],
-      ['Activity', document.getElementById('ob-activity')?.options[document.getElementById('ob-activity')?.selectedIndex]?.text?.split('(')[0]?.trim()||'Moderate'],
-      ['Goal', goalLabels[goal]||goal],
-      ['Daily Target', kcal+' kcal · '+prot+'g protein'],
-    ].map(([k,v])=>`
-      <div style="display:flex;justify-content:space-between;align-items:center;padding:7px 0;border-bottom:1px solid rgba(168,255,60,0.1);">
-        <span style="font-size:12px;font-weight:700;color:rgba(168,255,60,0.5);text-transform:uppercase;letter-spacing:0.08em;">${k}</span>
-        <span style="font-size:13px;font-weight:700;color:#f4f4f6;">${v}</span>
-      </div>`).join('');
-    obGoTo(3);
-  } else if(obStep===3){
-    // Save everything and dismiss
-    obFinish();
-  } else {
-    obGoTo(obStep+1);
-  }
-}
-
-function obFinish(){
-  const name = document.getElementById('ob-name')?.value?.trim()||'';
-  const weight = parseFloat(document.getElementById('ob-weight')?.value||75);
-  const height = parseFloat(document.getElementById('ob-height')?.value||170);
-  const age = parseInt(document.getElementById('ob-age')?.value||25);
-  const sex = document.getElementById('ob-sex')?.value||'male';
-  const activity = document.getElementById('ob-activity')?.value||'moderate';
-  const goal = document.getElementById('ob-goal')?.value||'build';
-  const kcal = parseInt(document.getElementById('ob-kcal')?.value||2000);
-  const prot = parseInt(document.getElementById('ob-prot')?.value||150);
-  const carbs = parseInt(document.getElementById('ob-carbs')?.value||200);
-  const fat = parseInt(document.getElementById('ob-fat')?.value||65);
-  const settings = {
-    name, weight, height, age, sex, activity, goal,
-    kcal, protein:prot, carbs, fat, water:8, rest:90, steps:10000
-  };
-  localStorage.setItem('ft_settings', JSON.stringify(settings));
-  localStorage.setItem('ft_onboarded', '1');
-  // Apply globals
-  GK=kcal; GP=prot; GC=carbs; GF=fat; GW=8;
-  // Dismiss onboarding
-  const ob = document.getElementById('onboarding');
-  ob.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
-  ob.style.opacity = '0';
-  ob.style.transform = 'scale(1.04)';
-  setTimeout(()=>{ ob.style.display='none'; }, 500);
-  haptic('heavy');
-  // Update greeting
-  const greet = document.getElementById('hdr-greeting');
-  if(greet&&name) greet.textContent = getGreeting()+', '+name.split(' ')[0].toUpperCase();
-  renderWorkout(); renderNut();
-}
-
 function checkOnboarding(){
   const done = localStorage.getItem('fittrack_v3') || localStorage.getItem('ft_onboarded');
   const ob = document.getElementById('onboarding');
   if(done){
     if(ob) ob.style.display='none';
   } else {
-    // New user — onboarding shown after CTA tap from splash
     if(ob) ob.style.display='none'; // hidden until splash CTA tapped
   }
 }
@@ -8582,9 +8585,9 @@ document.addEventListener('DOMContentLoaded',()=>{
       for(let i=0;i<120;i++){
         pts.push({
           angle:(i/120)*Math.PI*2,
-          speed:0.12+Math.random()*0.22,
+          speed:0.18+Math.random()*0.30,
           phase:Math.random()*Math.PI*2,
-          amp:0.05+Math.random()*0.08,
+          amp:0.10+Math.random()*0.14,
           lag:Math.random()*0.16,
         });
       }
@@ -8598,7 +8601,7 @@ document.addEventListener('DOMContentLoaded',()=>{
 
     function drawBlob(pts,progress,color,time){
       if(progress<=0)return;
-      const maxR=diag*0.58;
+      const maxR=diag*0.72;
       const points=pts.map(p=>{
         const ep=Math.max(0,progress-p.lag);
         const baseR=ep*maxR;
@@ -8620,9 +8623,9 @@ document.addEventListener('DOMContentLoaded',()=>{
       ctx.fill();
     }
 
-    const P1_START=300, P1_DUR=2200;
-    const P2_START=1800, P2_DUR=2000;
-    const CONTENT_AT=3500;
+    const P1_START=300,  P1_DUR=2000;
+    const P2_START=2200, P2_DUR=2400;
+    const CONTENT_AT=3000;
     let startTime=null, contentShown=false;
 
     function showSplashContent(){
@@ -8795,8 +8798,8 @@ const OB_SCREENS = [
     feel:"Your meal suggestions will respect how you eat.",
     type:'diet', key:'dietary', cuisineKey:'cuisine',
     dietary:['No restrictions','Vegetarian','Vegan','Halal','Gluten free','Dairy free','High protein'],
-    cuisine:['East African','West African','South Asian','American','Middle Eastern','European','Japanese'],
-    defaultDiet:['No restrictions'], defaultCuisine:['East African'],
+    cuisine:['American','European','Mediterranean','South Asian','East African','West African','Middle Eastern','Japanese'],
+    defaultDiet:['No restrictions'], defaultCuisine:['American'],
   },
   {
     step:'11 of 14', cat:'Elevate · Skin', q:"Tell us about your skin",
@@ -8904,13 +8907,13 @@ function buildObScreen(sc){
         style="background:${(obData[sc.key]??sc.default)===o.v?'var(--accent-muted)':'var(--surface)'};
         border:0.5px solid ${(obData[sc.key]??sc.default)===o.v?'rgba(168,255,60,0.4)':'var(--border)'};
         border-radius:12px;padding:11px 14px;margin-bottom:6px;display:flex;align-items:center;
-        justify-content:space-between;cursor:pointer;transition:all 0.15s;">
+        justify-content:space-between;cursor:pointer;-webkit-tap-highlight-color:transparent;">
         <div>
-          <div style="font-family:var(--fn);font-size:13px;font-weight:700;
+          <div class="ob-opt-label" style="font-family:var(--fn);font-size:13px;font-weight:700;
             color:${(obData[sc.key]??sc.default)===o.v?'var(--text)':'var(--text2)'};">${o.l}</div>
-          ${o.s?`<div style="font-family:var(--fn);font-size:10px;color:${(obData[sc.key]??sc.default)===o.v?'var(--accent-dim)':'var(--text4)'};margin-top:2px;">${o.s}</div>`:''}
+          ${o.s?`<div class="ob-opt-sub" style="font-family:var(--fn);font-size:10px;color:${(obData[sc.key]??sc.default)===o.v?'var(--accent-dim)':'var(--text4)'};margin-top:2px;">${o.s}</div>`:''}
         </div>
-        <div style="width:8px;height:8px;border-radius:50%;background:${(obData[sc.key]??sc.default)===o.v?'var(--accent)':'var(--border)'};flex-shrink:0;"></div>
+        <div class="ob-opt-dot" style="width:8px;height:8px;border-radius:50%;flex-shrink:0;background:${(obData[sc.key]??sc.default)===o.v?'var(--accent)':'var(--border)'};"></div>
       </div>`).join('');
 
     case 'multi-chip': return `
@@ -8918,10 +8921,12 @@ function buildObScreen(sc){
         ${sc.options.map(o=>{
           const sel=(obData[sc.key]??sc.default);
           const active=sel.includes(o);
-          return `<div onclick="obToggleChip('${sc.key}',${JSON.stringify(o)},this)"
+          const safeVal = o.replace(/'/g,"\\'");
+          return `<div onclick="obToggleSimpleChip('${sc.key}','${safeVal}',this)"
+            data-val="${o.replace(/"/g,'&quot;')}"
             style="padding:7px 14px;border-radius:20px;
             background:${active?'var(--accent-muted)':'var(--surface)'};
-            border:0.5px solid ${active?'rgba(168,255,60,0.4)':'var(--border)'};cursor:pointer;">
+            border:0.5px solid ${active?'rgba(168,255,60,0.4)':'var(--border)'};cursor:pointer;-webkit-tap-highlight-color:transparent;">
             <span style="font-family:var(--fn);font-size:11px;font-weight:700;
               color:${active?'var(--accent)':'var(--text4)'};">${o}</span>
           </div>`;
@@ -8942,25 +8947,24 @@ function buildWheel(sc){
   const cur = obData[sc.key] ?? sc.default;
   const vals = [];
   for(let i=sc.min;i<=sc.max;i++) vals.push(i);
-  const curIdx = vals.indexOf(cur);
-  const visible = vals.slice(Math.max(0,curIdx-2),Math.min(vals.length,curIdx+3));
-  return `<div style="display:flex;flex-direction:column;align-items:center;margin-bottom:12px;">
-    <div style="display:flex;flex-direction:column;align-items:center;gap:0;position:relative;">
-      ${visible.map((v,i)=>{
-        const isActive = v===cur;
-        const dist = Math.abs(i - Math.min(curIdx,2));
-        const op = isActive?1:[0.6,0.35,0.15][dist]||0.1;
-        return `<div onclick="obSetWheel('${sc.key}',${v})" style="
-          font-family:var(--fn);font-size:${isActive?'28px':'16px'};font-weight:${isActive?'800':'600'};
-          color:${isActive?'var(--text)':'var(--text3)'};padding:${isActive?'8px':'4px'} 20px;
-          border-radius:${isActive?'10px':'0'};background:${isActive?'var(--surface)':'transparent'};
-          cursor:pointer;opacity:${op};transition:all 0.15s;">${v}</div>`;
-      }).join('')}
+
+  // Use native select for scrollable behaviour on iOS — styled to look premium
+  return `<div style="display:flex;flex-direction:column;align-items:center;margin-bottom:16px;">
+    <div style="position:relative;width:140px;">
+      <select id="ob-wheel-${sc.key}"
+        onchange="obData['${sc.key}']=parseInt(this.value)"
+        style="width:100%;padding:12px 16px;font-family:var(--fn);font-size:28px;font-weight:800;
+          color:var(--text);background:var(--surface);border:0.5px solid var(--border);
+          border-radius:14px;text-align:center;-webkit-appearance:none;appearance:none;
+          outline:none;cursor:pointer;">
+        ${vals.map(v=>`<option value="${v}" ${v===cur?'selected':''}
+          style="font-size:16px;font-weight:700;">${v}</option>`).join('')}
+      </select>
     </div>
     <div style="font-family:var(--fn);font-size:10px;font-weight:700;color:var(--text4);
       text-transform:uppercase;letter-spacing:0.1em;margin-top:8px;">${sc.unit}</div>
-    ${sc.unitToggle?`<div style="display:flex;background:var(--surface);border-radius:10px;padding:3px;margin-top:10px;">
-      ${sc.unitToggle.map((u,i)=>`<div style="flex:1;padding:6px 12px;border-radius:7px;
+    ${sc.unitToggle?`<div style="display:flex;background:var(--surface);border:0.5px solid var(--border);border-radius:10px;padding:3px;margin-top:10px;">
+      ${sc.unitToggle.map((u,i)=>`<div onclick="obSetUnit('${sc.key}','${u}',this)" data-unit="${u}" style="flex:1;padding:6px 14px;border-radius:7px;
         background:${i===0?'var(--surface2)':'transparent'};text-align:center;cursor:pointer;">
         <span style="font-family:var(--fn);font-size:10px;font-weight:${i===0?'800':'600'};
           color:${i===0?'var(--text)':'var(--text4)'};">${u}</span></div>`).join('')}
@@ -8971,29 +8975,29 @@ function buildWheel(sc){
 function buildDualWheel(sc){
   const cur0 = obData[sc.keys[0]] ?? sc.defaults[0];
   const cur1 = obData[sc.keys[1]] ?? sc.defaults[1];
-  return `<div style="display:flex;gap:12px;margin-bottom:10px;">
-    ${[cur0,cur1].map((cur,ki)=>{
-      const key=sc.keys[ki];
-      const vals=[];for(let i=sc.min;i<=sc.max;i++)vals.push(i);
-      const ci=vals.indexOf(cur);
-      const vis=vals.slice(Math.max(0,ci-1),Math.min(vals.length,ci+2));
-      return `<div style="flex:1;display:flex;flex-direction:column;align-items:center;">
+  const vals = [];
+  for(let i=sc.min;i<=sc.max;i++) vals.push(i);
+
+  return `<div style="display:flex;gap:16px;margin-bottom:12px;align-items:flex-start;">
+    ${[cur0,cur1].map((cur,ki)=>`
+      <div style="flex:1;display:flex;flex-direction:column;align-items:center;">
         <div style="font-family:var(--fn);font-size:9px;font-weight:700;color:var(--text4);
           text-transform:uppercase;letter-spacing:0.1em;margin-bottom:8px;">${sc.labels[ki]}</div>
-        ${vis.map((v,i)=>{
-          const isA=v===cur;
-          return `<div onclick="obSetWheel('${key}',${v})" style="
-            font-family:var(--fn);font-size:${isA?'24px':'14px'};font-weight:${isA?'800':'600'};
-            color:${isA?'var(--text)':'var(--text3)'};padding:${isA?'6px':'3px'} 14px;
-            border-radius:${isA?'8px':'0'};background:${isA?'var(--surface)':'transparent'};
-            cursor:pointer;opacity:${isA?1:0.4};transition:all 0.15s;">${v}</div>`;
-        }).join('')}
+        <div style="position:relative;width:100%;">
+          <select id="ob-wheel-${sc.keys[ki]}"
+            onchange="obData['${sc.keys[ki]}']=parseInt(this.value)"
+            style="width:100%;padding:12px 8px;font-family:var(--fn);font-size:24px;font-weight:800;
+              color:var(--text);background:var(--surface);border:0.5px solid var(--border);
+              border-radius:14px;text-align:center;-webkit-appearance:none;appearance:none;
+              outline:none;cursor:pointer;">
+            ${vals.map(v=>`<option value="${v}" ${v===cur?'selected':''}>${v}</option>`).join('')}
+          </select>
+        </div>
         <div style="font-family:var(--fn);font-size:10px;color:var(--text4);margin-top:6px;">${sc.unit}</div>
-      </div>`;
-    }).join(`<div style="width:0.5px;background:var(--border);align-self:stretch;"></div>`)}
+      </div>`).join(`<div style="width:0.5px;background:var(--border);align-self:stretch;margin-top:24px;"></div>`)}
   </div>
-  <div style="display:flex;background:var(--surface);border-radius:10px;padding:3px;">
-    ${sc.unitToggle.map((u,i)=>`<div style="flex:1;padding:6px;border-radius:7px;
+  <div style="display:flex;background:var(--surface);border:0.5px solid var(--border);border-radius:10px;padding:3px;">
+    ${sc.unitToggle.map((u,i)=>`<div onclick="obSetDualUnit('${sc.keys[0]}','${sc.keys[1]}','${u}',this)" style="flex:1;padding:6px;border-radius:7px;
       background:${i===0?'var(--surface2)':'transparent'};text-align:center;cursor:pointer;">
       <span style="font-family:var(--fn);font-size:10px;font-weight:${i===0?'800':'600'};
         color:${i===0?'var(--text)':'var(--text4)'};">${u}</span></div>`).join('')}
@@ -9004,44 +9008,27 @@ function buildDaysEquipment(sc){
   const curDay = obData[sc.key] ?? sc.defaultDay;
   const curEquip = obData[sc.equipmentKey] ?? sc.defaultEquip;
   return `<div style="margin-bottom:14px;">
-    <div style="font-family:var(--fn);font-size:9px;font-weight:700;color:var(--text4);
-      text-transform:uppercase;letter-spacing:0.1em;margin-bottom:8px;">Days per week</div>
-    <div style="display:flex;gap:6px;">
-      ${sc.days.map(d=>`<div onclick="obData['${sc.key}']=${d};renderObScreen(obIdx)" style="flex:1;padding:10px 0;
-        border-radius:10px;background:${d===curDay?'var(--accent-muted)':'var(--surface)'};
-        border:0.5px solid ${d===curDay?'rgba(168,255,60,0.4)':'var(--border)'};
-        text-align:center;cursor:pointer;">
-        <span style="font-family:var(--fn);font-size:14px;font-weight:800;
-          color:${d===curDay?'var(--accent)':'var(--text3)'};">${d}</span>
-      </div>`).join('')}
+    <div style="font-family:var(--fn);font-size:9px;font-weight:700;color:var(--text4);text-transform:uppercase;letter-spacing:0.1em;margin-bottom:8px;">Days per week</div>
+    <div style="display:flex;gap:6px;" id="ob-days-row">
+      ${sc.days.map(d=>`<div onclick="obSetDay(${d},this)" data-day="${d}" style="flex:1;padding:10px 0;border-radius:10px;background:${d===curDay?'var(--accent-muted)':'var(--surface)'};border:0.5px solid ${d===curDay?'rgba(168,255,60,0.4)':'var(--border)'};text-align:center;cursor:pointer;-webkit-tap-highlight-color:transparent;"><span style="font-family:var(--fn);font-size:14px;font-weight:800;color:${d===curDay?'var(--accent)':'var(--text3)'};">${d}</span></div>`).join('')}
     </div>
   </div>
-  <div style="font-family:var(--fn);font-size:9px;font-weight:700;color:var(--text4);
-    text-transform:uppercase;letter-spacing:0.1em;margin-bottom:8px;">Equipment</div>
-  ${sc.equipment.map(e=>`
-    <div onclick="obData['${sc.equipmentKey}']='${e.v}';renderObScreen(obIdx)" style="
-      background:${curEquip===e.v?'var(--accent-muted)':'var(--surface)'};
-      border:0.5px solid ${curEquip===e.v?'rgba(168,255,60,0.4)':'var(--border)'};
-      border-radius:12px;padding:10px 14px;margin-bottom:6px;display:flex;
-      align-items:center;justify-content:space-between;cursor:pointer;">
-      <div>
-        <div style="font-family:var(--fn);font-size:13px;font-weight:700;
-          color:${curEquip===e.v?'var(--text)':'var(--text2)'};">${e.l}</div>
-        <div style="font-family:var(--fn);font-size:10px;color:${curEquip===e.v?'var(--accent-dim)':'var(--text4)'};margin-top:1px;">${e.s}</div>
-      </div>
-      <div style="width:8px;height:8px;border-radius:50%;background:${curEquip===e.v?'var(--accent)':'var(--border)'};"></div>
-    </div>`).join('')}`;
+  <div style="font-family:var(--fn);font-size:9px;font-weight:700;color:var(--text4);text-transform:uppercase;letter-spacing:0.1em;margin-bottom:8px;">Equipment</div>
+  <div id="ob-equip-list">
+  ${sc.equipment.map(e=>`<div onclick="obSetEquip('${e.v}',this)" data-equip="${e.v}" style="background:${curEquip===e.v?'var(--accent-muted)':'var(--surface)'};border:0.5px solid ${curEquip===e.v?'rgba(168,255,60,0.4)':'var(--border)'};border-radius:12px;padding:10px 14px;margin-bottom:6px;display:flex;align-items:center;justify-content:space-between;cursor:pointer;-webkit-tap-highlight-color:transparent;"><div><div class="ob-opt-label" style="font-family:var(--fn);font-size:13px;font-weight:700;color:${curEquip===e.v?'var(--text)':'var(--text2)'};">${e.l}</div><div class="ob-opt-sub" style="font-family:var(--fn);font-size:10px;color:${curEquip===e.v?'var(--accent-dim)':'var(--text4)'};margin-top:1px;">${e.s}</div></div><div class="ob-opt-dot" style="width:8px;height:8px;border-radius:50%;background:${curEquip===e.v?'var(--accent)':'var(--border)'};"></div></div>`).join('')}
+  </div>`;
 }
 
 function buildDiet(sc){
   const curD = obData[sc.key] ?? sc.defaultDiet;
   const curC = obData[sc.cuisineKey] ?? sc.defaultCuisine;
   return `<div style="margin-bottom:12px;">
-    <div style="display:flex;flex-wrap:wrap;gap:6px;">
+    <div style="display:flex;flex-wrap:wrap;gap:6px;" id="ob-diet-chips">
       ${sc.dietary.map(d=>{
-        const a=curD.includes(d);
-        return `<div onclick="obToggleChip('${sc.key}',${JSON.stringify(d)},this)" style="
-          padding:6px 12px;border-radius:20px;cursor:pointer;
+        const a = curD.includes(d);
+        return `<div onclick="obToggleDiet('${sc.key}','${d.replace(/'/g,"\\'")}',this)"
+          data-val="${d.replace(/"/g,'&quot;')}"
+          style="padding:6px 12px;border-radius:20px;cursor:pointer;-webkit-tap-highlight-color:transparent;
           background:${a?'var(--accent-muted)':'var(--surface)'};
           border:0.5px solid ${a?'rgba(168,255,60,0.4)':'var(--border)'};">
           <span style="font-family:var(--fn);font-size:10px;font-weight:700;
@@ -9052,11 +9039,12 @@ function buildDiet(sc){
   </div>
   <div style="font-family:var(--fn);font-size:9px;font-weight:700;color:var(--text4);
     text-transform:uppercase;letter-spacing:0.1em;margin-bottom:8px;">Preferred cuisine</div>
-  <div style="display:flex;flex-wrap:wrap;gap:6px;">
+  <div style="display:flex;flex-wrap:wrap;gap:6px;" id="ob-cuisine-chips">
     ${sc.cuisine.map(c=>{
-      const a=curC.includes(c);
-      return `<div onclick="obToggleChip('${sc.cuisineKey}',${JSON.stringify(c)},this)" style="
-        padding:6px 12px;border-radius:20px;cursor:pointer;
+      const a = curC.includes(c);
+      return `<div onclick="obToggleDiet('${sc.cuisineKey}','${c.replace(/'/g,"\\'")}',this)"
+        data-val="${c.replace(/"/g,'&quot;')}"
+        style="padding:6px 12px;border-radius:20px;cursor:pointer;-webkit-tap-highlight-color:transparent;
         background:${a?'var(--accent-muted)':'var(--surface)'};
         border:0.5px solid ${a?'rgba(168,255,60,0.4)':'var(--border)'};">
         <span style="font-family:var(--fn);font-size:10px;font-weight:700;
@@ -9071,17 +9059,20 @@ function buildSkin(sc){
   const curConcerns = obData[sc.concernKey] ?? sc.defaultConcerns;
   return `<div style="margin-bottom:12px;">
     ${sc.skinTypes.map(t=>`
-      <div onclick="obData['${sc.skinKey}']='${t.v}';renderObScreen(obIdx)" style="
-        background:${curSkin===t.v?'var(--purple-bg)':'var(--surface)'};
-        border:0.5px solid ${curSkin===t.v?'var(--purple-border)':'var(--border)'};
-        border-radius:12px;padding:10px 14px;margin-bottom:5px;display:flex;
-        align-items:center;justify-content:space-between;cursor:pointer;">
-        <div>
-          <div style="font-family:var(--fn);font-size:13px;font-weight:700;
+      <div onclick="obSetSkinType('${t.v}',this)" data-skin="${t.v}" style="
+        background:${curSkin===t.v?'rgba(187,127,255,0.1)':'var(--surface)'};
+        border:0.5px solid ${curSkin===t.v?'rgba(187,127,255,0.4)':'var(--border)'};
+        border-radius:12px;padding:11px 14px;margin-bottom:6px;display:flex;
+        align-items:center;justify-content:space-between;cursor:pointer;-webkit-tap-highlight-color:transparent;">
+        <div style="flex:1;min-width:0;">
+          <div class="ob-opt-label" style="font-family:var(--fn);font-size:13px;font-weight:700;
             color:${curSkin===t.v?'var(--text)':'var(--text2)'};">${t.l}</div>
-          <div style="font-family:var(--fn);font-size:10px;color:${curSkin===t.v?'var(--purple)':'var(--text4)'};margin-top:1px;">${t.s}</div>
+          <div class="ob-opt-sub" style="font-family:var(--fn);font-size:10px;
+            color:${curSkin===t.v?'#bb7fff':'var(--text4)'};margin-top:2px;
+            white-space:normal;display:block;">${t.s}</div>
         </div>
-        <div style="width:8px;height:8px;border-radius:50%;background:${curSkin===t.v?'var(--purple)':'var(--border)'};"></div>
+        <div class="ob-opt-dot" style="width:9px;height:9px;border-radius:50%;flex-shrink:0;margin-left:10px;
+          background:${curSkin===t.v?'#bb7fff':'var(--border)'};"></div>
       </div>`).join('')}
   </div>
   <div style="font-family:var(--fn);font-size:9px;font-weight:700;color:var(--text4);
@@ -9089,12 +9080,13 @@ function buildSkin(sc){
   <div style="display:flex;flex-wrap:wrap;gap:6px;">
     ${sc.concerns.map(c=>{
       const a=curConcerns.includes(c);
-      return `<div onclick="obToggleChip('${sc.concernKey}',${JSON.stringify(c)},this)" style="
-        padding:6px 12px;border-radius:20px;cursor:pointer;
-        background:${a?'var(--purple-bg)':'var(--surface)'};
-        border:0.5px solid ${a?'var(--purple-border)':'var(--border)'};">
+      const safeVal = c.replace(/'/g,"\\'");
+      return `<div onclick="obToggleSimpleChip('${sc.concernKey}','${safeVal}',this)" data-val="${c.replace(/"/g,'&quot;')}" style="
+        padding:6px 12px;border-radius:20px;cursor:pointer;-webkit-tap-highlight-color:transparent;
+        background:${a?'rgba(187,127,255,0.1)':'var(--surface)'};
+        border:0.5px solid ${a?'rgba(187,127,255,0.4)':'var(--border)'};">
         <span style="font-family:var(--fn);font-size:10px;font-weight:700;
-          color:${a?'var(--purple)':'var(--text4)'};">${c}</span>
+          color:${a?'#bb7fff':'var(--text4)'};">${c}</span>
       </div>`;
     }).join('')}
   </div>`;
@@ -9107,23 +9099,18 @@ function buildMind(sc){
     <div style="font-family:var(--fn);font-size:9px;font-weight:700;color:var(--text4);
       text-transform:uppercase;letter-spacing:0.1em;margin-bottom:8px;">Sleep quality</div>
     ${sc.sleep.map(s=>`
-      <div onclick="obData['${sc.sleepKey}']='${s.v}';renderObScreen(obIdx)" style="
-        background:${curSleep===s.v?'rgba(167,139,250,0.08)':'var(--surface)'};
-        border:0.5px solid ${curSleep===s.v?'rgba(167,139,250,0.3)':'var(--border)'};
-        border-radius:12px;padding:10px 14px;margin-bottom:5px;display:flex;
-        align-items:center;justify-content:space-between;cursor:pointer;">
+      <div onclick="obSetSleep('${s.v}',this)" data-sleep="${s.v}" style="background:${curSleep===s.v?'rgba(167,139,250,0.08)':'var(--surface)'};border:0.5px solid ${curSleep===s.v?'rgba(167,139,250,0.3)':'var(--border)'};border-radius:12px;padding:10px 14px;margin-bottom:5px;display:flex;align-items:center;justify-content:space-between;cursor:pointer;-webkit-tap-highlight-color:transparent;">
         <div>
-          <div style="font-family:var(--fn);font-size:13px;font-weight:700;
-            color:${curSleep===s.v?'var(--text)':'var(--text2)'};">${s.l}</div>
-          <div style="font-family:var(--fn);font-size:10px;color:${curSleep===s.v?'#a78bfa':'var(--text4)'};margin-top:1px;">${s.s}</div>
+          <div class="ob-opt-label" style="font-family:var(--fn);font-size:13px;font-weight:700;color:${curSleep===s.v?'var(--text)':'var(--text2)'};">${s.l}</div>
+          <div class="ob-opt-sub" style="font-family:var(--fn);font-size:10px;color:${curSleep===s.v?'#a78bfa':'var(--text4)'};margin-top:1px;">${s.s}</div>
         </div>
-        <div style="width:8px;height:8px;border-radius:50%;background:${curSleep===s.v?'#a78bfa':'var(--border)'};"></div>
+        <div class="ob-opt-dot" style="width:8px;height:8px;border-radius:50%;background:${curSleep===s.v?'#a78bfa':'var(--border)'};"></div>
       </div>`).join('')}
   </div>
   <div style="font-family:var(--fn);font-size:9px;font-weight:700;color:var(--text4);
     text-transform:uppercase;letter-spacing:0.1em;margin-bottom:8px;">Current stress level</div>
   <div style="display:flex;gap:6px;margin-bottom:6px;">
-    ${[1,2,3,4,5].map(n=>`<div onclick="obData['${sc.stressKey}']=${n};renderObScreen(obIdx)" style="
+    ${[1,2,3,4,5].map(n=>`<div onclick="obSetStress(${n},this)" data-stress="${n}" style="
       flex:1;padding:10px 0;border-radius:10px;text-align:center;cursor:pointer;
       background:${n===curStress?'rgba(167,139,250,0.1)':'var(--surface)'};
       border:0.5px solid ${n===curStress?'rgba(167,139,250,0.35)':'var(--border)'};">
@@ -9140,17 +9127,17 @@ function buildMind(sc){
 function buildNotifications(sc){
   const cur = obData[sc.key] ?? sc.default;
   return sc.options.map(o=>`
-    <div onclick="obToggleChip('${sc.key}',${JSON.stringify(o.v)},this)" style="
+    <div onclick="obToggleSimpleChip('${sc.key}','${o.v}',this)" data-val="${o.v}" style="
       background:${cur.includes(o.v)?'var(--accent-muted)':'var(--surface)'};
       border:0.5px solid ${cur.includes(o.v)?'rgba(168,255,60,0.4)':'var(--border)'};
       border-radius:12px;padding:11px 14px;margin-bottom:6px;display:flex;
-      align-items:center;justify-content:space-between;cursor:pointer;">
+      align-items:center;justify-content:space-between;cursor:pointer;-webkit-tap-highlight-color:transparent;">
       <div>
-        <div style="font-family:var(--fn);font-size:13px;font-weight:700;
+        <div class="ob-opt-label" style="font-family:var(--fn);font-size:13px;font-weight:700;
           color:${cur.includes(o.v)?'var(--text)':'var(--text2)'};">${o.l}</div>
-        <div style="font-family:var(--fn);font-size:10px;color:${cur.includes(o.v)?'var(--accent-dim)':'var(--text4)'};margin-top:1px;">${o.s}</div>
+        <div class="ob-opt-sub" style="font-family:var(--fn);font-size:10px;color:${cur.includes(o.v)?'var(--accent-dim)':'var(--text4)'};margin-top:1px;">${o.s}</div>
       </div>
-      <div style="width:8px;height:8px;border-radius:50%;background:${cur.includes(o.v)?'var(--accent)':'var(--border)'};"></div>
+      <div class="ob-opt-dot" style="width:8px;height:8px;border-radius:50%;background:${cur.includes(o.v)?'var(--accent)':'var(--border)'};"></div>
     </div>`).join('')
   + `<div style="font-family:var(--fn);font-size:10px;color:var(--text4);text-align:center;
       line-height:1.6;margin-top:8px;">You can change this any time in Settings</div>`;
@@ -9159,29 +9146,268 @@ function buildNotifications(sc){
 // ── Interaction helpers ──
 function obSelectOption(key, val, el){
   obData[key] = val;
-  renderObScreen(obIdx);
+  // Surgical update — just restyle all options, no full re-render
+  const parent = el.closest('[id^="ob-screen"]') || el.parentElement;
+  const allOpts = el.parentElement.querySelectorAll('[data-val]');
+  allOpts.forEach(opt=>{
+    const isActive = opt.dataset.val === val;
+    opt.style.background = isActive ? 'var(--accent-muted)' : 'var(--surface)';
+    opt.style.borderColor = isActive ? 'rgba(168,255,60,0.4)' : 'var(--border)';
+    const label = opt.querySelector('.ob-opt-label');
+    const sub = opt.querySelector('.ob-opt-sub');
+    const dot = opt.querySelector('.ob-opt-dot');
+    if(label) label.style.color = isActive ? 'var(--text)' : 'var(--text2)';
+    if(sub) sub.style.color = isActive ? 'var(--accent-dim)' : 'var(--text4)';
+    if(dot) dot.style.background = isActive ? 'var(--accent)' : 'var(--border)';
+  });
+}
+
+function obToggleSimpleChip(key, val, el){
+  if(!obData[key]) obData[key] = [];
+  const arr = obData[key];
+  const i = arr.indexOf(val);
+  const isNowActive = i === -1;
+  if(isNowActive) arr.push(val); else arr.splice(i,1);
+  // Surgical style update
+  el.style.background = isNowActive ? 'var(--accent-muted)' : 'var(--surface)';
+  el.style.borderColor = isNowActive ? 'rgba(168,255,60,0.4)' : 'var(--border)';
+  const span = el.querySelector('span');
+  if(span) span.style.color = isNowActive ? 'var(--accent)' : 'var(--text4)';
+  const dot = el.querySelector('.ob-opt-dot');
+  if(dot) dot.style.background = isNowActive ? 'var(--accent)' : 'var(--border)';
+}
+
+function obToggleDiet(key, val, el){
+  if(!obData[key]) obData[key] = [];
+  const arr = obData[key];
+  const i = arr.indexOf(val);
+  const isNowActive = i === -1;
+  if(isNowActive) arr.push(val); else arr.splice(i,1);
+  el.style.background = isNowActive ? 'var(--accent-muted)' : 'var(--surface)';
+  el.style.borderColor = isNowActive ? 'rgba(168,255,60,0.4)' : 'var(--border)';
+  const span = el.querySelector('span');
+  if(span) span.style.color = isNowActive ? 'var(--accent)' : 'var(--text4)';
 }
 
 function obToggleChip(key, val, el){
-  if(!obData[key]) obData[key] = OB_SCREENS[obIdx].default ? [...OB_SCREENS[obIdx].default] : [];
+  if(!obData[key]){
+    const sc = OB_SCREENS[obIdx];
+    obData[key] = sc.default ? [...sc.default] : [];
+  }
   const arr = obData[key];
   const i = arr.indexOf(val);
-  if(i > -1) arr.splice(i,1); else arr.push(val);
-  renderObScreen(obIdx);
+  const isNowActive = i === -1;
+  if(isNowActive) arr.push(val); else arr.splice(i,1);
+  // Surgical update — just restyle this chip
+  el.style.background = isNowActive ? 'var(--accent-muted)' : 'var(--surface)';
+  el.style.borderColor = isNowActive ? 'rgba(168,255,60,0.4)' : 'var(--border)';
+  const span = el.querySelector('span');
+  if(span) span.style.color = isNowActive ? 'var(--accent)' : 'var(--text4)';
 }
 
 function obSetWheel(key, val){
   obData[key] = val;
-  renderObScreen(obIdx);
+  // Native select handles display
+}
+function obSetUnit(key, unit, el){
+  const sc = OB_SCREENS[obIdx];
+
+  // Update visual toggle state
+  el.parentElement.querySelectorAll('div').forEach(btn=>{
+    const span = btn.querySelector('span');
+    if(!span) return;
+    const isActive = span.textContent.trim() === unit;
+    btn.style.background = isActive ? 'var(--surface2)' : 'transparent';
+    if(span){ span.style.fontWeight = isActive ? '800' : '600'; span.style.color = isActive ? 'var(--text)' : 'var(--text4)'; }
+  });
+
+  // Convert and rebuild select
+  const sel = document.getElementById('ob-wheel-'+key);
+  if(!sel) return;
+
+  let curVal = parseInt(sel.value);
+  let newMin, newMax, newVal;
+
+  if(key === 'height'){
+    if(unit === 'ft / in'){
+      // cm → inches (store as total inches)
+      newVal = Math.round(curVal / 2.54);
+      newMin = 48; newMax = 96;
+      obData[key] = newVal;
+      // Rebuild select
+      sel.innerHTML = '';
+      for(let i=newMin;i<=newMax;i++){
+        const ft=Math.floor(i/12); const ins=i%12;
+        const opt=document.createElement('option');
+        opt.value=i; opt.textContent=`${ft}'${ins}"`;
+        if(i===newVal) opt.selected=true;
+        sel.appendChild(opt);
+      }
+      sel.previousElementSibling && (sel.previousElementSibling.querySelector('span').textContent = `${Math.floor(newVal/12)}'${newVal%12}"`);
+    } else {
+      // inches → cm
+      newVal = Math.round(curVal * 2.54);
+      newMin = 140; newMax = 220;
+      obData[key] = newVal;
+      sel.innerHTML = '';
+      for(let i=newMin;i<=newMax;i++){
+        const opt=document.createElement('option');
+        opt.value=i; opt.textContent=i;
+        if(i===newVal) opt.selected=true;
+        sel.appendChild(opt);
+      }
+    }
+  }
+
+  // Update label
+  const labelEl = sel.parentElement.nextElementSibling;
+  if(labelEl && labelEl.tagName !== 'DIV') return;
+  if(labelEl) labelEl.textContent = unit === 'ft / in' ? 'FT / IN' : 'CM';
 }
 
+function obSetDualUnit(key0, key1, unit, el){
+  // Update visual toggle
+  el.parentElement.querySelectorAll('div').forEach(btn=>{
+    const span = btn.querySelector('span');
+    if(!span) return;
+    const isActive = span.textContent.trim() === unit;
+    btn.style.background = isActive ? 'var(--surface2)' : 'transparent';
+    if(span){ span.style.fontWeight = isActive ? '800' : '600'; span.style.color = isActive ? 'var(--text)' : 'var(--text4)'; }
+  });
+
+  // Convert weight values
+  [key0, key1].forEach(key=>{
+    const sel = document.getElementById('ob-wheel-'+key);
+    if(!sel) return;
+    const curVal = parseInt(sel.value);
+    let newVal, newMin, newMax;
+
+    if(unit === 'lbs'){
+      newVal = Math.round(curVal * 2.20462);
+      newMin = 66; newMax = 440;
+    } else {
+      newVal = Math.round(curVal / 2.20462);
+      newMin = 30; newMax = 200;
+    }
+
+    obData[key] = newVal;
+    sel.innerHTML = '';
+    for(let i=newMin;i<=newMax;i++){
+      const opt=document.createElement('option');
+      opt.value=i; opt.textContent=i;
+      if(i===newVal) opt.selected=true;
+      sel.appendChild(opt);
+    }
+    // Update unit label below select
+    const unitLabel = sel.closest('div').parentElement.querySelector('div:last-child');
+  });
+}
+
+function obSetSkinType(val, el){
+  const sc = OB_SCREENS[obIdx];
+  obData[sc.skinKey] = val;
+  el.closest('[id^="ob-screen"]') || el.parentElement;
+  el.parentElement.querySelectorAll('[data-skin]').forEach(item=>{
+    const isActive = item.dataset.skin === val;
+    item.style.background = isActive ? 'rgba(187,127,255,0.1)' : 'var(--surface)';
+    item.style.borderColor = isActive ? 'rgba(187,127,255,0.4)' : 'var(--border)';
+    const label = item.querySelector('.ob-opt-label');
+    const sub = item.querySelector('.ob-opt-sub');
+    const dot = item.querySelector('.ob-opt-dot');
+    if(label) label.style.color = isActive ? 'var(--text)' : 'var(--text2)';
+    if(sub) sub.style.color = isActive ? '#bb7fff' : 'var(--text4)';
+    if(dot) dot.style.background = isActive ? '#bb7fff' : 'var(--border)';
+  });
+}
+
+function obSetSleep(val, el){
+  const sc = OB_SCREENS[obIdx];
+  obData[sc.sleepKey] = val;
+  el.parentElement.querySelectorAll('[data-sleep]').forEach(item=>{
+    const isActive = item.dataset.sleep === val;
+    item.style.background = isActive ? 'rgba(167,139,250,0.08)' : 'var(--surface)';
+    item.style.borderColor = isActive ? 'rgba(167,139,250,0.3)' : 'var(--border)';
+    const label = item.querySelector('.ob-opt-label');
+    const sub = item.querySelector('.ob-opt-sub');
+    const dot = item.querySelector('.ob-opt-dot');
+    if(label) label.style.color = isActive ? 'var(--text)' : 'var(--text2)';
+    if(sub) sub.style.color = isActive ? '#a78bfa' : 'var(--text4)';
+    if(dot) dot.style.background = isActive ? '#a78bfa' : 'var(--border)';
+  });
+}
+
+function obSetStress(val, el){
+  const sc = OB_SCREENS[obIdx];
+  obData[sc.stressKey] = val;
+  el.parentElement.querySelectorAll('[data-stress]').forEach(item=>{
+    const isActive = parseInt(item.dataset.stress) === val;
+    item.style.background = isActive ? 'rgba(167,139,250,0.1)' : 'var(--surface)';
+    item.style.borderColor = isActive ? 'rgba(167,139,250,0.35)' : 'var(--border)';
+    const span = item.querySelector('span');
+    if(span) span.style.color = isActive ? '#a78bfa' : 'var(--text3)';
+  });
+}
+
+function obSetDay(val, el){
+  const sc = OB_SCREENS[obIdx];
+  obData[sc.key] = val;
+  // Surgical update of day buttons
+  const row = document.getElementById('ob-days-row');
+  if(row) row.querySelectorAll('[data-day]').forEach(btn=>{
+    const isActive = parseInt(btn.dataset.day) === val;
+    btn.style.background = isActive ? 'var(--accent-muted)' : 'var(--surface)';
+    btn.style.borderColor = isActive ? 'rgba(168,255,60,0.4)' : 'var(--border)';
+    const span = btn.querySelector('span');
+    if(span) span.style.color = isActive ? 'var(--accent)' : 'var(--text3)';
+  });
+}
+
+function obSetEquip(val, el){
+  const sc = OB_SCREENS[obIdx];
+  obData[sc.equipmentKey] = val;
+  // Surgical update of equipment items
+  const list = document.getElementById('ob-equip-list');
+  if(list) list.querySelectorAll('[data-equip]').forEach(item=>{
+    const isActive = item.dataset.equip === val;
+    item.style.background = isActive ? 'var(--accent-muted)' : 'var(--surface)';
+    item.style.borderColor = isActive ? 'rgba(168,255,60,0.4)' : 'var(--border)';
+    const label = item.querySelector('.ob-opt-label');
+    const sub = item.querySelector('.ob-opt-sub');
+    const dot = item.querySelector('.ob-opt-dot');
+    if(label) label.style.color = isActive ? 'var(--text)' : 'var(--text2)';
+    if(sub) sub.style.color = isActive ? 'var(--accent-dim)' : 'var(--text4)';
+    if(dot) dot.style.background = isActive ? 'var(--accent)' : 'var(--border)';
+  });
+}
+
+let obSetWheelTimer = null;
+
 function obNext(){
+  // Immediate visual feedback
+  const btn = document.getElementById('ob-next-btn');
+  if(btn){ btn.style.opacity='0.7'; btn.style.transform='scale(0.97)'; setTimeout(()=>{ btn.style.opacity=''; btn.style.transform=''; },150); }
+
   // Collect text input if present
   const input = document.getElementById('ob-input');
   if(input){
     const key = OB_SCREENS[obIdx].key;
     if(key) obData[key] = input.value.trim() || obData[key];
   }
+
+  // Collect native select values (wheels)
+  const sc = OB_SCREENS[obIdx];
+  if(sc.type === 'wheel'){
+    const sel = document.getElementById('ob-wheel-'+sc.key);
+    if(sel) obData[sc.key] = parseInt(sel.value);
+  }
+  if(sc.type === 'dual-wheel'){
+    sc.keys.forEach(k=>{
+      const sel = document.getElementById('ob-wheel-'+k);
+      if(sel) obData[k] = parseInt(sel.value);
+    });
+  }
+
+  haptic('light');
 
   if(obIdx < OB_SCREENS.length - 1){
     renderObScreen(obIdx + 1);
