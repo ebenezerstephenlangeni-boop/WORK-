@@ -86,8 +86,8 @@
 [data-theme="light"] {
   --bg:         #f5f5f7;
   --bg2:        #ebebee;
-  --obs:        #ffffff;
-  --obs-skin:   #f8f0ff;
+  --obs:        #14161a;
+  --obs-skin:   #1a1320;
   --surface:    #ffffff;
   --surface2:   #f8f8fa;
   --surface3:   #efeff2;
@@ -965,6 +965,44 @@ select option { background: var(--surface2); }
 [data-theme="dark"] .volt-hero {
   background: var(--accent);
 }
+
+/* ── NEW VOLT HERO CARD (score ring hero) — themeable ── */
+.volt-hero-card {
+  background: linear-gradient(135deg,#0a0a0a 0%,#0f1a04 100%);
+  border: 0.5px solid rgba(168,255,60,0.18);
+}
+.volt-hero-card .vh-topline { background: linear-gradient(90deg,transparent,rgba(168,255,60,0.3),transparent); }
+.volt-hero-card .vh-score { color: #a8ff3c; }
+.volt-hero-card .vh-score-sub { color: rgba(168,255,60,0.4); }
+.volt-hero-card .vh-eyebrow { color: rgba(168,255,60,0.4); }
+.volt-hero-card .vh-label { color: #a8ff3c; }
+.volt-hero-card .vh-streak-pill { background: rgba(168,255,60,0.1); border: 0.5px solid rgba(168,255,60,0.2); }
+.volt-hero-card .vh-streak-num { color: #a8ff3c; }
+.volt-hero-card .vh-streak-lbl { color: rgba(168,255,60,0.5); }
+.volt-hero-card .vh-share-btn { background: rgba(168,255,60,0.1); border: 0.5px solid rgba(168,255,60,0.25); }
+.volt-hero-card .vh-share-txt { color: #a8ff3c; }
+
+/* Light mode: white card, dark readable text, volt accents kept for the ring/score */
+[data-theme="light"] .volt-hero-card {
+  background: #ffffff;
+  border: 0.5px solid var(--border);
+  box-shadow: var(--sh);
+}
+[data-theme="light"] .volt-hero-card .vh-topline { background: linear-gradient(90deg,transparent,rgba(53,160,0,0.25),transparent); }
+[data-theme="light"] .volt-hero-card .vh-score { color: #2d8a00; }
+[data-theme="light"] .volt-hero-card .vh-score-sub { color: rgba(53,160,0,0.55); }
+[data-theme="light"] .volt-hero-card .vh-eyebrow { color: var(--text3); }
+[data-theme="light"] .volt-hero-card .vh-label { color: var(--text); }
+[data-theme="light"] .volt-hero-card .vh-streak-pill { background: #e0f5d8; border: 0.5px solid rgba(53,160,0,0.25); }
+[data-theme="light"] .volt-hero-card .vh-streak-num { color: #2d8a00; }
+[data-theme="light"] .volt-hero-card .vh-streak-lbl { color: rgba(53,160,0,0.6); }
+[data-theme="light"] .volt-hero-card .vh-share-btn { background: #e0f5d8; border: 0.5px solid rgba(53,160,0,0.3); }
+[data-theme="light"] .volt-hero-card .vh-share-txt { color: #2d8a00; }
+[data-theme="light"] .volt-hero-card .vh-share-btn svg { stroke: #2d8a00; }
+/* Score ring stays volt green in both modes — but tweak track for light */
+[data-theme="light"] .volt-hero-card #score-ring-fill { stroke: #35a000; filter: drop-shadow(0 0 4px rgba(53,160,0,0.4)); }
+[data-theme="light"] .volt-hero-card svg circle:first-of-type { stroke: rgba(53,160,0,0.12); }
+
 /* Entrance overrides the glow pulse momentarily, then it resumes */
 .volt-hero-anim {
   animation: voltHeroIn 0.45s cubic-bezier(0.34,1.56,0.64,1) both 0.08s, voltGlowFlash 0.7s ease both 0.45s !important;
@@ -4436,49 +4474,84 @@ async function aiParseMacros(){
     return;
   }
 
-  const prompt = `You are a nutrition expert. Parse this meal description and return ONLY a JSON object with nutritional data.
+  const prompt = `You are a precise nutrition database. Calculate the TOTAL macros for everything described in this meal.
 
 Meal: "${text}"
 
-Return ONLY valid JSON (no markdown, no explanation):
-{
-  "name": "meal name",
-  "kcal": number,
-  "protein": number,
-  "carbs": number,
-  "fat": number
-}
-
-Use accurate nutritional data. All numbers should be integers.`;
+RULES:
+- If a quantity is given (e.g. "200g chicken", "2 eggs", "1 cup rice"), use it exactly.
+- If NO quantity is given, assume ONE standard serving (e.g. a chicken breast ≈ 150g, a bowl of rice ≈ 180g cooked, an egg ≈ 50g).
+- Sum ALL items together into single totals.
+- Use real USDA-style values. Do not exaggerate.
+- A normal single meal is typically 200–900 kcal. Only exceed this for genuinely large described meals.
+- Return integers only.`;
 
   try {
-    // 8 second timeout — prevents indefinite freeze
+    // 12 second timeout — prevents indefinite freeze
     const controller = new AbortController();
-    const timeout = setTimeout(()=>controller.abort(), 8000);
+    const timeout = setTimeout(()=>controller.abort(), 12000);
 
     const res = await fetch(
       'https://generativelanguage.googleapis.com/v1/models/gemini-2.5-flash:generateContent?key='+key.trim(),
       { method:'POST', headers:{'Content-Type':'application/json'}, signal:controller.signal,
-        body:JSON.stringify({contents:[{parts:[{text:prompt}]}],generationConfig:{temperature:0.1,maxOutputTokens:200}}) }
+        body:JSON.stringify({
+          contents:[{parts:[{text:prompt}]}],
+          generationConfig:{
+            temperature:0.1,
+            maxOutputTokens:300,
+            responseMimeType:'application/json',
+            responseSchema:{
+              type:'OBJECT',
+              properties:{
+                name:{type:'STRING'},
+                kcal:{type:'INTEGER'},
+                protein:{type:'INTEGER'},
+                carbs:{type:'INTEGER'},
+                fat:{type:'INTEGER'}
+              },
+              required:['name','kcal','protein','carbs','fat']
+            }
+          }
+        }) }
     );
     clearTimeout(timeout);
     const data = await res.json();
     if(!res.ok) throw new Error(data?.error?.message||'API error');
-    const raw = data.candidates?.[0]?.content?.parts?.[0]?.text||'';
+
+    // Check the response wasn't blocked or truncated
+    const cand = data.candidates?.[0];
+    const finish = cand?.finishReason;
+    if(finish && finish!=='STOP' && finish!=='MAX_TOKENS'){
+      throw new Error('Response blocked ('+finish+')');
+    }
+    const raw = cand?.content?.parts?.[0]?.text||'';
+    if(!raw) throw new Error('Empty response');
     const clean = raw.replace(/```json|```/g,'').trim();
     const parsed = JSON.parse(clean);
+
+    // ── VALIDATE & CLAMP — never let bad data into the log ──
+    const num = (v)=>{ const n = Math.round(Number(v)); return (isFinite(n) && n>=0) ? n : 0; };
+    let kcal = num(parsed.kcal), p = num(parsed.protein), c = num(parsed.carbs), f = num(parsed.fat);
+    // Sanity: a single meal entry shouldn't exceed 5000 kcal or 500g of any macro
+    kcal = Math.min(kcal, 5000); p = Math.min(p, 500); c = Math.min(c, 800); f = Math.min(f, 400);
+    // Cross-check: if kcal is wildly off from macros, recompute from macros (4/4/9 rule)
+    const calcKcal = p*4 + c*4 + f*9;
+    if(kcal===0 && calcKcal>0) kcal = calcKcal;
+    else if(calcKcal>0 && Math.abs(kcal - calcKcal) > calcKcal*0.4) kcal = calcKcal; // trust macros over stated kcal if >40% off
+
+    const mealName = (parsed.name||text).toString().slice(0,60);
     const setV=(id,v)=>{const el=document.getElementById(id);if(el)el.value=v;};
-    setV('fn', parsed.name||text);
-    setV('fk', parsed.kcal||0);
-    setV('fp', parsed.protein||0);
-    setV('fc', parsed.carbs||0);
-    setV('ff', parsed.fat||0);
-    if(statusEl){ statusEl.textContent=`✓ ${parsed.kcal} kcal · P:${parsed.protein}g C:${parsed.carbs}g F:${parsed.fat}g`; statusEl.style.color='var(--accent)'; }
+    setV('fn', mealName);
+    setV('fk', kcal);
+    setV('fp', p);
+    setV('fc', c);
+    setV('ff', f);
+    if(statusEl){ statusEl.textContent=`✓ ${kcal} kcal · P:${p}g C:${c}g F:${f}g`; statusEl.style.color='var(--accent)'; }
     haptic('success');
   } catch(err){
     // Never freeze — always fallback gracefully
     localParseMacros(text);
-    const msg = err.name==='AbortError' ? 'Timeout — using local database' : 'Using local database (check API key)';
+    const msg = err.name==='AbortError' ? 'Timeout — used local database' : 'Used local database';
     if(statusEl){ statusEl.textContent=msg; statusEl.style.color='var(--text3)'; }
   } finally {
     // Always re-enable button
@@ -4998,39 +5071,60 @@ async function analyseFood(base64ImageData, mimeType='image/jpeg'){
   if(!key) throw new Error('No API key');
 
   const prompt = `You are a professional nutritionist. Look at this food image carefully.
-Respond ONLY with a single valid JSON object. No markdown fences, no explanation text, no preamble. Just the raw JSON.
 
-Identify ALL food items and drinks visible. Estimate total nutrition for the full portion shown.
-
-Required JSON format (all numbers must be integers, no nulls):
-{"name":"Grilled Chicken with Rice and Salad","emoji":"🍗","calories":520,"protein":42,"carbs":48,"fat":11,"description":"Grilled chicken breast approx 150g, white rice approx 200g, mixed salad","confidence":"high"}
+Identify ALL food items and drinks visible. Estimate total nutrition for the full portion shown, using typical serving sizes.
 
 Rules:
-- calories, protein, carbs, fat must be positive integers
+- calories, protein, carbs, fat must be positive integers based on real nutritional values
+- A typical plated meal is 300–900 kcal — only go higher for genuinely large portions
 - confidence must be exactly: high, medium, or low
 - If unsure, give your best estimate and set confidence to low
-- Consider typical serving sizes
-- Account for ALL visible food items`;
+- emoji should be a single food emoji matching the meal
+- Account for ALL visible food items, summed into one total`;
 
-  const response = await fetch(
-    `https://generativelanguage.googleapis.com/v1/models/gemini-2.5-flash:generateContent?key=${key}`,
-    {
-      method: 'POST',
-      headers: {'Content-Type': 'application/json'},
-      body: JSON.stringify({
-        contents: [{
-          parts: [
-            { text: prompt },
-            { inline_data: { mime_type: mimeType, data: base64ImageData } }
-          ]
-        }],
-        generationConfig: {
-          temperature: 0.2,
-          maxOutputTokens: 400
-        }
-      })
-    }
-  );
+  const controller = new AbortController();
+  const timeoutId = setTimeout(()=>controller.abort(), 15000);
+
+  let response;
+  try {
+    response = await fetch(
+      `https://generativelanguage.googleapis.com/v1/models/gemini-2.5-flash:generateContent?key=${key}`,
+      {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        signal: controller.signal,
+        body: JSON.stringify({
+          contents: [{
+            parts: [
+              { text: prompt },
+              { inline_data: { mime_type: mimeType, data: base64ImageData } }
+            ]
+          }],
+          generationConfig: {
+            temperature: 0.2,
+            maxOutputTokens: 500,
+            responseMimeType: 'application/json',
+            responseSchema: {
+              type:'OBJECT',
+              properties:{
+                name:{type:'STRING'},
+                emoji:{type:'STRING'},
+                calories:{type:'INTEGER'},
+                protein:{type:'INTEGER'},
+                carbs:{type:'INTEGER'},
+                fat:{type:'INTEGER'},
+                description:{type:'STRING'},
+                confidence:{type:'STRING'}
+              },
+              required:['name','calories','protein','carbs','fat','confidence']
+            }
+          }
+        })
+      }
+    );
+  } finally {
+    clearTimeout(timeoutId);
+  }
 
   if(!response.ok){
     const errData = await response.json().catch(()=>({}));
@@ -5046,10 +5140,11 @@ Rules:
 
   const data = await response.json();
 
-  // Handle safety blocks
+  // Handle safety blocks and truncation
   const candidate = data.candidates?.[0];
   if(!candidate) throw new Error('No response from AI. Try a clearer photo.');
   if(candidate.finishReason === 'SAFETY') throw new Error('Image blocked by safety filter. Try a different photo.');
+  if(candidate.finishReason === 'MAX_TOKENS') throw new Error('Too many items to read at once. Try photographing one plate.');
 
   const text = candidate.content?.parts?.[0]?.text || '';
   if(!text) throw new Error('Empty response from AI. Try again.');
@@ -5071,15 +5166,23 @@ Rules:
     throw new Error('Could not read AI response. Try again.');
   }
 
-  // Validate and sanitize
+  // Validate, sanitize and clamp to sane ranges
+  const clampN = (v, max)=>{ const n = Math.max(0, parseInt(v)||0); return Math.min(n, max); };
+  let cal = clampN(parsed.calories, 6000);
+  const p = clampN(parsed.protein, 500), c = clampN(parsed.carbs, 800), f = clampN(parsed.fat, 400);
+  // Cross-check kcal against macros; trust macros if stated kcal is way off
+  const calcKcal = p*4 + c*4 + f*9;
+  if(cal===0 && calcKcal>0) cal = calcKcal;
+  else if(calcKcal>0 && Math.abs(cal - calcKcal) > calcKcal*0.4) cal = calcKcal;
+
   return {
-    name: String(parsed.name || 'Food item'),
+    name: String(parsed.name || 'Food item').slice(0,60),
     emoji: String(parsed.emoji || '🍽️'),
-    calories: Math.max(0, parseInt(parsed.calories) || 0),
-    protein: Math.max(0, parseInt(parsed.protein) || 0),
-    carbs: Math.max(0, parseInt(parsed.carbs) || 0),
-    fat: Math.max(0, parseInt(parsed.fat) || 0),
-    description: String(parsed.description || 'AI nutritional estimate'),
+    calories: cal,
+    protein: p,
+    carbs: c,
+    fat: f,
+    description: String(parsed.description || 'AI nutritional estimate').slice(0,120),
     confidence: ['high','medium','low'].includes(parsed.confidence) ? parsed.confidence : 'medium'
   };
 }
@@ -5665,35 +5768,70 @@ async function sendCoachMsg(){
       { role: 'user', parts: [{ text: msg }] }
     ];
 
+    // 20 second timeout so it never hangs forever
+    const controller = new AbortController();
+    const timeout = setTimeout(()=>controller.abort(), 20000);
+
     const res = await fetch(
       `https://generativelanguage.googleapis.com/v1/models/gemini-2.5-flash:generateContent?key=${key}`,
       {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
+        signal: controller.signal,
         body: JSON.stringify({
           contents: primedHistory,
-          generationConfig: { temperature: 0.7, maxOutputTokens: 1000 }
+          generationConfig: { temperature: 0.7, maxOutputTokens: 1400 }
         })
       }
     );
+    clearTimeout(timeout);
     const data = await res.json();
     if(!res.ok){
       const errMsg = data?.error?.message || 'API error '+res.status;
       removeCoachTyping();
-      addCoachMessage('bot', 'Error: ' + errMsg);
+      if(errMsg.includes('API_KEY_INVALID') || errMsg.includes('API key not valid')){
+        addCoachMessage('bot', "Your API key isn't valid anymore. Add a fresh one from aistudio.google.com.");
+      } else if(errMsg.includes('quota') || errMsg.includes('RESOURCE_EXHAUSTED')){
+        addCoachMessage('bot', "You've hit today's free Gemini quota. It resets every 24 hours — try again later.");
+      } else {
+        addCoachMessage('bot', 'Something went wrong: ' + errMsg);
+      }
       return;
     }
-    const reply = data.candidates?.[0]?.content?.parts?.[0]?.text;
+
+    const cand = data.candidates?.[0];
+    const finish = cand?.finishReason;
+    let reply = cand?.content?.parts?.[0]?.text;
+
+    // Handle blocked / empty responses explicitly
     if(!reply){
       removeCoachTyping();
-      addCoachMessage('bot', "No response from Gemini. Check your API key is active at aistudio.google.com");
+      if(finish === 'SAFETY'){
+        addCoachMessage('bot', "I can't answer that one — let's keep it focused on your training, nutrition and recovery. What do you want to work on?");
+      } else if(finish === 'MAX_TOKENS'){
+        addCoachMessage('bot', "That needs a longer answer than I can give in one go. Ask me about one thing at a time and I'll go deep on it.");
+      } else if(data?.promptFeedback?.blockReason){
+        addCoachMessage('bot', "I can't respond to that. Ask me anything about your workouts, food or recovery.");
+      } else {
+        addCoachMessage('bot', "No response came back. Check your API key is active at aistudio.google.com and try again.");
+      }
       return;
     }
+
+    // If it got cut off but we still have partial text, append a soft note
+    if(finish === 'MAX_TOKENS'){
+      reply += '\n\n_(cut off — ask me to continue if you want the rest)_';
+    }
+
     removeCoachTyping();
     addCoachMessage('bot', reply);
   } catch(err){
     removeCoachTyping();
-    addCoachMessage('bot', "Network error — check your internet connection.");
+    if(err.name === 'AbortError'){
+      addCoachMessage('bot', "That took too long — Gemini didn't respond in time. Try again in a moment.");
+    } else {
+      addCoachMessage('bot', "Network error — check your internet connection and try again.");
+    }
     console.error('Coach FT error:', err);
   }
 }
@@ -5757,8 +5895,8 @@ function renderHeroBanner(){
 
   el.innerHTML = `
     <!-- VOLT HERO CARD -->
-    <div style="margin:14px 16px 0;background:linear-gradient(135deg,#0a0a0a 0%,#0f1a04 100%);border:0.5px solid rgba(168,255,60,0.18);border-radius:22px;padding:20px 20px 18px;position:relative;overflow:hidden;" class="metric-anim-1">
-      <div style="position:absolute;top:0;left:0;right:0;height:0.5px;background:linear-gradient(90deg,transparent,rgba(168,255,60,0.3),transparent);"></div>
+    <div class="volt-hero-card metric-anim-1" style="margin:14px 16px 0;border-radius:22px;padding:20px 20px 18px;position:relative;overflow:hidden;">
+      <div class="vh-topline" style="position:absolute;top:0;left:0;right:0;height:0.5px;"></div>
       <div style="display:flex;align-items:center;justify-content:space-between;position:relative;">
         <!-- LEFT: ring -->
         <div style="position:relative;width:110px;height:110px;flex-shrink:0;">
@@ -5772,24 +5910,24 @@ function renderHeroBanner(){
               style="transition:stroke-dashoffset 1s cubic-bezier(0.34,1.2,0.64,1);filter:drop-shadow(0 0 6px rgba(168,255,60,0.5));"/>
           </svg>
           <div style="position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;">
-            <div id="health-score-num" style="font-family:var(--fn);font-size:30px;font-weight:900;color:#a8ff3c;letter-spacing:-1.5px;line-height:1;">0</div>
-            <div style="font-family:var(--fn);font-size:8px;font-weight:700;color:rgba(168,255,60,0.4);text-transform:uppercase;letter-spacing:0.12em;margin-top:2px;">Score</div>
+            <div id="health-score-num" class="vh-score" style="font-family:var(--fn);font-size:30px;font-weight:900;letter-spacing:-1.5px;line-height:1;">0</div>
+            <div class="vh-score-sub" style="font-family:var(--fn);font-size:8px;font-weight:700;text-transform:uppercase;letter-spacing:0.12em;margin-top:2px;">Score</div>
           </div>
         </div>
         <!-- RIGHT: labels + streak + share -->
         <div style="flex:1;padding-left:16px;display:flex;flex-direction:column;gap:6px;">
-          <div style="font-family:var(--fn);font-size:9px;font-weight:700;color:rgba(168,255,60,0.35);text-transform:uppercase;letter-spacing:0.16em;">Daily health score</div>
-          <div style="font-family:var(--fn);font-size:18px;font-weight:800;color:#a8ff3c;letter-spacing:-0.5px;line-height:1;">${scoreLabel}</div>
+          <div class="vh-eyebrow" style="font-family:var(--fn);font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:0.16em;">Daily health score</div>
+          <div class="vh-label" style="font-family:var(--fn);font-size:18px;font-weight:800;letter-spacing:-0.5px;line-height:1;">${scoreLabel}</div>
           <div style="display:flex;align-items:center;gap:6px;margin-top:2px;">
-            <div style="background:rgba(168,255,60,0.1);border:0.5px solid rgba(168,255,60,0.2);border-radius:20px;padding:4px 10px;display:inline-flex;align-items:center;gap:5px;">
+            <div class="vh-streak-pill" style="border-radius:20px;padding:4px 10px;display:inline-flex;align-items:center;gap:5px;">
               <span style="font-size:11px;">🔥</span>
-              <span style="font-family:var(--fn);font-size:12px;font-weight:800;color:#a8ff3c;">${streak}</span>
-              <span style="font-family:var(--fn);font-size:9px;font-weight:600;color:rgba(168,255,60,0.5);text-transform:uppercase;letter-spacing:0.06em;">day streak</span>
+              <span class="vh-streak-num" style="font-family:var(--fn);font-size:12px;font-weight:800;">${streak}</span>
+              <span class="vh-streak-lbl" style="font-family:var(--fn);font-size:9px;font-weight:600;text-transform:uppercase;letter-spacing:0.06em;">day streak</span>
             </div>
           </div>
-          <button onclick="shareWeeklyScore()" style="margin-top:4px;background:rgba(168,255,60,0.1);border:0.5px solid rgba(168,255,60,0.25);border-radius:10px;padding:7px 12px;display:flex;align-items:center;gap:6px;cursor:pointer;width:fit-content;">
+          <button onclick="shareWeeklyScore()" class="vh-share-btn" style="margin-top:4px;border-radius:10px;padding:7px 12px;display:flex;align-items:center;gap:6px;cursor:pointer;width:fit-content;">
             <svg width="12" height="12" fill="none" stroke="#a8ff3c" stroke-width="2" viewBox="0 0 24 24"><path d="M4 12v8a2 2 0 002 2h12a2 2 0 002-2v-8M16 6l-4-4-4 4M12 2v13"/></svg>
-            <span style="font-family:var(--fn);font-size:10px;font-weight:800;color:#a8ff3c;text-transform:uppercase;letter-spacing:0.08em;">Share week</span>
+            <span class="vh-share-txt" style="font-family:var(--fn);font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:0.08em;">Share week</span>
           </button>
         </div>
       </div>
@@ -6344,10 +6482,10 @@ function renderSkinPillar(){
 
     <!-- EVENING ROUTINE — same purple obsidian treatment -->
     <div style="display:flex;align-items:center;justify-content:space-between;margin:0 16px 10px;">
-      <div style="font-family:var(--fn);font-size:9px;font-weight:700;color:#333;text-transform:uppercase;letter-spacing:0.14em;">Evening routine</div>
+      <div style="font-family:var(--fn);font-size:9px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:0.14em;">Evening routine</div>
       <div style="display:flex;align-items:center;gap:8px;">
-        <span style="font-family:var(--fn);font-size:10px;font-weight:700;color:#252525;background:#111;padding:3px 8px;border-radius:6px;border:0.5px solid var(--border);">${eveningDone}/${EV.eveningRoutine.length} done</span>
-        <button onclick="openRoutineEditor('evening')" style="font-family:var(--fn);font-size:10px;font-weight:700;color:#2a2a2a;background:none;border:none;cursor:pointer;">Edit</button>
+        <span style="font-family:var(--fn);font-size:10px;font-weight:700;color:var(--accent);background:var(--accent-muted);padding:3px 8px;border-radius:6px;border:0.5px solid var(--border);">${eveningDone}/${EV.eveningRoutine.length} done</span>
+        <button onclick="openRoutineEditor('evening')" style="font-family:var(--fn);font-size:10px;font-weight:700;color:var(--text3);background:none;border:none;cursor:pointer;">Edit</button>
       </div>
     </div>
     <div style="margin:0 16px 14px;background:var(--obs-skin);border:0.5px solid rgba(224,64,251,0.1);border-radius:14px;overflow:hidden;">
@@ -6396,11 +6534,11 @@ function renderSkinPillar(){
         const highlighted = window._activeConcern && (CONCERN_INGREDIENTS[window._activeConcern]||[]).includes(ing.name);
         return `<div style="padding:12px 14px;${i<arr.length-1?'border-bottom:0.5px solid rgba(224,64,251,0.06);':''}${highlighted?'background:rgba(224,64,251,0.06);':''}">
           <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:4px;">
-            <div style="font-family:var(--fn);font-size:13px;font-weight:700;color:${highlighted?'#e040fb':'#666'};">${ing.name}</div>
-            <div style="font-family:var(--fn);font-size:9px;color:#1e1e1e;background:#111;padding:2px 7px;border-radius:6px;font-weight:700;">${ing.conc}</div>
+            <div style="font-family:var(--fn);font-size:13px;font-weight:700;color:${highlighted?'#e040fb':'var(--text2)'};">${ing.name}</div>
+            <div style="font-family:var(--fn);font-size:9px;color:var(--text3);background:var(--surface2);padding:2px 7px;border-radius:6px;font-weight:700;border:0.5px solid var(--border);">${ing.conc}</div>
           </div>
-          <div style="font-family:var(--fn);font-size:10px;color:#2a2a2a;font-weight:600;margin-bottom:3px;">${ing.type}</div>
-          <div style="font-family:var(--fn);font-size:11px;color:#333;line-height:1.5;">${ing.does}</div>
+          <div style="font-family:var(--fn);font-size:10px;color:var(--text3);font-weight:600;margin-bottom:3px;">${ing.type}</div>
+          <div style="font-family:var(--fn);font-size:11px;color:var(--text2);line-height:1.5;">${ing.does}</div>
         </div>`;
       }).join('')}
     </div>`;
@@ -8287,27 +8425,92 @@ async function analyseOutfit(event){
     const b64 = e.target.result.split(',')[1];
     const mimeType = file.type||'image/jpeg';
     const bodyType = loadElevate().bodyType||'not specified';
-    const prompt = `You are a professional fashion stylist. Analyse this outfit photo honestly and specifically.\n\nUSER: Body type ${bodyType}\n\nGive:\n1. FIT SCORE (1-10): How well items fit the body\n2. COLOUR COORDINATION (1-10): Do colours work together\n3. OVERALL STYLE RATING (1-10): Overall appearance\n4. WHAT WORKS: 2 specific positives\n5. WHAT TO IMPROVE: 2 specific actionable changes\n6. STYLING TIP: One tip to elevate this look right now\n\nBe specific about actual items visible. Honest but encouraging. Max 200 words.`;
+    const prompt = `You are a professional fashion stylist. Look at this outfit photo and analyse it honestly and specifically.
+
+The person's body type is: ${bodyType}.
+
+Score each from 1-10 (integers). Reference ACTUAL items you can see in the photo. Be honest but encouraging. Keep each text field under 40 words.
+
+If the image does not clearly show a person's outfit, set all scores to 0 and put "No outfit detected — try a clear full-body photo" in the styleTip field.`;
     try {
+      const controller = new AbortController();
+      const timeout = setTimeout(()=>controller.abort(), 15000);
+
       const res = await fetch(
         'https://generativelanguage.googleapis.com/v1/models/gemini-2.5-flash:generateContent?key='+key.trim(),
-        { method:'POST', headers:{'Content-Type':'application/json'},
-          body:JSON.stringify({contents:[{parts:[{inline_data:{mime_type:mimeType,data:b64}},{text:prompt}]}],generationConfig:{temperature:0.7,maxOutputTokens:400}}) }
+        { method:'POST', headers:{'Content-Type':'application/json'}, signal:controller.signal,
+          body:JSON.stringify({
+            contents:[{parts:[{inline_data:{mime_type:mimeType,data:b64}},{text:prompt}]}],
+            generationConfig:{
+              temperature:0.6,
+              maxOutputTokens:600,
+              responseMimeType:'application/json',
+              responseSchema:{
+                type:'OBJECT',
+                properties:{
+                  fitScore:{type:'INTEGER'},
+                  colourScore:{type:'INTEGER'},
+                  overallScore:{type:'INTEGER'},
+                  whatWorks:{type:'STRING'},
+                  whatToImprove:{type:'STRING'},
+                  styleTip:{type:'STRING'}
+                },
+                required:['fitScore','colourScore','overallScore','whatWorks','whatToImprove','styleTip']
+              }
+            }
+          }) }
       );
+      clearTimeout(timeout);
       const data = await res.json();
       if(!res.ok) throw new Error(data?.error?.message||'API error');
-      const text = data.candidates?.[0]?.content?.parts?.[0]?.text||'';
+
+      const cand = data.candidates?.[0];
+      const finish = cand?.finishReason;
+      if(finish && finish!=='STOP' && finish!=='MAX_TOKENS'){
+        throw new Error(finish==='SAFETY' ? 'Photo could not be analysed' : 'Analysis blocked');
+      }
+      const raw = cand?.content?.parts?.[0]?.text||'';
+      if(!raw) throw new Error('Empty response — try another photo');
+      const r = JSON.parse(raw.replace(/```json|```/g,'').trim());
+
+      const clamp = (v)=>{ const n=Math.round(Number(v)); return (isFinite(n)&&n>=0&&n<=10)?n:0; };
+      const fit=clamp(r.fitScore), col=clamp(r.colourScore), overall=clamp(r.overallScore);
+
+      // No outfit detected case
+      if(overall===0 && fit===0 && col===0){
+        if(resultEl) resultEl.innerHTML='<div style="background:var(--surface2);border:0.5px solid var(--border);border-radius:12px;padding:14px;font-size:12px;color:var(--text3);text-align:center;">'+(r.styleTip||'No outfit detected — try a clear full-body photo.')+'</div>';
+        return;
+      }
+
+      const sc = overall>=8?'var(--accent)':overall>=6?'var(--gold)':'var(--orange)';
       if(resultEl){
-        const sm = text.match(/OVERALL STYLE RATING[^\d]*(\d+)/i);
-        const score = sm ? parseInt(sm[1]) : null;
-        const sc = score>=8?'var(--accent)':score>=6?'var(--gold)':'var(--orange)';
-        resultEl.innerHTML = `<div style="background:var(--surface2);border: 0.5px solid var(--border);border-radius:12px;overflow:hidden;">
-          ${score?`<div style="background:${sc};padding:8px 14px;text-align:center;"><span style="font-family:var(--fn);font-size:22px;font-weight:900;color:var(--bg);">${score}/10</span><span style="font-size:11px;font-weight:700;color:var(--bg);margin-left:6px;">Overall Style Score</span></div>`:''}
-          <div style="padding:12px 14px;font-size:12px;color:var(--text2);line-height:1.8;white-space:pre-wrap;">${text}</div>
+        resultEl.innerHTML = `<div style="background:var(--surface2);border:0.5px solid var(--border);border-radius:12px;overflow:hidden;">
+          <div style="background:${sc};padding:10px 14px;text-align:center;">
+            <span style="font-family:var(--fn);font-size:24px;font-weight:900;color:var(--bg);">${overall}/10</span>
+            <span style="font-size:11px;font-weight:700;color:var(--bg);margin-left:6px;">Overall Style</span>
+          </div>
+          <div style="display:flex;border-bottom:0.5px solid var(--border);">
+            <div style="flex:1;padding:10px;text-align:center;border-right:0.5px solid var(--border);">
+              <div style="font-family:var(--fn);font-size:18px;font-weight:800;color:var(--text);">${fit}</div>
+              <div style="font-size:9px;font-weight:700;color:var(--text4);text-transform:uppercase;letter-spacing:0.08em;">Fit</div>
+            </div>
+            <div style="flex:1;padding:10px;text-align:center;">
+              <div style="font-family:var(--fn);font-size:18px;font-weight:800;color:var(--text);">${col}</div>
+              <div style="font-size:9px;font-weight:700;color:var(--text4);text-transform:uppercase;letter-spacing:0.08em;">Colour</div>
+            </div>
+          </div>
+          <div style="padding:12px 14px;font-size:12px;line-height:1.7;">
+            <div style="margin-bottom:10px;"><span style="color:var(--accent);font-weight:800;">✓ What works</span><br/><span style="color:var(--text2);">${r.whatWorks||''}</span></div>
+            <div style="margin-bottom:10px;"><span style="color:var(--orange);font-weight:800;">↑ Improve</span><br/><span style="color:var(--text2);">${r.whatToImprove||''}</span></div>
+            <div><span style="color:var(--purple);font-weight:800;">✨ Tip</span><br/><span style="color:var(--text2);">${r.styleTip||''}</span></div>
+          </div>
         </div>`;
       }
       haptic('success');
-    } catch(err){ if(resultEl) resultEl.innerHTML='<div style="color:var(--red);font-size:12px;padding:8px;">Could not analyse: '+err.message+'</div>'; }
+    } catch(err){
+      const m = err.name==='AbortError' ? 'Took too long — try again' : err.message;
+      if(resultEl) resultEl.innerHTML='<div style="color:var(--red);font-size:12px;padding:12px;text-align:center;">Could not analyse: '+m+'</div>';
+    }
   };
   reader.readAsDataURL(file);
 }
@@ -10139,11 +10342,12 @@ function goWithAnim(k, el){
   if(k==='el'){ k='y'; if(!el) el=document.getElementById('tb-y'); setYouTab('elevate'); }
 
   const newIdx = TAB_ORDER.indexOf(k);
+  if(newIdx === -1) return;
   const oldIdx = currentTabIdx;
   const direction = newIdx >= oldIdx ? 1 : -1;
   const sameTab = newIdx === oldIdx;
 
-  // Update tab active state immediately — always
+  // Update tab active state immediately
   document.querySelectorAll('.tb').forEach(b => b.classList.remove('active'));
   if(el) el.classList.add('active');
 
@@ -10154,59 +10358,43 @@ function goWithAnim(k, el){
       setTimeout(()=>ico.classList.remove('tab-bounce'), 320); }
   }
 
-  // Same tab — just re-render, no animation
-  if(sameTab){
-    _triggerRender(k);
-    return;
-  }
+  currentTabIdx = newIdx;
 
-  currentTabIdx = newIdx >= 0 ? newIdx : oldIdx;
+  // Clear any pending animation cleanup
+  if(_slidingTimer){ clearTimeout(_slidingTimer); _slidingTimer = null; }
 
-  // Cancel any in-flight animation immediately — rapid taps always win
-  if(_slidingTimer) clearTimeout(_slidingTimer);
-  // Hard-clear all animation classes on all screens immediately
+  const inEl = document.getElementById(SM[k]);
+  if(!inEl){ return; }
+
+  // Hard reset: hide every screen and strip all animation classes
   Object.values(SM).forEach(id=>{
     const s = document.getElementById(id);
-    if(s){
-      s.classList.remove('screen-slide-in-right','screen-slide-in-left','screen-slide-out-right','screen-slide-out-left');
+    if(!s) return;
+    s.classList.remove('screen-slide-in-right','screen-slide-in-left','screen-slide-out-right','screen-slide-out-left');
+    if(id !== SM[k]){
+      s.classList.add('gone');
+      s.style.display = '';
     }
   });
 
-  _sliding = true;
-  _slidingTimer = setTimeout(()=>{ _sliding=false; }, 240);
-
-  // Find current visible screen
-  const outId = Object.values(SM).find(id => {
-    const s = document.getElementById(id);
-    return s && !s.classList.contains('gone');
-  });
-  const outEl = outId ? document.getElementById(outId) : null;
-  const inEl = document.getElementById(SM[k]);
-  if(!inEl){ _sliding=false; return; }
-
-  // Animate out current screen
-  if(outEl && outEl !== inEl){
-    const outClass = direction === 1 ? 'screen-slide-out-left' : 'screen-slide-out-right';
-    outEl.classList.add(outClass);
-    setTimeout(()=>{
-      outEl.classList.remove(outClass);
-      outEl.classList.add('gone');
-      outEl.style.display = '';
-    }, 140);
-  }
-
-  // Animate in new screen — no stagger, immediate
-  const inClass = direction === 1 ? 'screen-slide-in-right' : 'screen-slide-in-left';
-  Object.values(SM).forEach(id=>{
-    const s = document.getElementById(id);
-    if(s && id !== SM[k]){ s.classList.add('gone'); s.style.display=''; }
-  });
-  inEl.classList.remove('screen-slide-in-right','screen-slide-in-left','gone');
+  // Show target screen
+  inEl.classList.remove('gone');
   inEl.style.display = 'flex';
-  void inEl.offsetWidth; // force reflow
-  inEl.classList.add(inClass);
+
+  // Render its content
   _triggerRender(k);
-  setTimeout(()=>{ inEl.classList.remove(inClass); _sliding=false; }, 200);
+
+  // Same tab — no slide animation needed
+  if(sameTab) return;
+
+  // Animate the new screen in
+  const inClass = direction === 1 ? 'screen-slide-in-right' : 'screen-slide-in-left';
+  void inEl.offsetWidth; // force reflow so animation restarts
+  inEl.classList.add(inClass);
+  _slidingTimer = setTimeout(()=>{
+    inEl.classList.remove(inClass);
+    _slidingTimer = null;
+  }, 220);
 }
 
 function _triggerRender(k){
