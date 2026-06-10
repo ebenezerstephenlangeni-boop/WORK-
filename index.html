@@ -5,14 +5,14 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover"/>
 <meta name="apple-mobile-web-app-capable" content="yes"/>
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
-<meta name="apple-mobile-web-app-title" content="FitVolt"/>
+<meta name="apple-mobile-web-app-title" content="Hone"/>
 <meta name="theme-color" content="#0c0c0e"/>
 <link rel="manifest" href="manifest.json"/>
 <link rel="apple-touch-icon" href="icon-192.png"/>
-<title>FitVolt</title>
+<title>Hone</title>
 <style>
 /* ============================================================
-   FITVOLT — LUXURY ATHLETIC DESIGN SYSTEM
+   HONE — LUXURY ATHLETIC DESIGN SYSTEM
    Dark mode (default) + Light mode toggle
    ============================================================ */
 
@@ -1242,15 +1242,15 @@ html, body {
 /* Tab transitions removed for instant switching */
 
 /* ── SCREEN SLIDE TRANSITIONS ── */
-@keyframes slideInRight  { from { opacity:0; transform:translateX(40px);  } to { opacity:1; transform:translateX(0); } }
-@keyframes slideInLeft   { from { opacity:0; transform:translateX(-40px); } to { opacity:1; transform:translateX(0); } }
-@keyframes slideOutRight { from { opacity:1; transform:translateX(0); } to { opacity:0; transform:translateX(40px);  } }
-@keyframes slideOutLeft  { from { opacity:1; transform:translateX(0); } to { opacity:0; transform:translateX(-40px); } }
+@keyframes slideInRight  { from { opacity:0; transform:translateX(28px);  } to { opacity:1; transform:translateX(0); } }
+@keyframes slideInLeft   { from { opacity:0; transform:translateX(-28px); } to { opacity:1; transform:translateX(0); } }
+@keyframes slideOutRight { from { opacity:1; transform:translateX(0); } to { opacity:0; transform:translateX(28px);  } }
+@keyframes slideOutLeft  { from { opacity:1; transform:translateX(0); } to { opacity:0; transform:translateX(-28px); } }
 
-.screen-slide-in-right  { animation: slideInRight  0.26s cubic-bezier(0.32,0.72,0,1) both; }
-.screen-slide-in-left   { animation: slideInLeft   0.26s cubic-bezier(0.32,0.72,0,1) both; }
-.screen-slide-out-right { animation: slideOutRight 0.22s cubic-bezier(0.32,0.72,0,1) both; pointer-events:none; }
-.screen-slide-out-left  { animation: slideOutLeft  0.22s cubic-bezier(0.32,0.72,0,1) both; pointer-events:none; }
+.screen-slide-in-right  { animation: slideInRight  0.2s cubic-bezier(0.22,1,0.36,1) both; }
+.screen-slide-in-left   { animation: slideInLeft   0.2s cubic-bezier(0.22,1,0.36,1) both; }
+.screen-slide-out-right { animation: slideOutRight 0.14s cubic-bezier(0.4,0,1,1) both; pointer-events:none; }
+.screen-slide-out-left  { animation: slideOutLeft  0.14s cubic-bezier(0.4,0,1,1) both; pointer-events:none; }
 /* ── SCROLL BODY SPACING ── */
 .scroll-body { padding: 12px 16px 100px; }
 
@@ -2272,7 +2272,7 @@ input:focus, select:focus, textarea:focus {
     <div id="splash-track" style="font-family:var(--fn);font-size:12px;font-weight:700;color:var(--text4);letter-spacing:0.32em;text-transform:uppercase;margin-top:8px;opacity:0;transform:translateY(16px);transition:opacity 0.9s ease,transform 0.9s cubic-bezier(0.22,1,0.36,1);">Track</div>
     <div id="splash-transform" style="font-family:var(--fn);font-size:12px;font-weight:700;color:var(--text4);letter-spacing:0.32em;text-transform:uppercase;margin-top:8px;opacity:0;transform:translateY(16px);transition:opacity 0.9s ease,transform 0.9s cubic-bezier(0.22,1,0.36,1);">Transform</div>
     <div id="splash-line" style="height:1px;background:var(--accent);width:0px;margin:18px 0;transition:width 1s cubic-bezier(0.22,1,0.36,1);"></div>
-    <div id="splash-brand" style="font-family:var(--fn);font-size:26px;font-weight:800;color:var(--text);letter-spacing:6px;opacity:0;transform:translateY(12px);transition:opacity 0.9s ease,transform 0.9s cubic-bezier(0.34,1.56,0.64,1);">FITVOLT</div>
+    <div id="splash-brand" style="font-family:var(--fn);font-size:26px;font-weight:800;color:var(--text);letter-spacing:6px;opacity:0;transform:translateY(12px);transition:opacity 0.9s ease,transform 0.9s cubic-bezier(0.34,1.56,0.64,1);">HONE</div>
     <div id="splash-dot" style="width:5px;height:5px;border-radius:50%;background:var(--accent);margin-top:12px;opacity:0;transition:opacity 0.6s ease;"></div>
     <!-- First launch CTA — only shown to new users -->
     <div id="splash-cta" style="margin-top:40px;display:none;flex-direction:column;align-items:center;gap:12px;">
@@ -2863,7 +2863,7 @@ input:focus, select:focus, textarea:focus {
       <!-- About -->
       <div style="margin:16px 16px 0;background:var(--surface);border:0.5px solid var(--border);border-radius:16px;padding:20px;display:flex;flex-direction:column;align-items:center;gap:4px;">
         <div style="font-family:var(--fn);font-size:26px;font-weight:900;color:var(--accent);letter-spacing:-1px;">FT</div>
-        <div style="font-family:var(--fn);font-size:13px;font-weight:800;letter-spacing:0.12em;text-transform:uppercase;color:var(--text2);">FitVolt</div>
+        <div style="font-family:var(--fn);font-size:13px;font-weight:800;letter-spacing:0.12em;text-transform:uppercase;color:var(--text2);">Hone</div>
         <div style="font-family:var(--fn);font-size:11px;color:var(--text4);margin-top:2px;">Version 1.0 · PWA</div>
         <div style="font-family:var(--fn);font-size:11px;color:var(--text4);">Train. Track. Transform.</div>
       </div>
@@ -5517,7 +5517,7 @@ function buildCoachContext(){
 
   const goalFull = {build:'Build Muscle',cut:'Lose Fat / Cut','aggressive-cut':'Aggressive Cut ⚡',maintain:'Maintain / Recomp',strength:'Increase Strength',endurance:'Improve Endurance'}[s.goal]||s.goal||'Build Muscle';
 
-  return `You are Coach FT — the AI personal trainer inside FitVolt. You are direct, knowledgeable, and motivating. You speak like a real experienced coach: no fluff, no generic advice, always specific to this user's actual data.
+  return `You are Coach FT — the AI personal trainer inside Hone. You are direct, knowledgeable, and motivating. You speak like a real experienced coach: no fluff, no generic advice, always specific to this user's actual data.
 
 PERSONALITY:
 - Confident and direct — give the answer, not a disclaimer
@@ -6702,7 +6702,7 @@ function renderLearnPillar(){
       </div>
     </div>
 
-    <div style="font-family:var(--fn);font-size:9px;font-weight:700;color:var(--text4);text-transform:uppercase;letter-spacing:0.14em;margin:0 16px 10px;">The FitVolt philosophy</div>
+    <div style="font-family:var(--fn);font-size:9px;font-weight:700;color:var(--text4);text-transform:uppercase;letter-spacing:0.14em;margin:0 16px 10px;">The Hone philosophy</div>
     <div style="margin:0 16px 80px;">
     ${[
       ['You vs you only','No rankings, no ratings, no comparisons to others. Your only competition is who you were yesterday.'],
@@ -7520,7 +7520,7 @@ function copyGroceryList(){
   const allMealIdxs = [...new Set(days.flatMap(d=>S.mealPlan[d]||[]))];
   const meals = allMealIdxs.map(i=>MEALS_DB[i]).filter(Boolean);
   if(!meals.length){ toast('No meals planned'); return; }
-  const text = 'FitVolt Grocery List\n\n' + meals.flatMap(m=>m.ingredients.split(',').map(i=>'• '+i.trim())).join('\n');
+  const text = 'Hone Grocery List\n\n' + meals.flatMap(m=>m.ingredients.split(',').map(i=>'• '+i.trim())).join('\n');
   if(navigator.clipboard){ navigator.clipboard.writeText(text).then(()=>toast('Copied to clipboard')); }
   else { toast('Copy not supported in this browser'); }
 }
@@ -9158,7 +9158,7 @@ document.addEventListener('DOMContentLoaded',()=>{
 const OB_SCREENS = [
   {
     step:'1 of 14', cat:'Welcome', q:"What should we call you?",
-    feel:"Every morning FitVolt will greet you by name. Make it yours.",
+    feel:"Every morning Hone will greet you by name. Make it yours.",
     type:'text', id:'ob-name', placeholder:'Your name', key:'name',
   },
   {
@@ -9290,6 +9290,11 @@ const OB_SCREENS = [
     default:['morning','workout'],
     isLast:true,
   },
+  {
+    step:'', cat:'', q:'', feel:'',
+    type:'score-reveal',
+    key:'score-reveal',
+  },
 ];
 
 let obIdx = 0;
@@ -9301,31 +9306,201 @@ function renderObScreen(idx){
   const wrap = document.getElementById('ob-screen-wrap');
   if(!wrap) return;
 
+  const total = OB_SCREENS.length;
+  const isScoreReveal = sc.type === 'score-reveal';
+  const isLast = sc.isLast || false;
+
   // Back button visibility
   const backBtn = document.getElementById('ob-back-btn');
   const nextBtn = document.getElementById('ob-next-btn');
   const skipWrap = document.getElementById('ob-skip-wrap');
-  if(backBtn) backBtn.style.display = idx > 0 ? 'block' : 'none';
-  if(nextBtn) nextBtn.textContent = sc.isLast ? "Let's go →" : "Continue →";
-  if(skipWrap) skipWrap.style.display = (idx === 13) ? 'block' : 'none';
+  if(backBtn) backBtn.style.display = (idx > 0 && !isScoreReveal) ? 'block' : 'none';
+  if(nextBtn){
+    nextBtn.style.display = isScoreReveal ? 'none' : 'block';
+    nextBtn.textContent = isLast ? "Show my score →" : "Continue →";
+  }
+  if(skipWrap) skipWrap.style.display = 'none';
+
+  // Score reveal — full custom screen
+  if(isScoreReveal){
+    const name = obData.name || 'you';
+    const baseScore = obCalcBaseScore(obData);
+    const circumference = 289.03;
+    const offset = circumference - (baseScore / 100) * circumference;
+    wrap.innerHTML = `
+    <div style="display:flex;flex-direction:column;align-items:center;justify-content:center;height:100%;padding:40px 28px;text-align:center;">
+      <div style="font-family:var(--fn);font-size:9px;font-weight:700;color:rgba(168,255,60,0.4);text-transform:uppercase;letter-spacing:0.2em;margin-bottom:32px;">Your baseline score</div>
+
+      <!-- Score ring -->
+      <div style="position:relative;width:200px;height:200px;margin-bottom:32px;">
+        <svg width="200" height="200" viewBox="0 0 200 200" style="transform:rotate(-90deg);">
+          <circle cx="100" cy="100" r="84" fill="none" stroke="rgba(168,255,60,0.06)" stroke-width="10"/>
+          <circle id="ob-score-ring" cx="100" cy="100" r="84" fill="none"
+            stroke="#a8ff3c" stroke-width="10" stroke-linecap="round"
+            stroke-dasharray="${circumference * (84/46)}"
+            stroke-dashoffset="${circumference * (84/46)}"
+            style="transition:stroke-dashoffset 1.4s cubic-bezier(0.34,1.1,0.64,1);filter:drop-shadow(0 0 10px rgba(168,255,60,0.6));"/>
+        </svg>
+        <div style="position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;">
+          <div id="ob-score-num" style="font-family:var(--fn);font-size:52px;font-weight:900;color:#a8ff3c;letter-spacing:-3px;line-height:1;">0</div>
+          <div style="font-family:var(--fn);font-size:9px;font-weight:700;color:rgba(168,255,60,0.4);text-transform:uppercase;letter-spacing:0.14em;margin-top:4px;">/ 100</div>
+        </div>
+      </div>
+
+      <div style="font-family:var(--fn);font-size:26px;font-weight:800;color:var(--text);letter-spacing:-0.5px;line-height:1.2;margin-bottom:10px;">
+        Welcome to Hone,<br/><span style="color:#a8ff3c;">${name}.</span>
+      </div>
+      <div style="font-family:var(--fn);font-size:13px;font-weight:500;color:var(--text3);line-height:1.7;margin-bottom:36px;max-width:280px;">
+        Your baseline score is <strong style="color:var(--text);font-weight:800;">${baseScore}</strong>. Every habit you log moves this number. Let's build from here.
+      </div>
+
+      <!-- Pillar preview pills -->
+      <div style="display:flex;gap:8px;flex-wrap:wrap;justify-content:center;margin-bottom:40px;">
+        ${[
+          {l:'Workout',c:'#a8ff3c'},
+          {l:'Nutrition',c:'#ff6b35'},
+          {l:'Sleep',c:'#bb7fff'},
+          {l:'Hydration',c:'#4da8ff'},
+          {l:'Skin',c:'#e040fb'},
+          {l:'Mood',c:'#00e5a0'},
+        ].map(p=>`<div style="padding:5px 12px;border-radius:20px;background:rgba(255,255,255,0.04);border:0.5px solid rgba(255,255,255,0.08);">
+          <span style="font-family:var(--fn);font-size:10px;font-weight:700;color:${p.c};">${p.l}</span>
+        </div>`).join('')}
+      </div>
+
+      <button onclick="obFinish()" style="width:100%;max-width:320px;padding:16px;border-radius:14px;background:var(--accent);border:none;font-family:var(--fn);font-size:15px;font-weight:800;color:#071a00;cursor:pointer;letter-spacing:0.02em;">
+        Enter Hone →
+      </button>
+    </div>`;
+
+    // Animate ring after render
+    setTimeout(()=>{
+      const ring = document.getElementById('ob-score-ring');
+      const numEl = document.getElementById('ob-score-num');
+      if(ring){
+        const c2 = 289.03 * (84/46);
+        const off = c2 - (baseScore / 100) * c2;
+        ring.style.strokeDashoffset = off;
+      }
+      if(numEl && typeof animCountUp === 'function') animCountUp(numEl, 0, baseScore, 1200, 0);
+      else if(numEl) numEl.textContent = baseScore;
+    }, 120);
+
+    // Animate in
+    wrap.style.opacity='0'; wrap.style.transform='scale(0.96)';
+    requestAnimationFrame(()=>{
+      wrap.style.transition='opacity 0.5s ease,transform 0.5s cubic-bezier(0.22,1,0.36,1)';
+      wrap.style.opacity='1'; wrap.style.transform='scale(1)';
+    });
+    return;
+  }
+
+  // ── Premium progress bar ──
+  const progressPct = Math.round(((idx + 1) / (total - 1)) * 100); // -1 to exclude score reveal from count
+  const progressBar = `
+  <div style="padding:calc(var(--safe-top,0px) + 16px) 22px 0;flex-shrink:0;">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;">
+      <div style="font-family:var(--fn);font-size:9px;font-weight:700;color:var(--text4);letter-spacing:0.14em;text-transform:uppercase;">${sc.cat}</div>
+      <div style="font-family:var(--fn);font-size:9px;font-weight:700;color:rgba(168,255,60,0.4);">${idx + 1} / ${total - 1}</div>
+    </div>
+    <div style="height:2px;background:rgba(255,255,255,0.06);border-radius:1px;overflow:hidden;">
+      <div style="height:100%;width:${progressPct}%;background:#a8ff3c;border-radius:1px;transition:width 0.4s cubic-bezier(0.22,1,0.36,1);box-shadow:0 0 6px rgba(168,255,60,0.5);"></div>
+    </div>
+  </div>`;
+
+  // ── Hero icon area ──
+  const heroIcon = obGetHeroIcon(sc);
 
   const html = buildObScreen(sc);
-  wrap.innerHTML = `<div style="padding:calc(var(--safe-top,0px) + 20px) 22px 20px;display:flex;flex-direction:column;height:100%;overflow-y:auto;">
-    <div style="font-family:var(--fn);font-size:10px;font-weight:700;color:var(--text4);letter-spacing:0.1em;margin-bottom:auto;">${sc.step}</div>
-    <div style="flex:1;display:flex;flex-direction:column;justify-content:center;padding:20px 0;">
-      <div style="font-family:var(--fn);font-size:9px;font-weight:700;color:var(--text4);text-transform:uppercase;letter-spacing:0.16em;margin-bottom:8px;">${sc.cat}</div>
-      <div style="font-family:var(--fn);font-size:20px;font-weight:800;color:var(--text);letter-spacing:-0.4px;line-height:1.25;margin-bottom:8px;">${sc.q}</div>
-      <div style="font-family:var(--fn);font-size:12px;font-weight:500;color:var(--text3);line-height:1.6;margin-bottom:20px;">${sc.feel}</div>
+
+  wrap.innerHTML = `
+  ${progressBar}
+  <div style="flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:0 22px 20px;display:flex;flex-direction:column;">
+    <!-- Hero visual -->
+    <div style="display:flex;align-items:center;justify-content:center;padding:24px 0 20px;flex-shrink:0;">
+      ${heroIcon}
+    </div>
+    <!-- Question block -->
+    <div style="flex-shrink:0;margin-bottom:20px;">
+      <div style="font-family:var(--fn);font-size:22px;font-weight:800;color:var(--text);letter-spacing:-0.5px;line-height:1.2;margin-bottom:8px;">${sc.q}</div>
+      <div style="font-family:var(--fn);font-size:13px;font-weight:500;color:var(--text3);line-height:1.6;">${sc.feel}</div>
+    </div>
+    <!-- Input/options -->
+    <div style="flex:1;">
       ${html}
     </div>
   </div>`;
 
   // Animate in
-  wrap.style.opacity='0'; wrap.style.transform='translateX(20px)';
+  wrap.style.opacity='0'; wrap.style.transform='translateX(24px)';
   requestAnimationFrame(()=>{
-    wrap.style.transition='opacity 0.35s ease,transform 0.35s cubic-bezier(0.22,1,0.36,1)';
+    wrap.style.transition='opacity 0.32s ease,transform 0.32s cubic-bezier(0.22,1,0.36,1)';
     wrap.style.opacity='1'; wrap.style.transform='translateX(0)';
   });
+}
+
+// ── Hero icon per screen ──
+function obGetHeroIcon(sc){
+  const icons = {
+    name: `<div style="width:72px;height:72px;border-radius:24px;background:rgba(168,255,60,0.08);border:0.5px solid rgba(168,255,60,0.15);display:flex;align-items:center;justify-content:center;">
+      <svg width="32" height="32" fill="none" stroke="#a8ff3c" stroke-width="1.6" viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+    </div>`,
+    age: `<div style="width:72px;height:72px;border-radius:24px;background:rgba(168,255,60,0.08);border:0.5px solid rgba(168,255,60,0.15);display:flex;align-items:center;justify-content:center;">
+      <svg width="32" height="32" fill="none" stroke="#a8ff3c" stroke-width="1.6" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+    </div>`,
+    sex: `<div style="display:flex;gap:12px;">
+      <div style="width:60px;height:60px;border-radius:20px;background:rgba(77,168,255,0.08);border:0.5px solid rgba(77,168,255,0.2);display:flex;align-items:center;justify-content:center;font-size:24px;">♂</div>
+      <div style="width:60px;height:60px;border-radius:20px;background:rgba(224,64,251,0.08);border:0.5px solid rgba(224,64,251,0.2);display:flex;align-items:center;justify-content:center;font-size:24px;">♀</div>
+    </div>`,
+    height: `<div style="width:72px;height:72px;border-radius:24px;background:rgba(168,255,60,0.08);border:0.5px solid rgba(168,255,60,0.15);display:flex;align-items:center;justify-content:center;">
+      <svg width="32" height="32" fill="none" stroke="#a8ff3c" stroke-width="1.6" viewBox="0 0 24 24"><path d="M8 3v18M16 3v18M8 12h8"/><path d="M8 6h4M8 18h4M16 9h-4M16 15h-4"/></svg>
+    </div>`,
+    weight: `<div style="width:72px;height:72px;border-radius:24px;background:rgba(168,255,60,0.08);border:0.5px solid rgba(168,255,60,0.15);display:flex;align-items:center;justify-content:center;">
+      <svg width="32" height="32" fill="none" stroke="#a8ff3c" stroke-width="1.6" viewBox="0 0 24 24"><path d="M12 3l1.5 3h5.5l-4.5 3.5 1.5 4.5L12 11l-4 3 1.5-4.5L5 6h5.5z"/><path d="M5 20h14"/></svg>
+    </div>`,
+    goal: `<div style="display:flex;gap:8px;">
+      ${[{e:'🎯',c:'#a8ff3c'},{e:'💪',c:'#ff6b35'},{e:'⚡',c:'#bb7fff'}].map(i=>`<div style="width:52px;height:52px;border-radius:16px;background:rgba(255,255,255,0.04);border:0.5px solid rgba(255,255,255,0.08);display:flex;align-items:center;justify-content:center;font-size:22px;">${i.e}</div>`).join('')}
+    </div>`,
+    experience: `<div style="display:flex;gap:6px;align-items:flex-end;">
+      ${[20,32,44,56].map((h,i)=>`<div style="width:14px;height:${h}px;border-radius:4px;background:${i<2?'rgba(168,255,60,0.15)':'rgba(168,255,60,'+(0.4+i*0.2)+')'};">` ).join('')}
+    </div>`,
+    daysPerWeek: `<div style="display:flex;gap:6px;">
+      ${['M','T','W','T','F','S','S'].map((d,i)=>`<div style="width:30px;height:30px;border-radius:8px;background:${i<4?'rgba(168,255,60,0.15)':'rgba(255,255,255,0.04)'};border:0.5px solid ${i<4?'rgba(168,255,60,0.25)':'rgba(255,255,255,0.06)'};display:flex;align-items:center;justify-content:center;"><span style="font-family:var(--fn);font-size:9px;font-weight:700;color:${i<4?'#a8ff3c':'var(--text4)'};">${d}</span></div>`).join('')}
+    </div>`,
+    cardioPrefs: `<div style="width:72px;height:72px;border-radius:24px;background:rgba(255,107,53,0.08);border:0.5px solid rgba(255,107,53,0.2);display:flex;align-items:center;justify-content:center;font-size:32px;">🏃</div>`,
+    dietary: `<div style="display:flex;gap:8px;">${['🥩','🥦','🌾','💧'].map(e=>`<div style="width:48px;height:48px;border-radius:14px;background:rgba(255,255,255,0.04);border:0.5px solid rgba(255,255,255,0.08);display:flex;align-items:center;justify-content:center;font-size:20px;">${e}</div>`).join('')}</div>`,
+    skinType: `<div style="width:72px;height:72px;border-radius:24px;background:rgba(224,64,251,0.08);border:0.5px solid rgba(224,64,251,0.2);display:flex;align-items:center;justify-content:center;">
+      <svg width="32" height="32" fill="none" stroke="#e040fb" stroke-width="1.6" viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/></svg>
+    </div>`,
+    sleepQuality: `<div style="width:72px;height:72px;border-radius:24px;background:rgba(187,127,255,0.08);border:0.5px solid rgba(187,127,255,0.2);display:flex;align-items:center;justify-content:center;font-size:32px;">🌙</div>`,
+    bodyType: `<div style="display:flex;gap:8px;">${['🏋','🤸','🧘'].map(e=>`<div style="width:52px;height:52px;border-radius:16px;background:rgba(255,255,255,0.04);border:0.5px solid rgba(255,255,255,0.06);display:flex;align-items:center;justify-content:center;font-size:22px;">${e}</div>`).join('')}</div>`,
+    notifications: `<div style="width:72px;height:72px;border-radius:24px;background:rgba(168,255,60,0.08);border:0.5px solid rgba(168,255,60,0.15);display:flex;align-items:center;justify-content:center;">
+      <svg width="32" height="32" fill="none" stroke="#a8ff3c" stroke-width="1.6" viewBox="0 0 24 24"><path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 01-3.46 0"/></svg>
+    </div>`,
+  };
+  const key = sc.key || sc.skinKey || sc.sleepKey || 'name';
+  return icons[key] || icons['name'];
+}
+
+// ── Calculate a baseline score from onboarding data ──
+function obCalcBaseScore(d){
+  let score = 20; // baseline everyone starts with
+  // Goal alignment bonus
+  if(d.goal) score += 8;
+  // Activity level
+  if(d.daysPerWeek >= 4) score += 10;
+  else if(d.daysPerWeek >= 2) score += 5;
+  // Sleep quality
+  if(d.sleepQuality === 'good') score += 12;
+  else if(d.sleepQuality === 'average') score += 6;
+  else score += 2;
+  // Stress (inverse)
+  const stress = d.stressLevel || 3;
+  score += Math.max(0, (6 - stress) * 2);
+  // Skin routine intent
+  if(d.skinType) score += 5;
+  // Cap at 55 — they haven't done anything yet
+  return Math.min(55, Math.max(18, score));
 }
 
 function buildObScreen(sc){
@@ -9851,6 +10026,7 @@ function obNext(){
   if(obIdx < OB_SCREENS.length - 1){
     renderObScreen(obIdx + 1);
   } else {
+    // This branch only hits if somehow past all screens — shouldn't happen
     obFinish();
   }
 }
@@ -9967,7 +10143,7 @@ function goWithAnim(k, el){
   const direction = newIdx >= oldIdx ? 1 : -1;
   const sameTab = newIdx === oldIdx;
 
-  // Update tab active state immediately — always, no delay
+  // Update tab active state immediately — always
   document.querySelectorAll('.tb').forEach(b => b.classList.remove('active'));
   if(el) el.classList.add('active');
 
@@ -9975,24 +10151,29 @@ function goWithAnim(k, el){
   if(el){
     const ico = el.querySelector('svg');
     if(ico){ ico.classList.remove('tab-bounce'); void ico.offsetWidth; ico.classList.add('tab-bounce');
-      setTimeout(()=>ico.classList.remove('tab-bounce'), 350); }
+      setTimeout(()=>ico.classList.remove('tab-bounce'), 320); }
   }
 
-  currentTabIdx = newIdx >= 0 ? newIdx : oldIdx;
-
-  // If already sliding or same tab — skip animation, just switch
-  if(sameTab || _sliding){
-    Object.values(SM).forEach(id=>{const s=document.getElementById(id);if(s){s.classList.add('gone');s.style.display='';}});
-    const s=document.getElementById(SM[k]);if(!s)return;
-    s.classList.remove('gone');s.style.display='flex';
+  // Same tab — just re-render, no animation
+  if(sameTab){
     _triggerRender(k);
     return;
   }
 
-  // Hard reset _sliding after max 500ms no matter what
-  _sliding = true;
+  currentTabIdx = newIdx >= 0 ? newIdx : oldIdx;
+
+  // Cancel any in-flight animation immediately — rapid taps always win
   if(_slidingTimer) clearTimeout(_slidingTimer);
-  _slidingTimer = setTimeout(()=>{ _sliding=false; }, 500);
+  // Hard-clear all animation classes on all screens immediately
+  Object.values(SM).forEach(id=>{
+    const s = document.getElementById(id);
+    if(s){
+      s.classList.remove('screen-slide-in-right','screen-slide-in-left','screen-slide-out-right','screen-slide-out-left');
+    }
+  });
+
+  _sliding = true;
+  _slidingTimer = setTimeout(()=>{ _sliding=false; }, 240);
 
   // Find current visible screen
   const outId = Object.values(SM).find(id => {
@@ -10000,38 +10181,32 @@ function goWithAnim(k, el){
     return s && !s.classList.contains('gone');
   });
   const outEl = outId ? document.getElementById(outId) : null;
+  const inEl = document.getElementById(SM[k]);
+  if(!inEl){ _sliding=false; return; }
 
-  // Animate out
-  if(outEl){
+  // Animate out current screen
+  if(outEl && outEl !== inEl){
     const outClass = direction === 1 ? 'screen-slide-out-left' : 'screen-slide-out-right';
     outEl.classList.add(outClass);
     setTimeout(()=>{
       outEl.classList.remove(outClass);
       outEl.classList.add('gone');
       outEl.style.display = '';
-    }, 180);
+    }, 140);
   }
 
-  // Bring in new screen
-  const inEl = document.getElementById(SM[k]);
-  if(!inEl){ _sliding=false; return; }
+  // Animate in new screen — no stagger, immediate
   const inClass = direction === 1 ? 'screen-slide-in-right' : 'screen-slide-in-left';
-
-  setTimeout(()=>{
-    try {
-      Object.values(SM).forEach(id=>{
-        const s=document.getElementById(id);
-        if(s && id !== SM[k]){ s.classList.add('gone'); s.style.display=''; }
-      });
-      inEl.classList.remove('screen-slide-in-right','screen-slide-in-left');
-      inEl.classList.remove('gone');
-      inEl.style.display = 'flex';
-      void inEl.offsetWidth;
-      inEl.classList.add(inClass);
-      _triggerRender(k);
-      setTimeout(()=>{ inEl.classList.remove(inClass); _sliding=false; }, 220);
-    } catch(e){ _sliding=false; }
-  }, outEl ? 50 : 0);
+  Object.values(SM).forEach(id=>{
+    const s = document.getElementById(id);
+    if(s && id !== SM[k]){ s.classList.add('gone'); s.style.display=''; }
+  });
+  inEl.classList.remove('screen-slide-in-right','screen-slide-in-left','gone');
+  inEl.style.display = 'flex';
+  void inEl.offsetWidth; // force reflow
+  inEl.classList.add(inClass);
+  _triggerRender(k);
+  setTimeout(()=>{ inEl.classList.remove(inClass); _sliding=false; }, 200);
 }
 
 function _triggerRender(k){
