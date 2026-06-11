@@ -67,6 +67,12 @@
   --text3:  #555555;
   --text4:  #2a2a2a;
 
+  /* Obsidian-banner internal text (adapts per theme) */
+  --obs-text:    #f4f4f6;
+  --obs-text2:   #f0f0f0;
+  --obs-text-dim:#555555;
+  --obs-text-dim2:#2a2a2a;
+
   /* Shadows */
   --sh:    none;
   --sh-g:  0 4px 24px var(--accent-glow);
@@ -86,8 +92,8 @@
 [data-theme="light"] {
   --bg:         #f5f5f7;
   --bg2:        #ebebee;
-  --obs:        #14161a;
-  --obs-skin:   #1a1320;
+  --obs:        #ffffff;
+  --obs-skin:   #faf4ff;
   --surface:    #ffffff;
   --surface2:   #f8f8fa;
   --surface3:   #efeff2;
@@ -102,6 +108,11 @@
   --text2:  #50505e;
   --text3:  #9090a0;
   --text4:  #c0c0cc;
+  /* Obsidian-banner internal text — dark in light mode for readability */
+  --obs-text:    #0c0c0e;
+  --obs-text2:   #1a1a22;
+  --obs-text-dim:#8a8a98;
+  --obs-text-dim2:#a0a0ac;
   --sh:    0 2px 12px rgba(0,0,0,0.08);
   --sh-g:  0 4px 20px var(--accent-glow);
   /* Pillar backgrounds adapt */
@@ -2505,18 +2516,18 @@ input:focus, select:focus, textarea:focus {
     <div id="nut-track" class="scroll-body" style="padding-top:14px;">
 
       <!-- Obsidian macro banner — contained card -->
-      <div style="margin:0 16px 14px;background:var(--obs);border:0.5px solid rgba(168,255,60,0.12);border-radius:20px;padding:16px 18px 18px;position:relative;overflow:hidden;">
+      <div class="obs-banner" style="margin:0 16px 12px;background:var(--obs);border:0.5px solid rgba(168,255,60,0.12);border-radius:20px;padding:16px 18px 18px;position:relative;overflow:hidden;">
         <div style="position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(168,255,60,0.1),transparent);"></div>
         <div style="font-family:var(--fn);font-size:9px;font-weight:700;color:rgba(168,255,60,0.2);text-transform:uppercase;letter-spacing:0.16em;margin-bottom:12px;" id="nut-track-date">Today</div>
         <!-- Remaining as hero -->
         <div style="display:flex;align-items:flex-end;justify-content:space-between;margin-bottom:14px;">
           <div>
-            <div style="font-family:var(--fn);font-size:36px;font-weight:800;color:#f4f4f6;letter-spacing:-2px;line-height:1;" id="rkcal-remaining">0</div>
+            <div style="font-family:var(--fn);font-size:36px;font-weight:800;color:var(--obs-text);letter-spacing:-2px;line-height:1;" id="rkcal-remaining">0</div>
             <div style="font-family:var(--fn);font-size:9px;font-weight:700;color:rgba(168,255,60,0.4);text-transform:uppercase;letter-spacing:0.1em;margin-top:4px;">kcal remaining</div>
           </div>
           <div style="text-align:right;">
-            <div style="font-family:var(--fn);font-size:14px;font-weight:800;color:#2a2a2a;" id="rkcal">0</div>
-            <div style="font-family:var(--fn);font-size:9px;color:#1e1e1e;margin-top:1px;">eaten · <span id="ring-goal-lbl">2000</span> goal</div>
+            <div style="font-family:var(--fn);font-size:14px;font-weight:800;color:var(--obs-text-dim2);" id="rkcal">0</div>
+            <div style="font-family:var(--fn);font-size:9px;color:var(--obs-text-dim2);margin-top:1px;">eaten · <span id="ring-goal-lbl">2000</span> goal</div>
           </div>
         </div>
         <!-- Progress bar -->
@@ -2526,19 +2537,19 @@ input:focus, select:focus, textarea:focus {
         <!-- Macro row -->
         <div style="display:flex;align-items:flex-end;">
           <div style="flex:1.4;">
-            <div style="font-family:var(--fn);font-size:20px;font-weight:800;color:#f0f0f0;letter-spacing:-0.5px;line-height:1;" id="rp">0<span style="font-size:12px;color:#2a2a2a;font-weight:600;" id="rp-goal"></span></div>
+            <div style="font-family:var(--fn);font-size:20px;font-weight:800;color:var(--obs-text2);letter-spacing:-0.5px;line-height:1;" id="rp">0<span style="font-size:12px;color:var(--obs-text-dim2);font-weight:600;" id="rp-goal"></span></div>
             <div style="font-family:var(--fn);font-size:9px;font-weight:700;color:var(--prot);text-transform:uppercase;letter-spacing:0.1em;margin-top:4px;">Protein</div>
             <div style="margin-top:5px;height:1px;width:44px;background:#161616;border-radius:1px;overflow:hidden;"><div id="nut-prot-bar" style="height:100%;background:var(--prot);opacity:0.45;width:0%;transition:width 0.7s ease;"></div></div>
           </div>
           <div style="width:0.5px;height:28px;background:#1e1e1e;margin:0 12px 4px;"></div>
           <div style="flex:1;">
-            <div style="font-family:var(--fn);font-size:16px;font-weight:800;color:#555;letter-spacing:-0.5px;line-height:1;" id="rc">0</div>
+            <div style="font-family:var(--fn);font-size:16px;font-weight:800;color:var(--obs-text-dim);letter-spacing:-0.5px;line-height:1;" id="rc">0</div>
             <div style="font-family:var(--fn);font-size:9px;font-weight:700;color:var(--carb);text-transform:uppercase;letter-spacing:0.08em;margin-top:4px;">Carbs</div>
             <div style="margin-top:5px;height:1px;width:36px;background:#161616;border-radius:1px;overflow:hidden;"><div id="nut-carb-bar" style="height:100%;background:var(--carb);opacity:0.4;width:0%;transition:width 0.7s ease;"></div></div>
           </div>
           <div style="width:0.5px;height:28px;background:#1e1e1e;margin:0 12px 4px;"></div>
           <div style="flex:1;">
-            <div style="font-family:var(--fn);font-size:16px;font-weight:800;color:#555;letter-spacing:-0.5px;line-height:1;" id="rf">0</div>
+            <div style="font-family:var(--fn);font-size:16px;font-weight:800;color:var(--obs-text-dim);letter-spacing:-0.5px;line-height:1;" id="rf">0</div>
             <div style="font-family:var(--fn);font-size:9px;font-weight:700;color:var(--fat);text-transform:uppercase;letter-spacing:0.08em;margin-top:4px;">Fat</div>
             <div style="margin-top:5px;height:1px;width:36px;background:#161616;border-radius:1px;overflow:hidden;"><div id="nut-fat-bar" style="height:100%;background:var(--fat);opacity:0.4;width:0%;transition:width 0.7s ease;"></div></div>
           </div>
@@ -2663,7 +2674,7 @@ input:focus, select:focus, textarea:focus {
     <div id="prog-view-week" style="flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding-bottom:calc(var(--tab-h) + 20px);">
 
       <!-- Weekly Health Report banner -->
-      <div id="weekly-report" style="margin:14px 16px 0;"></div>
+      <div id="weekly-report" style="margin:12px 16px 0;"></div>
 
       <!-- Streak calendar -->
       <div style="font-family:var(--fn);font-size:9px;font-weight:700;color:var(--text4);text-transform:uppercase;letter-spacing:0.14em;margin:14px 16px 8px;">Training calendar</div>
@@ -2692,7 +2703,7 @@ input:focus, select:focus, textarea:focus {
 
       <!-- Progress photos -->
       <div style="font-family:var(--fn);font-size:9px;font-weight:700;color:var(--text4);text-transform:uppercase;letter-spacing:0.14em;margin:14px 16px 8px;">Progress photos</div>
-      <div style="margin:0 16px 10px;">
+      <div style="margin:0 16px 12px;">
         <button onclick="document.getElementById('photo-input').click()" style="width:100%;padding:11px;border-radius:12px;background:var(--surface);border:0.5px solid var(--border);font-family:var(--fn);font-size:12px;font-weight:700;color:var(--text3);cursor:pointer;margin-bottom:10px;">+ Add progress photo</button>
         <div class="photo-grid" id="photo-grid"></div>
         <input type="file" id="photo-input" accept="image/*" style="display:none;" onchange="handlePhoto(event)"/>
@@ -2704,7 +2715,7 @@ input:focus, select:focus, textarea:focus {
 
       <!-- Weight log -->
       <div style="font-family:var(--fn);font-size:9px;font-weight:700;color:var(--text4);text-transform:uppercase;letter-spacing:0.14em;margin:14px 16px 8px;">Weight log</div>
-      <div style="margin:0 16px 10px;">
+      <div style="margin:0 16px 12px;">
         <button onclick="openWeightModal()" style="width:100%;padding:11px;border-radius:12px;background:var(--surface);border:0.5px solid var(--border);font-family:var(--fn);font-size:12px;font-weight:700;color:var(--text3);cursor:pointer;margin-bottom:10px;">+ Log weight</button>
         <div id="weight-log"></div>
       </div>
@@ -2724,12 +2735,14 @@ input:focus, select:focus, textarea:focus {
   <!-- ELEVATE PANEL -->
   <div id="sel" style="flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;display:flex;flex-direction:column;">
     <!-- Pillar sub-tabs — each pillar has its own colour -->
-    <div style="display:flex;flex-shrink:0;border-bottom:0.5px solid var(--border2);background:var(--bg);" id="elevate-pillar-tabs">
-      <button onclick="setElevatePillar('skin')" id="eptab-skin" style="flex:1;padding:18px 0 12px;text-align:center;font-family:var(--fn);font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.06em;background:none;border:none;cursor:pointer;color:var(--text);position:relative;">Skin<span id="eptab-skin-ind" style="position:absolute;bottom:0;left:50%;transform:translateX(-50%);width:14px;height:1.5px;background:#e040fb;border-radius:1px;display:block;"></span></button>
-      <button onclick="setElevatePillar('mind')" id="eptab-mind" style="flex:1;padding:18px 0 12px;text-align:center;font-family:var(--fn);font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.06em;background:none;border:none;cursor:pointer;color:var(--text4);position:relative;">Mind<span id="eptab-mind-ind" style="position:absolute;bottom:0;left:50%;transform:translateX(-50%);width:14px;height:1.5px;background:#00e5a0;border-radius:1px;display:none;"></span></button>
-      <button onclick="setElevatePillar('body')" id="eptab-body" style="flex:1;padding:18px 0 12px;text-align:center;font-family:var(--fn);font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.06em;background:none;border:none;cursor:pointer;color:var(--text4);position:relative;">Body<span id="eptab-body-ind" style="position:absolute;bottom:0;left:50%;transform:translateX(-50%);width:14px;height:1.5px;background:#ff5722;border-radius:1px;display:none;"></span></button>
-      <button onclick="setElevatePillar('style')" id="eptab-style" style="flex:1;padding:18px 0 12px;text-align:center;font-family:var(--fn);font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.06em;background:none;border:none;cursor:pointer;color:var(--text4);position:relative;">Style<span id="eptab-style-ind" style="position:absolute;bottom:0;left:50%;transform:translateX(-50%);width:14px;height:1.5px;background:#ffea00;border-radius:1px;display:none;"></span></button>
-      <button onclick="setElevatePillar('learn')" id="eptab-learn" style="flex:1;padding:18px 0 12px;text-align:center;font-family:var(--fn);font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.06em;background:none;border:none;cursor:pointer;color:var(--text4);position:relative;">Learn<span id="eptab-learn-ind" style="position:absolute;bottom:0;left:50%;transform:translateX(-50%);width:14px;height:1.5px;background:#00e5ff;border-radius:1px;display:none;"></span></button>
+    <div style="overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none;flex-shrink:0;border-bottom:0.5px solid var(--border2);background:var(--bg);" id="elevate-pillar-tabs">
+      <div style="display:flex;gap:8px;padding:12px 16px;min-width:max-content;">
+        <button onclick="setElevatePillar('skin')" id="eptab-skin" style="padding:8px 18px;border-radius:12px;font-family:var(--fn);font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.06em;background:rgba(224,64,251,0.12);border:0.5px solid rgba(224,64,251,0.3);cursor:pointer;color:#e040fb;white-space:nowrap;">🧴 Skin</button>
+        <button onclick="setElevatePillar('mind')" id="eptab-mind" style="padding:8px 18px;border-radius:12px;font-family:var(--fn);font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.06em;background:var(--surface2);border:0.5px solid var(--border);cursor:pointer;color:var(--text3);white-space:nowrap;">🧠 Mind</button>
+        <button onclick="setElevatePillar('body')" id="eptab-body" style="padding:8px 18px;border-radius:12px;font-family:var(--fn);font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.06em;background:var(--surface2);border:0.5px solid var(--border);cursor:pointer;color:var(--text3);white-space:nowrap;">💪 Body</button>
+        <button onclick="setElevatePillar('style')" id="eptab-style" style="padding:8px 18px;border-radius:12px;font-family:var(--fn);font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.06em;background:var(--surface2);border:0.5px solid var(--border);cursor:pointer;color:var(--text3);white-space:nowrap;">✨ Style</button>
+        <button onclick="setElevatePillar('learn')" id="eptab-learn" style="padding:8px 18px;border-radius:12px;font-family:var(--fn);font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.06em;background:var(--surface2);border:0.5px solid var(--border);cursor:pointer;color:var(--text3);white-space:nowrap;">📖 Learn</button>
+      </div>
     </div>
     <div id="glow-report"></div>
     <div id="elevate-hero"></div>
@@ -3685,7 +3698,21 @@ function renderWorkout(){
       </div>` : '';
     el.innerHTML=`<div class="empty-rich">
       ${todaySummary}
-      <div class="empty-rich-icon">🏋️</div>
+      <div class="empty-rich-icon">
+        <svg width="44" height="44" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <!-- Left plate -->
+          <rect x="6" y="22" width="8" height="20" rx="2" fill="#a8ff3c"/>
+          <rect x="14" y="26" width="4" height="12" rx="1" fill="#a8ff3c"/>
+          <!-- Bar -->
+          <rect x="18" y="30" width="28" height="4" rx="1" fill="#a8ff3c"/>
+          <!-- Right plate -->
+          <rect x="46" y="26" width="4" height="12" rx="1" fill="#a8ff3c"/>
+          <rect x="50" y="22" width="8" height="20" rx="2" fill="#a8ff3c"/>
+          <!-- Inner highlight stripes -->
+          <rect x="8" y="26" width="4" height="12" rx="1" fill="#0a1a00" opacity="0.35"/>
+          <rect x="52" y="26" width="4" height="12" rx="1" fill="#0a1a00" opacity="0.35"/>
+        </svg>
+      </div>
       <div class="empty-rich-title">Today: ${dayFocus}</div>
       <div class="empty-rich-sub">Add exercises below or pick from the suggested exercises dropdown to start building today's session.</div>
       </div>`;
@@ -4112,29 +4139,29 @@ function renderCardio(){
     const weekKcal=weekLog.reduce((a,c)=>a+c.kcal,0);
     const weekSessions=weekLog.length;
     heroEl.innerHTML=`
-      <div style="margin:14px 16px 0;background:var(--obs);border: 0.5px solid rgba(255,107,53,0.16);border-radius:20px;padding:16px 18px 18px;position:relative;overflow:hidden;">
+      <div style="margin:12px 16px 0;background:var(--obs);border: 0.5px solid rgba(255,107,53,0.16);border-radius:20px;padding:16px 18px 18px;position:relative;overflow:hidden;">
         <div style="position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(255,107,53,0.2),transparent);"></div>
         <div style="font-family:var(--fn);font-size:9px;font-weight:700;color:rgba(255,107,53,0.25);text-transform:uppercase;letter-spacing:0.18em;margin-bottom:12px;">Today's burn</div>
         <div style="display:flex;align-items:flex-end;gap:0;margin-bottom:14px;">
           <div style="flex:1.4;">
-            <div style="font-family:var(--fn);font-size:38px;font-weight:800;color:#f4f4f6;letter-spacing:-2px;line-height:1;">${todayKcal}</div>
+            <div style="font-family:var(--fn);font-size:38px;font-weight:800;color:var(--obs-text);letter-spacing:-2px;line-height:1;">${todayKcal}</div>
             <div style="font-family:var(--fn);font-size:9px;font-weight:700;color:var(--orange);text-transform:uppercase;letter-spacing:0.1em;margin-top:4px;">kcal burned</div>
             <div style="margin-top:6px;height:1px;width:44px;background:#161616;border-radius:1px;overflow:hidden;"><div style="height:100%;width:${Math.min(100,todayKcal/5)}%;background:rgba(255,107,53,0.45);border-radius:1px;"></div></div>
           </div>
           <div style="width:0.5px;height:32px;background:rgba(255,107,53,0.1);margin:0 14px 6px;"></div>
           <div style="flex:1;">
-            <div style="font-family:var(--fn);font-size:22px;font-weight:800;color:#555;letter-spacing:-1px;line-height:1;">${todayMins}</div>
-            <div style="font-family:var(--fn);font-size:9px;font-weight:700;color:#2a2a2a;text-transform:uppercase;letter-spacing:0.08em;margin-top:4px;">min active</div>
+            <div style="font-family:var(--fn);font-size:22px;font-weight:800;color:var(--obs-text-dim);letter-spacing:-1px;line-height:1;">${todayMins}</div>
+            <div style="font-family:var(--fn);font-size:9px;font-weight:700;color:var(--obs-text-dim2);text-transform:uppercase;letter-spacing:0.08em;margin-top:4px;">min active</div>
             <div style="margin-top:6px;height:1px;width:36px;background:#161616;border-radius:1px;overflow:hidden;"><div style="height:100%;width:${Math.min(100,todayMins/60*100)}%;background:rgba(255,107,53,0.3);border-radius:1px;"></div></div>
           </div>
           <div style="width:0.5px;height:32px;background:rgba(255,107,53,0.1);margin:0 14px 6px;"></div>
           <div style="flex:1;">
-            <div style="font-family:var(--fn);font-size:22px;font-weight:800;color:#555;letter-spacing:-1px;line-height:1;">${weekKcal}</div>
-            <div style="font-family:var(--fn);font-size:9px;font-weight:700;color:#2a2a2a;text-transform:uppercase;letter-spacing:0.08em;margin-top:4px;">week kcal</div>
+            <div style="font-family:var(--fn);font-size:22px;font-weight:800;color:var(--obs-text-dim);letter-spacing:-1px;line-height:1;">${weekKcal}</div>
+            <div style="font-family:var(--fn);font-size:9px;font-weight:700;color:var(--obs-text-dim2);text-transform:uppercase;letter-spacing:0.08em;margin-top:4px;">week kcal</div>
             <div style="margin-top:6px;height:1px;width:36px;background:#161616;border-radius:1px;overflow:hidden;"><div style="height:100%;width:${Math.min(100,weekKcal/3500*100)}%;background:rgba(255,107,53,0.25);border-radius:1px;"></div></div>
           </div>
         </div>
-        <div style="font-family:var(--fn);font-size:9px;color:#1e1e1e;font-weight:500;">${weekSessions} session${weekSessions!==1?'s':''} this week</div>
+        <div style="font-family:var(--fn);font-size:9px;color:var(--obs-text-dim2);font-weight:500;">${weekSessions} session${weekSessions!==1?'s':''} this week</div>
       </div>`;
   }
   // Activity chips — horizontal scroll, compact
@@ -4168,7 +4195,7 @@ function renderCForm(){
   const isTreadmill=['walk','run','inclinewalk'].includes(ct.id);
   const isIncline=['inclinewalk'].includes(ct.id);
   document.getElementById('cform').innerHTML=`
-    <div style="background:var(--surface);border:0.5px solid var(--border);border-radius:16px;overflow:hidden;margin:14px 16px 0;">
+    <div style="background:var(--surface);border:0.5px solid var(--border);border-radius:16px;overflow:hidden;margin:12px 16px 0;">
       <div style="background:rgba(255,107,53,0.06);padding:12px 14px;border-bottom:0.5px solid var(--border2);display:flex;align-items:center;gap:10px;">
         <div style="width:32px;height:32px;border-radius:9px;background:rgba(255,107,53,0.1);display:flex;align-items:center;justify-content:center;color:#ff6b35;flex-shrink:0;">${getCardioIcon(ct.id)}</div>
         <div>
@@ -4223,12 +4250,12 @@ function renderLive(){
   const kcal=kcalCard(liveType,mins);
   const isLive=liveRun&&!livePause;
   el.innerHTML=`
-    <div style="margin:14px 16px 0;background:var(--obs);border:0.5px solid rgba(255,107,53,${isLive?'0.4':'0.18'});border-radius:18px;padding:16px;position:relative;overflow:hidden;">
+    <div style="margin:12px 16px 0;background:var(--obs);border:0.5px solid rgba(255,107,53,${isLive?'0.4':'0.18'});border-radius:18px;padding:16px;position:relative;overflow:hidden;">
       ${isLive?'<div style="position:absolute;top:0;left:0;right:0;height:1.5px;background:linear-gradient(90deg,transparent,#ff6b35,transparent);animation:scanLine 2s linear infinite;"></div>':''}
       <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;">
         <div style="display:flex;align-items:center;gap:10px;">
           <div style="width:32px;height:32px;border-radius:9px;background:rgba(255,107,53,0.12);display:flex;align-items:center;justify-content:center;color:#ff6b35;">${getCardioIcon(ct.id)}</div>
-          <div style="font-family:var(--fn);font-size:14px;font-weight:800;color:#f4f4f6;">${ct.n}</div>
+          <div style="font-family:var(--fn);font-size:14px;font-weight:800;color:var(--obs-text);">${ct.n}</div>
         </div>
         <div style="font-family:var(--fn);font-size:9px;font-weight:800;color:#ff6b35;text-transform:uppercase;letter-spacing:0.12em;display:flex;align-items:center;gap:5px;">
           ${isLive?'<div style="width:6px;height:6px;border-radius:50%;background:#ff6b35;animation:pulse 1s infinite;"></div>LIVE':livePause?'PAUSED':'DONE'}
@@ -4300,7 +4327,7 @@ function renderCLog(){
           <button onclick="delCardio('${c.id}')" style="background:none;border:none;cursor:pointer;color:var(--text4);padding:4px;flex-shrink:0;"><svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
         </div>`).join('')}
     </div>`
-    :'<div style="padding:32px 16px;text-align:center;"><div style="font-family:var(--fn);font-size:12px;color:var(--text4);">No sessions logged today</div></div>';
+    :'<div class="empty-rich"><div class="empty-rich-icon"><svg width="32" height="32" fill="none" stroke="var(--orange)" stroke-width="1.6" viewBox="0 0 24 24"><circle cx="12" cy="5" r="2"/><path d="M7 21l3-8-2-1-1.5 4M17 21l-3-8 2-1 1.5 4M12 10v4" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div class="empty-rich-title">No cardio yet today</div><div class="empty-rich-sub">Log a run, walk, cycle or swim. Every session counts toward your score.</div></div>';
 }
 function delCardio(id){S.clog=S.clog.filter(c=>c.id!==id);S.hist=S.hist.filter(h=>h.id!==id);save();renderCardio();}
 function renderWeek(){
@@ -4779,15 +4806,15 @@ function renderProgHero(){
       <div style="font-family:var(--fn);font-size:9px;font-weight:700;color:rgba(168,255,60,0.22);text-transform:uppercase;letter-spacing:0.18em;margin-bottom:12px;">Weight trend</div>
       <div style="display:flex;align-items:flex-end;justify-content:space-between;margin-bottom:12px;">
         <div>
-          <div style="font-family:var(--fn);font-size:34px;font-weight:800;color:#f4f4f6;letter-spacing:-2px;line-height:1;">${currentW}<span style="font-size:14px;color:#2a2a2a;font-weight:600;">kg</span></div>
+          <div style="font-family:var(--fn);font-size:34px;font-weight:800;color:var(--obs-text);letter-spacing:-2px;line-height:1;">${currentW}<span style="font-size:14px;color:var(--obs-text-dim2);font-weight:600;">kg</span></div>
           <div style="font-family:var(--fn);font-size:10px;font-weight:700;color:${weightChange!==null&&weightChange<0?'var(--accent)':weightChange!==null&&weightChange>0?'var(--red)':'#2a2a2a'};margin-top:4px;">${weightChange!==null?(weightChange<0?'↓ '+Math.abs(weightChange)+'kg':'↑ '+Math.abs(weightChange)+'kg'):'No data yet'}</div>
         </div>
-        <div style="text-align:right;">${goalW?`<div style="font-family:var(--fn);font-size:12px;font-weight:700;color:#2a2a2a;">Goal: ${goalW}kg</div><div style="font-family:var(--fn);font-size:10px;color:#1e1e1e;margin-top:1px;">${toGo?toGo+'kg to go':'On track'}</div>`:'<div style="font-size:10px;color:#1e1e1e;">Set goal in Settings</div>'}</div>
+        <div style="text-align:right;">${goalW?`<div style="font-family:var(--fn);font-size:12px;font-weight:700;color:var(--obs-text-dim2);">Goal: ${goalW}kg</div><div style="font-family:var(--fn);font-size:10px;color:var(--obs-text-dim2);margin-top:1px;">${toGo?toGo+'kg to go':'On track'}</div>`:'<div style="font-size:10px;color:var(--obs-text-dim2);">Set goal in Settings</div>'}</div>
       </div>
       <div style="display:flex;gap:4px;align-items:flex-end;height:36px;margin-bottom:8px;">
         ${wts.map((w,i)=>{const pct=w>0?Math.max(4,Math.round(((w-minW)/(maxW-minW||1))*32)):2;const isLatest=i===wts.length-1;return`<div style="flex:1;height:${pct}px;border-radius:2px 2px 0 0;background:${isLatest?'rgba(168,255,60,0.5)':'rgba(168,255,60,0.12)'};"></div>`;}).join('')}
       </div>
-      <div style="display:flex;gap:4px;">${wdays.map(d=>{const dt=new Date(d+'T12:00:00');return`<div style="flex:1;font-family:var(--fn);font-size:8px;color:#1e1e1e;text-align:center;">${MS[dt.getMonth()].slice(0,3)}</div>`;}).join('')}</div>
+      <div style="display:flex;gap:4px;">${wdays.map(d=>{const dt=new Date(d+'T12:00:00');return`<div style="flex:1;font-family:var(--fn);font-size:8px;color:var(--obs-text-dim2);text-align:center;">${MS[dt.getMonth()].slice(0,3)}</div>`;}).join('')}</div>
     </div>`;
 }
 
@@ -4843,7 +4870,7 @@ function renderProgressStats(){
 function renderSessionHistory(){
   const el=document.getElementById('hlist');if(!el)return;
   const workouts=S.hist.filter(h=>h.type==='workout').sort((a,b)=>b.date.localeCompare(a.date)).slice(0,8);
-  if(!workouts.length){el.innerHTML='<div style="padding:16px;text-align:center;font-family:var(--fn);font-size:12px;color:var(--text4);">No sessions yet</div>';return;}
+  if(!workouts.length){el.innerHTML='<div class="empty-rich"><div class="empty-rich-icon"><svg width="28" height="28" fill="none" stroke="var(--accent)" stroke-width="1.6" viewBox="0 0 24 24"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg></div><div class="empty-rich-title">No sessions yet</div><div class="empty-rich-sub">Complete a workout or cardio session and it\'ll appear here.</div></div>';return;}
   el.innerHTML=`<div style="background:var(--surface);border:0.5px solid var(--border);border-radius:14px;overflow:hidden;">
     ${workouts.map((h,i)=>{const d=new Date(h.date+'T12:00:00');const isToday=h.date===today();return`<div style="display:flex;align-items:center;gap:10px;padding:10px 14px;${i<workouts.length-1?'border-bottom:0.5px solid var(--border2);':''}"><div style="width:6px;height:6px;border-radius:50%;background:${isToday?'var(--accent)':'rgba(168,255,60,0.2)'};flex-shrink:0;"></div><div style="flex:1;min-width:0;"><div style="font-family:var(--fn);font-size:12px;font-weight:700;color:${isToday?'var(--text)':'var(--text2)'};">${h.title||'Workout'}</div><div style="font-family:var(--fn);font-size:10px;color:var(--text4);margin-top:1px;">${isToday?'Today':DS[d.getDay()]+', '+d.getDate()+' '+MS[d.getMonth()]} · ${h.sets||0} sets</div></div></div>`;}).join('')}
   </div>`;
@@ -5895,7 +5922,7 @@ function renderHeroBanner(){
 
   el.innerHTML = `
     <!-- VOLT HERO CARD -->
-    <div class="volt-hero-card metric-anim-1" style="margin:14px 16px 0;border-radius:22px;padding:20px 20px 18px;position:relative;overflow:hidden;">
+    <div class="volt-hero-card metric-anim-1" style="margin:12px 16px 0;border-radius:22px;padding:20px 20px 18px;position:relative;overflow:hidden;">
       <div class="vh-topline" style="position:absolute;top:0;left:0;right:0;height:0.5px;"></div>
       <div style="display:flex;align-items:center;justify-content:space-between;position:relative;">
         <!-- LEFT: ring -->
@@ -5920,7 +5947,13 @@ function renderHeroBanner(){
           <div class="vh-label" style="font-family:var(--fn);font-size:18px;font-weight:800;letter-spacing:-0.5px;line-height:1;">${scoreLabel}</div>
           <div style="display:flex;align-items:center;gap:6px;margin-top:2px;">
             <div class="vh-streak-pill" style="border-radius:20px;padding:4px 10px;display:inline-flex;align-items:center;gap:5px;">
-              <span style="font-size:11px;">🔥</span>
+              <svg width="11" height="13" viewBox="0 0 16 20" fill="none" xmlns="http://www.w3.org/2000/svg" style="flex-shrink:0;">
+                <path d="M8 1 C 9 4, 12 5, 12 9 C 12 10, 11.5 10.5, 11 10.5 C 10.5 10.5, 10 10, 10 9.2 C 10 8, 9 7, 8 6 C 7 8, 4 10, 4 13.5 C 4 16.5, 5.8 19, 8 19 C 10.2 19, 12 16.5, 12 13.5 C 12 12.8, 11.9 12.2, 11.7 11.7 C 12.6 12.5, 13.5 13.8, 13.5 15.5 C 13.5 17.7, 11 19.8, 8 19.8 C 5 19.8, 2.5 17.7, 2.5 15 C 2.5 9, 7 7, 8 1 Z"
+                  fill="#ff3b30" stroke="#ff3b30" stroke-width="0.4" stroke-linejoin="round"
+                  style="filter:drop-shadow(0 0 3px rgba(255,59,48,0.55));"/>
+                <path d="M8 11 C 8.5 12.5, 9.5 13.2, 9.5 14.5 C 9.5 15.8, 8.8 16.5, 8 16.5 C 7.2 16.5, 6.5 15.8, 6.5 14.5 C 6.5 13.5, 7.4 12.5, 8 11 Z"
+                  fill="#ffd54a" opacity="0.9"/>
+              </svg>
               <span class="vh-streak-num" style="font-family:var(--fn);font-size:12px;font-weight:800;">${streak}</span>
               <span class="vh-streak-lbl" style="font-family:var(--fn);font-size:9px;font-weight:600;text-transform:uppercase;letter-spacing:0.06em;">day streak</span>
             </div>
@@ -5934,7 +5967,7 @@ function renderHeroBanner(){
     </div>
 
     <!-- RECOVERY CARD -->
-    <div style="margin:10px 16px 0;background:var(--surface);border:0.5px solid var(--border);border-radius:16px;padding:14px 16px;" class="metric-anim-2">
+    <div style="margin:12px 16px 0;background:var(--surface);border:0.5px solid var(--border);border-radius:16px;padding:14px 16px;" class="metric-anim-2">
       <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;">
         <div style="display:flex;align-items:center;gap:10px;">
           <div style="width:32px;height:32px;border-radius:10px;background:var(--accent-muted);border:0.5px solid rgba(168,255,60,0.15);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
@@ -5957,6 +5990,24 @@ function renderHeroBanner(){
         </div>
         <div style="font-family:var(--fn);font-size:9px;color:var(--text4);font-weight:600;flex-shrink:0;">Tap to rate</div>
       </div>
+    </div>
+
+    <!-- COACH FT — FEATURED CARD -->
+    <div onclick="openM('coach-modal');initCoach();" class="coach-ft-strip metric-anim-2" style="margin:12px 16px 0;background:linear-gradient(135deg,var(--surface) 0%,rgba(168,255,60,0.04) 100%);border:0.5px solid rgba(168,255,60,0.18);border-radius:16px;padding:13px 14px;display:flex;align-items:center;gap:12px;cursor:pointer;position:relative;overflow:hidden;">
+      <div style="position:absolute;top:0;left:0;right:0;height:0.5px;background:linear-gradient(90deg,transparent,rgba(168,255,60,0.3),transparent);"></div>
+      <div style="width:38px;height:38px;border-radius:11px;background:var(--accent-muted);border:0.5px solid rgba(168,255,60,0.2);display:flex;align-items:center;justify-content:center;flex-shrink:0;position:relative;">
+        <svg width="18" height="18" fill="none" stroke="var(--accent)" stroke-width="1.8" viewBox="0 0 24 24" style="filter:drop-shadow(0 0 4px rgba(168,255,60,0.5));"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>
+        <!-- Online dot -->
+        <div style="position:absolute;bottom:-2px;right:-2px;width:10px;height:10px;border-radius:50%;background:var(--accent);border:2px solid var(--bg);box-shadow:0 0 4px rgba(168,255,60,0.6);"></div>
+      </div>
+      <div style="flex:1;min-width:0;">
+        <div style="display:flex;align-items:center;gap:6px;">
+          <div style="font-family:var(--fn);font-size:13px;font-weight:800;color:var(--text);letter-spacing:-0.2px;">Coach FT</div>
+          <div style="font-family:var(--fn);font-size:8px;font-weight:700;color:var(--accent);background:var(--accent-muted);border:0.5px solid rgba(168,255,60,0.2);padding:1px 6px;border-radius:8px;letter-spacing:0.06em;text-transform:uppercase;">Online</div>
+        </div>
+        <div style="font-family:var(--fn);font-size:11px;color:var(--text3);margin-top:2px;line-height:1.4;">Ask me anything about your training or nutrition</div>
+      </div>
+      <svg width="14" height="14" fill="none" stroke="var(--accent)" stroke-width="2" viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg>
     </div>
 
     <!-- 2×2 METRIC CARDS -->
@@ -5996,20 +6047,8 @@ function renderHeroBanner(){
     </div>
 
     <!-- WORKOUT CARD -->
-    <div class="workout-card-anim" style="margin:10px 16px 0;">
+    <div class="workout-card-anim" style="margin:12px 16px 0;">
       ${renderWorkoutHomeCard()}
-    </div>
-
-    <!-- COACH FT STRIP -->
-    <div onclick="openM('coach-modal');initCoach();" class="coach-ft-strip" style="margin:10px 16px 0;background:var(--surface);border:0.5px solid var(--border);border-radius:14px;padding:12px 14px;display:flex;align-items:center;gap:10px;cursor:pointer;">
-      <div style="width:30px;height:30px;border-radius:9px;background:var(--accent-muted);border:0.5px solid rgba(168,255,60,0.15);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
-        <svg width="14" height="14" fill="none" stroke="var(--accent)" stroke-width="1.8" viewBox="0 0 24 24"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>
-      </div>
-      <div style="flex:1;min-width:0;">
-        <div style="font-family:var(--fn);font-size:12px;font-weight:700;color:var(--text);">Coach FT</div>
-        <div style="font-family:var(--fn);font-size:10px;color:var(--text4);margin-top:1px;">Ask me anything about your training or nutrition</div>
-      </div>
-      <svg width="13" height="13" fill="none" stroke="var(--text4)" stroke-width="2" viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg>
     </div>
   `;
 
@@ -6373,12 +6412,16 @@ function prevElevateEdu(pillar){
 function setElevatePillar(id){
   EV.activePillar = id;
   saveElevate(EV);
-  // Update tab indicators
+  // Update pill tab styles
+  const colors = {skin:'224,64,251',mind:'0,229,160',body:'255,87,34',style:'255,234,0',learn:'0,229,255'};
+  const hexes = {skin:'#e040fb',mind:'#00e5a0',body:'#ff5722',style:'#ffea00',learn:'#00e5ff'};
   ['skin','mind','body','style','learn'].forEach(p=>{
     const btn = document.getElementById('eptab-'+p);
-    const ind = document.getElementById('eptab-'+p+'-ind');
-    if(btn) btn.style.color = p===id ? 'var(--text)' : 'var(--text4)';
-    if(ind) ind.style.display = p===id ? 'block' : 'none';
+    if(!btn) return;
+    const active = p===id;
+    btn.style.background = active ? `rgba(${colors[p]},0.12)` : 'var(--surface2)';
+    btn.style.borderColor = active ? `rgba(${colors[p]},0.3)` : 'var(--border)';
+    btn.style.color = active ? hexes[p] : 'var(--text3)';
   });
   renderElevateContent();
   haptic('light');
@@ -6389,12 +6432,16 @@ function renderElevateContent(){
   if(!el) return;
   const p = EV.activePillar || 'skin';
   EV.activePillar = p;
-  // Sync tab indicators
+  // Sync pill tab styles
+  const colors = {skin:'224,64,251',mind:'0,229,160',body:'255,87,34',style:'255,234,0',learn:'0,229,255'};
+  const hexes = {skin:'#e040fb',mind:'#00e5a0',body:'#ff5722',style:'#ffea00',learn:'#00e5ff'};
   ['skin','mind','body','style','learn'].forEach(pid=>{
     const btn = document.getElementById('eptab-'+pid);
-    const ind = document.getElementById('eptab-'+pid+'-ind');
-    if(btn) btn.style.color = pid===p ? 'var(--text)' : 'var(--text4)';
-    if(ind) ind.style.display = pid===p ? 'block' : 'none';
+    if(!btn) return;
+    const active = pid===p;
+    btn.style.background = active ? `rgba(${colors[pid]},0.12)` : 'var(--surface2)';
+    btn.style.borderColor = active ? `rgba(${colors[pid]},0.3)` : 'var(--border)';
+    btn.style.color = active ? hexes[pid] : 'var(--text3)';
   });
   if(p==='skin') el.innerHTML = renderSkinPillar();
   else if(p==='mind') el.innerHTML = renderMindPillar();
@@ -6418,17 +6465,17 @@ function renderSkinPillar(){
 
   return `
     <!-- GLOW SCORE BANNER — obsidian, purple border -->
-    <div style="margin:14px 16px 0;background:var(--obs-skin);border: 0.5px solid rgba(224,64,251,0.18);border-radius:20px;padding:16px 18px 16px;position:relative;overflow:hidden;">
+    <div style="margin:12px 16px 0;background:var(--obs-skin);border: 0.5px solid rgba(224,64,251,0.18);border-radius:20px;padding:16px 18px 16px;position:relative;overflow:hidden;">
       <div style="position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(224,64,251,0.2),transparent);"></div>
       <div style="font-family:var(--fn);font-size:9px;font-weight:700;color:rgba(224,64,251,0.25);text-transform:uppercase;letter-spacing:0.18em;margin-bottom:12px;">Glow score</div>
       <div style="display:flex;align-items:flex-end;justify-content:space-between;margin-bottom:14px;">
         <div>
-          <div style="font-family:var(--fn);font-size:48px;font-weight:800;color:#f4f4f6;letter-spacing:-3px;line-height:1;">${glowScore}</div>
+          <div style="font-family:var(--fn);font-size:48px;font-weight:800;color:var(--obs-text);letter-spacing:-3px;line-height:1;">${glowScore}</div>
           <div style="font-family:var(--fn);font-size:10px;font-weight:700;color:#e040fb;text-transform:uppercase;letter-spacing:0.12em;margin-top:5px;">${glowLabel}</div>
         </div>
         <div style="text-align:right;padding-bottom:4px;">
-          <div style="font-family:var(--fn);font-size:13px;font-weight:800;color:#2a2a2a;">${EV.skinType||'Unknown skin'}</div>
-          <div style="font-family:var(--fn);font-size:10px;color:#1e1e1e;margin-top:1px;">${EV.skinType?'Skin type set':'Set your skin type →'}</div>
+          <div style="font-family:var(--fn);font-size:13px;font-weight:800;color:var(--obs-text-dim2);">${EV.skinType||'Unknown skin'}</div>
+          <div style="font-family:var(--fn);font-size:10px;color:var(--obs-text-dim2);margin-top:1px;">${EV.skinType?'Skin type set':'Set your skin type →'}</div>
         </div>
       </div>
       <div style="height:1px;background:rgba(224,64,251,0.08);border-radius:1px;overflow:hidden;margin-bottom:14px;">
@@ -6437,74 +6484,74 @@ function renderSkinPillar(){
       <!-- Stats row -->
       <div style="display:flex;align-items:flex-end;">
         <div style="flex:1;">
-          <div style="font-family:var(--fn);font-size:18px;font-weight:800;color:#f0f0f0;letter-spacing:-0.5px;">${EV.routineStreak||0}</div>
-          <div style="font-family:var(--fn);font-size:9px;font-weight:700;color:#252525;text-transform:uppercase;letter-spacing:0.08em;margin-top:3px;">Streak</div>
+          <div style="font-family:var(--fn);font-size:18px;font-weight:800;color:var(--obs-text2);letter-spacing:-0.5px;">${EV.routineStreak||0}</div>
+          <div style="font-family:var(--fn);font-size:9px;font-weight:700;color:var(--obs-text-dim2);text-transform:uppercase;letter-spacing:0.08em;margin-top:3px;">Streak</div>
         </div>
         <div style="width:0.5px;height:28px;background:rgba(224,64,251,0.08);margin:0 10px 4px;"></div>
         <div style="flex:1;">
-          <div style="font-family:var(--fn);font-size:18px;font-weight:800;color:#555;letter-spacing:-0.5px;">${(EV.skinPhotos||[]).length}</div>
-          <div style="font-family:var(--fn);font-size:9px;font-weight:700;color:#252525;text-transform:uppercase;letter-spacing:0.08em;margin-top:3px;">Skin logs</div>
+          <div style="font-family:var(--fn);font-size:18px;font-weight:800;color:var(--obs-text-dim);letter-spacing:-0.5px;">${(EV.skinPhotos||[]).length}</div>
+          <div style="font-family:var(--fn);font-size:9px;font-weight:700;color:var(--obs-text-dim2);text-transform:uppercase;letter-spacing:0.08em;margin-top:3px;">Skin logs</div>
         </div>
         <div style="width:0.5px;height:28px;background:rgba(224,64,251,0.08);margin:0 10px 4px;"></div>
         <div style="flex:1;">
-          <div style="font-family:var(--fn);font-size:18px;font-weight:800;color:#555;letter-spacing:-0.5px;">${(EV.prescriptions||[]).length}</div>
-          <div style="font-family:var(--fn);font-size:9px;font-weight:700;color:#252525;text-transform:uppercase;letter-spacing:0.08em;margin-top:3px;">Products</div>
+          <div style="font-family:var(--fn);font-size:18px;font-weight:800;color:var(--obs-text-dim);letter-spacing:-0.5px;">${(EV.prescriptions||[]).length}</div>
+          <div style="font-family:var(--fn);font-size:9px;font-weight:700;color:var(--obs-text-dim2);text-transform:uppercase;letter-spacing:0.08em;margin-top:3px;">Products</div>
         </div>
         <div style="width:0.5px;height:28px;background:rgba(224,64,251,0.08);margin:0 10px 4px;"></div>
         <div style="flex:1;">
-          <div style="font-family:var(--fn);font-size:18px;font-weight:800;color:#555;letter-spacing:-0.5px;">${(EV.journal||[]).length}</div>
-          <div style="font-family:var(--fn);font-size:9px;font-weight:700;color:#252525;text-transform:uppercase;letter-spacing:0.08em;margin-top:3px;">Journal</div>
+          <div style="font-family:var(--fn);font-size:18px;font-weight:800;color:var(--obs-text-dim);letter-spacing:-0.5px;">${(EV.journal||[]).length}</div>
+          <div style="font-family:var(--fn);font-size:9px;font-weight:700;color:var(--obs-text-dim2);text-transform:uppercase;letter-spacing:0.08em;margin-top:3px;">Journal</div>
         </div>
       </div>
     </div>
 
     <!-- MORNING ROUTINE — dark purple obsidian card -->
     <div style="display:flex;align-items:center;justify-content:space-between;margin:14px 16px 10px;">
-      <div style="font-family:var(--fn);font-size:9px;font-weight:700;color:#333;text-transform:uppercase;letter-spacing:0.14em;">Morning routine</div>
+      <div style="font-family:var(--fn);font-size:9px;font-weight:700;color:var(--obs-text-dim);text-transform:uppercase;letter-spacing:0.14em;">Morning routine</div>
       <div style="display:flex;align-items:center;gap:8px;">
-        <span style="font-family:var(--fn);font-size:10px;font-weight:700;color:${morningDone>0?'#3a2a4a':'#252525'};background:${morningDone>0?'#160d22':'#111'};padding:3px 8px;border-radius:6px;border:0.5px solid ${morningDone>0?'rgba(224,64,251,0.15)':'var(--border)'};">${morningDone}/${EV.morningRoutine.length} done</span>
-        <button onclick="openRoutineEditor('morning')" style="font-family:var(--fn);font-size:10px;font-weight:700;color:#2a2a2a;background:none;border:none;cursor:pointer;">Edit</button>
+        <span style="font-family:var(--fn);font-size:10px;font-weight:700;color:var(--accent);background:var(--accent-muted);padding:3px 8px;border-radius:6px;border:0.5px solid var(--border);">${morningDone}/${EV.morningRoutine.length} done</span>
+        <button onclick="openRoutineEditor('morning')" style="font-family:var(--fn);font-size:10px;font-weight:700;color:var(--obs-text-dim2);background:none;border:none;cursor:pointer;">Edit</button>
       </div>
     </div>
-    <div style="margin:0 16px 14px;background:var(--obs-skin);border:0.5px solid rgba(224,64,251,0.1);border-radius:14px;overflow:hidden;">
+    <div style="margin:0 16px 12px;background:var(--obs-skin);border:0.5px solid rgba(224,64,251,0.1);border-radius:14px;overflow:hidden;">
       ${EV.morningRoutine.map((step,i)=>`
         <div onclick="toggleRoutineStep('morning',${i})" style="display:flex;align-items:center;gap:10px;padding:10px 14px;${i<EV.morningRoutine.length-1?'border-bottom:0.5px solid rgba(224,64,251,0.06);':''}cursor:pointer;">
-          <div style="width:20px;height:20px;border-radius:6px;flex-shrink:0;background:${step.done?'#1a0a2a':'#120e18'};border:0.5px solid ${step.done?'rgba(224,64,251,0.4)':'rgba(224,64,251,0.12)'};display:flex;align-items:center;justify-content:center;">
+          <div style="width:20px;height:20px;border-radius:6px;flex-shrink:0;background:${step.done?'rgba(224,64,251,0.15)':'rgba(224,64,251,0.06)'};border:0.5px solid ${step.done?'rgba(224,64,251,0.5)':'rgba(224,64,251,0.18)'};display:flex;align-items:center;justify-content:center;">
             ${step.done?'<svg width="10" height="10" fill="none" stroke="#e040fb" stroke-width="2.5" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>':''}
           </div>
           <div style="flex:1;min-width:0;">
-            <div style="font-family:var(--fn);font-size:12px;font-weight:700;color:${step.done?'#2a1a3a':'#666'};${step.done?'text-decoration:line-through;':''}">${step.name}</div>
-            <div style="font-family:var(--fn);font-size:10px;color:${step.done?'#1a1a2a':'#222'};margin-top:1px;">${step.tip}</div>
+            <div style="font-family:var(--fn);font-size:12px;font-weight:700;color:${step.done?'var(--text3)':'var(--text)'};${step.done?'text-decoration:line-through;':''}">${step.name}</div>
+            <div style="font-family:var(--fn);font-size:10px;color:var(--text2);margin-top:1px;">${step.tip}</div>
           </div>
-          <span style="font-family:var(--fn);font-size:10px;color:${step.done?'#1a1a2a':'#1e1e1e'};font-weight:600;flex-shrink:0;">${step.time}</span>
+          <span style="font-family:var(--fn);font-size:10px;color:var(--text3);font-weight:600;flex-shrink:0;">${step.time}</span>
         </div>`).join('')}
     </div>
 
     <!-- EVENING ROUTINE — same purple obsidian treatment -->
-    <div style="display:flex;align-items:center;justify-content:space-between;margin:0 16px 10px;">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin:0 16px 12px;">
       <div style="font-family:var(--fn);font-size:9px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:0.14em;">Evening routine</div>
       <div style="display:flex;align-items:center;gap:8px;">
         <span style="font-family:var(--fn);font-size:10px;font-weight:700;color:var(--accent);background:var(--accent-muted);padding:3px 8px;border-radius:6px;border:0.5px solid var(--border);">${eveningDone}/${EV.eveningRoutine.length} done</span>
         <button onclick="openRoutineEditor('evening')" style="font-family:var(--fn);font-size:10px;font-weight:700;color:var(--text3);background:none;border:none;cursor:pointer;">Edit</button>
       </div>
     </div>
-    <div style="margin:0 16px 14px;background:var(--obs-skin);border:0.5px solid rgba(224,64,251,0.1);border-radius:14px;overflow:hidden;">
+    <div style="margin:0 16px 12px;background:var(--obs-skin);border:0.5px solid rgba(224,64,251,0.1);border-radius:14px;overflow:hidden;">
       ${EV.eveningRoutine.map((step,i)=>`
         <div onclick="toggleRoutineStep('evening',${i})" style="display:flex;align-items:center;gap:10px;padding:10px 14px;${i<EV.eveningRoutine.length-1?'border-bottom:0.5px solid rgba(224,64,251,0.06);':''}cursor:pointer;">
-          <div style="width:20px;height:20px;border-radius:6px;flex-shrink:0;background:${step.done?'#1a0a2a':'#120e18'};border:0.5px solid ${step.done?'rgba(224,64,251,0.4)':'rgba(224,64,251,0.12)'};display:flex;align-items:center;justify-content:center;">
+          <div style="width:20px;height:20px;border-radius:6px;flex-shrink:0;background:${step.done?'rgba(224,64,251,0.15)':'rgba(224,64,251,0.06)'};border:0.5px solid ${step.done?'rgba(224,64,251,0.5)':'rgba(224,64,251,0.18)'};display:flex;align-items:center;justify-content:center;">
             ${step.done?'<svg width="10" height="10" fill="none" stroke="#e040fb" stroke-width="2.5" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>':''}
           </div>
           <div style="flex:1;min-width:0;">
-            <div style="font-family:var(--fn);font-size:12px;font-weight:700;color:${step.done?'#2a1a3a':'#666'};${step.done?'text-decoration:line-through;':''}">${step.name}</div>
-            <div style="font-family:var(--fn);font-size:10px;color:${step.done?'#1a1a2a':'#222'};margin-top:1px;">${step.tip}</div>
+            <div style="font-family:var(--fn);font-size:12px;font-weight:700;color:${step.done?'var(--text3)':'var(--text)'};${step.done?'text-decoration:line-through;':''}">${step.name}</div>
+            <div style="font-family:var(--fn);font-size:10px;color:var(--text2);margin-top:1px;">${step.tip}</div>
           </div>
-          <span style="font-family:var(--fn);font-size:10px;color:${step.done?'#1a1a2a':'#1e1e1e'};font-weight:600;flex-shrink:0;">${step.time}</span>
+          <span style="font-family:var(--fn);font-size:10px;color:var(--text3);font-weight:600;flex-shrink:0;">${step.time}</span>
         </div>`).join('')}
     </div>
 
     <!-- SKIN TYPE -->
-    <div style="font-family:var(--fn);font-size:9px;font-weight:700;color:#333;text-transform:uppercase;letter-spacing:0.14em;margin:0 16px 10px;">Skin type</div>
-    <div style="margin:0 16px 14px;background:var(--obs-skin);border:0.5px solid rgba(224,64,251,0.1);border-radius:14px;overflow:hidden;">
+    <div style="font-family:var(--fn);font-size:9px;font-weight:700;color:var(--obs-text-dim);text-transform:uppercase;letter-spacing:0.14em;margin:0 16px 12px;">Skin type</div>
+    <div style="margin:0 16px 12px;background:var(--obs-skin);border:0.5px solid rgba(224,64,251,0.1);border-radius:14px;overflow:hidden;">
       ${['Oily','Dry','Combination','Sensitive','Normal'].map((t,i,arr)=>`
         <div onclick="setSkinType('${t}')" style="display:flex;align-items:center;justify-content:space-between;padding:10px 14px;${i<arr.length-1?'border-bottom:0.5px solid rgba(224,64,251,0.06);':''}cursor:pointer;background:${(EV.skinType||'')===t?'rgba(224,64,251,0.06)':'transparent'};">
           <div style="font-family:var(--fn);font-size:13px;font-weight:700;color:${(EV.skinType||'')===t?'#f4f4f6':'#555'};">${t}</div>
@@ -6513,16 +6560,16 @@ function renderSkinPillar(){
     </div>
 
     <!-- SKIN CONCERNS -->
-    <div style="font-family:var(--fn);font-size:9px;font-weight:700;color:#333;text-transform:uppercase;letter-spacing:0.14em;margin:0 16px 10px;">Skin concerns</div>
-    <div style="display:flex;flex-wrap:wrap;gap:6px;margin:0 16px 14px;">
+    <div style="font-family:var(--fn);font-size:9px;font-weight:700;color:var(--obs-text-dim);text-transform:uppercase;letter-spacing:0.14em;margin:0 16px 12px;">Skin concerns</div>
+    <div style="display:flex;flex-wrap:wrap;gap:6px;margin:0 16px 12px;">
       ${['Acne','Dark spots','Wrinkles','Dryness','Oiliness','Redness','Uneven tone','Large pores','Dullness','Under-eye circles'].map(c=>`
-        <div onclick="toggleSkinConcern('${c}')" style="padding:6px 12px;border-radius:20px;font-family:var(--fn);font-size:10px;font-weight:700;cursor:pointer;border:0.5px solid ${(EV.skinConcerns||[]).includes(c)?'rgba(224,64,251,0.3)':'rgba(224,64,251,0.08)'};background:${(EV.skinConcerns||[]).includes(c)?'#160d22':'#0d0b12'};color:${(EV.skinConcerns||[]).includes(c)?'#e040fb':'#2a2a2a'};">${c}</div>`).join('')}
+        <div onclick="toggleSkinConcern('${c}')" style="padding:6px 12px;border-radius:20px;font-family:var(--fn);font-size:10px;font-weight:700;cursor:pointer;border:0.5px solid ${(EV.skinConcerns||[]).includes(c)?'rgba(224,64,251,0.4)':'var(--border)'};background:${(EV.skinConcerns||[]).includes(c)?'rgba(224,64,251,0.12)':'var(--surface2)'};color:${(EV.skinConcerns||[]).includes(c)?'#e040fb':'var(--text)'};">${c}</div>`).join('')}
     </div>
 
     <!-- INGREDIENT LIBRARY — same purple treatment, keep existing data -->
-    <div style="font-family:var(--fn);font-size:9px;font-weight:700;color:#333;text-transform:uppercase;letter-spacing:0.14em;margin:0 16px 10px;" id="ingredient-library-head">Ingredient library</div>
+    <div style="font-family:var(--fn);font-size:9px;font-weight:700;color:var(--obs-text-dim);text-transform:uppercase;letter-spacing:0.14em;margin:0 16px 12px;" id="ingredient-library-head">Ingredient library</div>
     <div style="margin:0 16px 80px;background:var(--obs-skin);border:0.5px solid rgba(224,64,251,0.1);border-radius:14px;overflow:hidden;">
-      ${window._activeConcern ? `<div style="padding:10px 14px;background:rgba(224,64,251,0.06);border-bottom:0.5px solid rgba(224,64,251,0.1);font-family:var(--fn);font-size:11px;color:#e040fb;font-weight:700;">For: ${window._activeConcern} — <span onclick="window._activeConcern=null;renderElevateContent();" style="cursor:pointer;text-decoration:underline;color:#555;">clear</span></div>` : ''}
+      ${window._activeConcern ? `<div style="padding:10px 14px;background:rgba(224,64,251,0.06);border-bottom:0.5px solid rgba(224,64,251,0.1);font-family:var(--fn);font-size:11px;color:#e040fb;font-weight:700;">For: ${window._activeConcern} — <span onclick="window._activeConcern=null;renderElevateContent();" style="cursor:pointer;text-decoration:underline;color:var(--obs-text-dim);">clear</span></div>` : ''}
       ${[
         {name:'Niacinamide',type:'Vitamin B3',does:'Fades dark spots, controls oil, minimises pores, strengthens skin barrier.',good:['Oily','Combination','Sensitive'],avoid:'None — very well tolerated',conc:'5–10%'},
         {name:'Salicylic Acid',type:'BHA Exfoliant',does:'Penetrates pores to dissolve oil and dead skin. Best for acne and blackheads.',good:['Oily','Combination','Acne-prone'],avoid:'Sensitive or dry skin',conc:'0.5–2%'},
@@ -6567,7 +6614,7 @@ function renderMindPillar(){
 
   return `
     <!-- MOOD BANNER -->
-    <div style="margin:14px 16px 0;background:rgba(0,229,160,0.06);border:0.5px solid rgba(0,229,160,0.18);border-radius:18px;padding:14px 16px;position:relative;overflow:hidden;">
+    <div style="margin:12px 16px 0;background:rgba(0,229,160,0.06);border:0.5px solid rgba(0,229,160,0.18);border-radius:18px;padding:14px 16px;position:relative;overflow:hidden;">
       <div style="position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(0,229,160,0.2),transparent);"></div>
       <div style="font-family:var(--fn);font-size:9px;font-weight:700;color:rgba(0,229,160,0.4);text-transform:uppercase;letter-spacing:0.16em;margin-bottom:12px;">How are you feeling today?</div>
       <div style="display:flex;justify-content:space-between;gap:6px;">
@@ -6584,7 +6631,7 @@ function renderMindPillar(){
 
     <!-- SLEEP TRACKER -->
     <div style="font-family:var(--fn);font-size:9px;font-weight:700;color:var(--text4);text-transform:uppercase;letter-spacing:0.14em;margin:14px 16px 10px;">Sleep tracker</div>
-    <div style="background:var(--surface);border:0.5px solid var(--border);border-radius:14px;padding:14px;margin:0 16px 14px;">
+    <div style="background:var(--surface);border:0.5px solid var(--border);border-radius:14px;padding:14px;margin:0 16px 12px;">
       <div style="display:flex;align-items:flex-end;justify-content:space-between;margin-bottom:14px;">
         <div>
           <div style="font-family:var(--fn);font-size:32px;font-weight:800;color:#00e5a0;letter-spacing:-2px;line-height:1;" id="sleep-hrs-display">${lastSleep?lastSleep.hours:'7'}</div>
@@ -6603,8 +6650,8 @@ function renderMindPillar(){
     </div>
 
     <!-- MENTAL HEALTH -->
-    <div style="font-family:var(--fn);font-size:9px;font-weight:700;color:var(--text4);text-transform:uppercase;letter-spacing:0.14em;margin:0 16px 10px;">Mental health matters</div>
-    <div style="background:var(--surface);border:0.5px solid var(--border);border-left:2px solid #00e5a0;border-radius:14px;overflow:hidden;margin:0 16px 14px;">
+    <div style="font-family:var(--fn);font-size:9px;font-weight:700;color:var(--text4);text-transform:uppercase;letter-spacing:0.14em;margin:0 16px 12px;">Mental health matters</div>
+    <div style="background:var(--surface);border:0.5px solid var(--border);border-left:2px solid #00e5a0;border-radius:14px;overflow:hidden;margin:0 16px 12px;">
       ${mhTips.map((tip,i)=>`
         <div style="padding:12px 14px;${i<mhTips.length-1?'border-bottom:0.5px solid var(--border2);':''}">
           <div style="font-family:var(--fn);font-size:12px;font-weight:800;color:#00e5a0;margin-bottom:4px;">${tip.title}</div>
@@ -6613,8 +6660,8 @@ function renderMindPillar(){
     </div>
 
     <!-- CONFIDENCE JOURNAL -->
-    <div style="font-family:var(--fn);font-size:9px;font-weight:700;color:var(--text4);text-transform:uppercase;letter-spacing:0.14em;margin:0 16px 10px;">Confidence journal</div>
-    <div style="background:var(--surface);border:0.5px solid var(--border);border-radius:14px;padding:14px;margin:0 16px 14px;">
+    <div style="font-family:var(--fn);font-size:9px;font-weight:700;color:var(--text4);text-transform:uppercase;letter-spacing:0.14em;margin:0 16px 12px;">Confidence journal</div>
+    <div style="background:var(--surface);border:0.5px solid var(--border);border-radius:14px;padding:14px;margin:0 16px 12px;">
       <div style="font-family:var(--fn);font-size:11px;color:#00e5a0;font-weight:700;margin-bottom:6px;">Today's prompt</div>
       <div style="font-family:var(--fn);font-size:13px;color:var(--text2);margin-bottom:12px;line-height:1.6;font-style:italic;">"${getDailyJournalPrompt()}"</div>
       <textarea id="journal-input" placeholder="Write your thoughts..." rows="3"
@@ -6622,7 +6669,7 @@ function renderMindPillar(){
       <button onclick="saveJournalEntry()" style="width:100%;background:rgba(0,229,160,0.1);border:0.5px solid rgba(0,229,160,0.25);border-radius:12px;padding:11px;color:#00e5a0;font-family:var(--fn);font-size:13px;font-weight:800;cursor:pointer;margin-top:8px;">Save entry</button>
     </div>
     ${EV.journal.length > 0 ? `
-      <div style="margin:0 16px 14px;">
+      <div style="margin:0 16px 12px;">
         <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;">
           <div style="font-family:var(--fn);font-size:9px;font-weight:700;color:var(--text4);text-transform:uppercase;letter-spacing:0.1em;">Past entries (${EV.journal.length})</div>
           ${EV.journal.length > 3 ? `<button onclick="toggleJournalExpand()" id="journal-expand-btn" style="font-family:var(--fn);font-size:11px;font-weight:700;color:#00e5a0;background:none;border:none;cursor:pointer;">Show all</button>` : ''}
@@ -6686,7 +6733,7 @@ function renderBodyPillar(){
 
   return `
     <div style="font-family:var(--fn);font-size:9px;font-weight:700;color:var(--text4);text-transform:uppercase;letter-spacing:0.14em;margin:14px 16px 10px;">Measurements trend</div>
-    <div style="background:var(--surface);border:0.5px solid var(--border);border-radius:14px;padding:14px;margin:0 16px 14px;">
+    <div style="background:var(--surface);border:0.5px solid var(--border);border-radius:14px;padding:14px;margin:0 16px 12px;">
       ${sorted.length >= 2 ? `
         ${lastMeas?.chest ? measChart('chest','#ff5722','Chest') : ''}
         ${lastMeas?.waist ? measChart('waist','var(--orange)','Waist') : ''}
@@ -6695,8 +6742,8 @@ function renderBodyPillar(){
       ` : `<div style="padding:24px;text-align:center;"><div style="font-family:var(--fn);font-size:12px;color:var(--text4);">Log at least 2 measurements to see your trend</div></div>`}
     </div>
 
-    <div style="font-family:var(--fn);font-size:9px;font-weight:700;color:var(--text4);text-transform:uppercase;letter-spacing:0.14em;margin:0 16px 10px;">Current stats</div>
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:0 16px 14px;">
+    <div style="font-family:var(--fn);font-size:9px;font-weight:700;color:var(--text4);text-transform:uppercase;letter-spacing:0.14em;margin:0 16px 12px;">Current stats</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:0 16px 12px;">
       ${[
         ['Weight', lastWeight?lastWeight.kg+'kg':'—', '#ff5722'],
         ['Chest', lastMeas&&lastMeas.chest?lastMeas.chest+'"':'—', '#ff5722'],
@@ -6709,7 +6756,7 @@ function renderBodyPillar(){
         </div>`).join('')}
     </div>
 
-    <div style="font-family:var(--fn);font-size:9px;font-weight:700;color:var(--text4);text-transform:uppercase;letter-spacing:0.14em;margin:0 16px 10px;">Log measurements</div>
+    <div style="font-family:var(--fn);font-size:9px;font-weight:700;color:var(--text4);text-transform:uppercase;letter-spacing:0.14em;margin:0 16px 12px;">Log measurements</div>
     <div style="background:var(--surface);border:0.5px solid var(--border);border-radius:14px;padding:14px;margin:0 16px 80px;">
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px;">
         <div>
@@ -6775,7 +6822,7 @@ function renderStylePillar(){
 
   return `
     <div style="font-family:var(--fn);font-size:9px;font-weight:700;color:var(--text4);text-transform:uppercase;letter-spacing:0.14em;margin:14px 16px 10px;">Your body type</div>
-    <div style="margin:0 16px 14px;">
+    <div style="margin:0 16px 12px;">
       <div style="font-family:var(--fn);font-size:11px;color:var(--text4);margin-bottom:12px;line-height:1.5;">Select your body type for personalised fit guidance.</div>
       ${bodyTypes.map(bt=>`
         <div style="background:${EV.bodyType===bt.id?'rgba(255,234,0,0.08)':'var(--surface)'};border:0.5px solid ${EV.bodyType===bt.id?'rgba(255,234,0,0.3)':'var(--border)'};border-radius:14px;padding:12px 14px;margin-bottom:8px;cursor:pointer;" onclick="setBodyType('${bt.id}')">
@@ -6788,8 +6835,8 @@ function renderStylePillar(){
         </div>`).join('')}
     </div>
 
-    <div style="font-family:var(--fn);font-size:9px;font-weight:700;color:var(--text4);text-transform:uppercase;letter-spacing:0.14em;margin:0 16px 10px;">Capsule wardrobe essentials</div>
-    <div style="background:var(--surface);border:0.5px solid var(--border);border-radius:14px;overflow:hidden;margin:0 16px 14px;">
+    <div style="font-family:var(--fn);font-size:9px;font-weight:700;color:var(--text4);text-transform:uppercase;letter-spacing:0.14em;margin:0 16px 12px;">Capsule wardrobe essentials</div>
+    <div style="background:var(--surface);border:0.5px solid var(--border);border-radius:14px;overflow:hidden;margin:0 16px 12px;">
       <!-- Gender toggle -->
       <div style="display:flex;gap:0;border-bottom:0.5px solid var(--border2);">
         <button onclick="setWardrobeGender('male')" style="flex:1;padding:10px;background:${EV.wardrobeGender!=='female'?'var(--surface2)':'transparent'};border:none;font-family:var(--fn);font-size:11px;font-weight:700;color:${EV.wardrobeGender!=='female'?'var(--text)':'var(--text4)'};cursor:pointer;border-right:0.5px solid var(--border2);">Men</button>
@@ -6804,7 +6851,7 @@ function renderStylePillar(){
         </div>`).join('')}
     </div>
 
-    <div style="font-family:var(--fn);font-size:9px;font-weight:700;color:var(--text4);text-transform:uppercase;letter-spacing:0.14em;margin:0 16px 10px;">AI outfit analysis</div>
+    <div style="font-family:var(--fn);font-size:9px;font-weight:700;color:var(--text4);text-transform:uppercase;letter-spacing:0.14em;margin:0 16px 12px;">AI outfit analysis</div>
     <div style="background:var(--surface);border:0.5px solid var(--border);border-radius:14px;overflow:hidden;margin:0 16px 80px;">
       <div style="padding:12px 14px;border-bottom:0.5px solid var(--border2);">
         <div style="font-family:var(--fn);font-size:13px;font-weight:800;color:var(--text);">Style Analysis</div>
@@ -6830,7 +6877,7 @@ function renderLearnPillar(){
   const edu = ELEVATE_EDU.learn[elevateEduIdx.learn];
   return `
     <div style="font-family:var(--fn);font-size:9px;font-weight:700;color:var(--text4);text-transform:uppercase;letter-spacing:0.14em;margin:14px 16px 10px;">Self-optimisation principles</div>
-    <div style="background:var(--surface);border:0.5px solid var(--border);border-radius:14px;padding:14px;margin:0 16px 14px;">
+    <div style="background:var(--surface);border:0.5px solid var(--border);border-radius:14px;padding:14px;margin:0 16px 12px;">
       <div style="font-family:var(--fn);font-size:14px;font-weight:800;color:#00e5ff;margin-bottom:8px;letter-spacing:-0.2px;">${edu.title}</div>
       <div style="font-family:var(--fn);font-size:12px;color:var(--text2);line-height:1.7;">${edu.body}</div>
       <div style="display:flex;align-items:center;justify-content:space-between;margin-top:12px;padding-top:10px;border-top:0.5px solid var(--border2);">
@@ -6840,7 +6887,7 @@ function renderLearnPillar(){
       </div>
     </div>
 
-    <div style="font-family:var(--fn);font-size:9px;font-weight:700;color:var(--text4);text-transform:uppercase;letter-spacing:0.14em;margin:0 16px 10px;">The Hone philosophy</div>
+    <div style="font-family:var(--fn);font-size:9px;font-weight:700;color:var(--text4);text-transform:uppercase;letter-spacing:0.14em;margin:0 16px 12px;">The Hone philosophy</div>
     <div style="margin:0 16px 80px;">
     ${[
       ['You vs you only','No rankings, no ratings, no comparisons to others. Your only competition is who you were yesterday.'],
@@ -7460,7 +7507,7 @@ function renderNutMeals(){
         </div>
       </div>`;
     }).join('')
-    : '<div style="padding:40px 16px;text-align:center;"><div style="font-family:var(--fn);font-size:12px;color:var(--text4);">No meals found — try a different filter</div></div>'}`;
+    : '<div class="empty-rich"><div class="empty-rich-icon"><svg width="28" height="28" fill="none" stroke="var(--text4)" stroke-width="1.6" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg></div><div class="empty-rich-title">No meals found</div><div class="empty-rich-sub">Try a different filter or add new meals.</div></div>'}`;
 }
 
 function setMealRegionFilter(r){ activeMealRegion=r; renderNutMeals(); haptic('light'); }
@@ -7505,7 +7552,7 @@ function renderMealPlan(){
     </div>
 
     ${totalMeals > 0 ? `
-    <div style="margin:0 16px 14px;padding:12px 14px;background:var(--accent-glow2);border:0.5px solid rgba(168,255,60,0.2);border-radius:14px;display:flex;justify-content:space-between;align-items:center;">
+    <div style="margin:0 16px 12px;padding:12px 14px;background:var(--accent-glow2);border:0.5px solid rgba(168,255,60,0.2);border-radius:14px;display:flex;justify-content:space-between;align-items:center;">
       <div>
         <div style="font-size:11px;font-weight:800;color:var(--accent);text-transform:uppercase;letter-spacing:0.08em;">Week Total</div>
         <div style="font-size:20px;font-weight:900;color:var(--text);">${totalKcal.toLocaleString()} <span style="font-size:11px;color:var(--text3);font-weight:600;">kcal</span></div>
@@ -7582,11 +7629,11 @@ function renderGroceryList(){
 
   if(meals.length === 0){
     el.innerHTML = `
-      <div style="padding:40px 24px;text-align:center;">
-        <div style="font-size:40px;margin-bottom:12px;">
-        <div style="font-size:15px;font-weight:700;color:var(--text);margin-bottom:6px;">No meals planned yet</div>
-        <div style="font-size:12px;color:var(--text3);margin-bottom:20px;">Add meals in the Plan tab first</div>
-        <button onclick="setNutTab('plan')" style="padding:11px 22px;border-radius:12px;border:none;background:var(--accent);color:#071a00;font-family:var(--fn);font-size:12px;font-weight:800;cursor:pointer;">Go to Plan</button>
+      <div class="empty-rich">
+        <div class="empty-rich-icon"><svg width="32" height="32" fill="none" stroke="var(--accent)" stroke-width="1.6" viewBox="0 0 24 24"><path d="M3 2v7c0 1.1.9 2 2 2h1v11h2V11h1a2 2 0 002-2V2H9v5H7V2H5v5H3z"/><path d="M16 2v20h2V13h3V2h-2v8h-1V2h-2z"/></svg></div>
+        <div class="empty-rich-title">No meals planned yet</div>
+        <div class="empty-rich-sub">Add meals in the Plan tab to build your daily menu.</div>
+        <button onclick="setNutTab('plan')" class="empty-rich-action">Go to Plan</button>
       </div>`;
     return;
   }
@@ -7642,7 +7689,7 @@ function renderGroceryList(){
     </div>
 
     ${Object.entries(categorised).filter(([,items])=>items.length>0).map(([cat,items])=>`
-      <div style="margin:0 16px 10px;">
+      <div style="margin:0 16px 12px;">
         <div style="font-size:11px;font-weight:800;color:var(--text3);text-transform:uppercase;letter-spacing:0.1em;margin-bottom:6px;">${cat}</div>
         ${items.map(item=>`
           <div class="grocery-item" onclick="this.classList.toggle('checked')" style="display:flex;align-items:center;gap:10px;padding:9px 12px;background:var(--surface);border:0.5px solid var(--border);border-radius:10px;margin-bottom:5px;cursor:pointer;transition:all 0.12s;">
@@ -7741,7 +7788,7 @@ function renderWeeklyHealthReport(){
           <div style="display:flex;justify-content:space-between;align-items:flex-start;">
             <div>
               <div style="font-family:var(--fn);font-size:9px;font-weight:700;color:rgba(168,255,60,0.25);text-transform:uppercase;letter-spacing:0.18em;margin-bottom:4px;">Weekly health report</div>
-              <div style="font-family:var(--fn);font-size:15px;font-weight:800;color:#f4f4f6;letter-spacing:-0.2px;">${days7[0].slice(5).replace('-','/')} – ${days7[6].slice(5).replace('-','/')}</div>
+              <div style="font-family:var(--fn);font-size:15px;font-weight:800;color:var(--obs-text);letter-spacing:-0.2px;">${days7[0].slice(5).replace('-','/')} – ${days7[6].slice(5).replace('-','/')}</div>
             </div>
             <div style="text-align:right;">
               <div style="font-family:var(--fn);font-size:38px;font-weight:800;color:${gradeColor};letter-spacing:-2px;line-height:1;">${grade}</div>
@@ -7754,25 +7801,25 @@ function renderWeeklyHealthReport(){
         <div style="display:flex;border-bottom:0.5px solid rgba(168,255,60,0.06);">
           <div style="flex:1;padding:12px 10px;text-align:center;border-right:0.5px solid rgba(168,255,60,0.06);">
             <div style="font-family:var(--fn);font-size:18px;font-weight:800;color:var(--accent);letter-spacing:-0.5px;">${totalActive}<span style="font-size:11px;color:rgba(168,255,60,0.4);">/7</span></div>
-            <div style="font-family:var(--fn);font-size:9px;color:#252525;text-transform:uppercase;letter-spacing:0.08em;margin-top:3px;">Active days</div>
+            <div style="font-family:var(--fn);font-size:9px;color:var(--obs-text-dim2);text-transform:uppercase;letter-spacing:0.08em;margin-top:3px;">Active days</div>
           </div>
           <div style="flex:1;padding:12px 10px;text-align:center;border-right:0.5px solid rgba(168,255,60,0.06);">
             <div style="font-family:var(--fn);font-size:18px;font-weight:800;color:#60a5fa;letter-spacing:-0.5px;">${avgSleep?avgSleep+'h':'—'}</div>
-            <div style="font-family:var(--fn);font-size:9px;color:#252525;text-transform:uppercase;letter-spacing:0.08em;margin-top:3px;">Avg sleep</div>
+            <div style="font-family:var(--fn);font-size:9px;color:var(--obs-text-dim2);text-transform:uppercase;letter-spacing:0.08em;margin-top:3px;">Avg sleep</div>
           </div>
           <div style="flex:1;padding:12px 10px;text-align:center;border-right:0.5px solid rgba(168,255,60,0.06);">
             <div style="font-family:var(--fn);font-size:18px;font-weight:800;color:var(--accent);letter-spacing:-0.5px;">${healthScore}</div>
-            <div style="font-family:var(--fn);font-size:9px;color:#252525;text-transform:uppercase;letter-spacing:0.08em;margin-top:3px;">Health score</div>
+            <div style="font-family:var(--fn);font-size:9px;color:var(--obs-text-dim2);text-transform:uppercase;letter-spacing:0.08em;margin-top:3px;">Health score</div>
           </div>
           <div style="flex:1;padding:12px 10px;text-align:center;">
             <div style="font-family:var(--fn);font-size:18px;font-weight:800;color:var(--orange);letter-spacing:-0.5px;">${streak}</div>
-            <div style="font-family:var(--fn);font-size:9px;color:#252525;text-transform:uppercase;letter-spacing:0.08em;margin-top:3px;">Streak</div>
+            <div style="font-family:var(--fn);font-size:9px;color:var(--obs-text-dim2);text-transform:uppercase;letter-spacing:0.08em;margin-top:3px;">Streak</div>
           </div>
         </div>
 
         <!-- Insight -->
         <div style="padding:12px 16px;">
-          <div style="font-family:var(--fn);font-size:11px;color:#333;line-height:1.65;font-style:italic;">"${insight}"</div>
+          <div style="font-family:var(--fn);font-size:11px;color:var(--obs-text-dim);line-height:1.65;font-style:italic;">"${insight}"</div>
         </div>
       </div>
     </div>
