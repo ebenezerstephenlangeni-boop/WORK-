@@ -50,6 +50,9 @@
   --purple-bg:  #0a0810;
   --purple-border: rgba(187,127,255,0.15);
   --lavender:   #a78bfa;
+  --ob-chip-bg:        rgba(255,255,255,0.04);
+  --ob-chip-border:    rgba(255,255,255,0.08);
+  --ob-selected-border:rgba(168,255,60,0.4);
   --sage:       #6ee7b7;
   --sage-bg:    #060d0a;
   --amber:      #fbbf24;
@@ -135,6 +138,11 @@
   --pillar-body:  #a02800;
   --pillar-style: #7a6200;
   --pillar-learn: #006680;
+  --purple:             #7c3aed;
+  --lavender:           #4f46e5;
+  --ob-chip-bg:         rgba(0,0,0,0.04);
+  --ob-chip-border:     rgba(0,0,0,0.08);
+  --ob-selected-border: rgba(53,160,0,0.6);
 }
 
 /* ── RESET ── */
@@ -2313,6 +2321,8 @@ tr.set-flash    { animation: setRowFlash 0.55s ease both; }
 }
 
 /* ── LIGHT MODE FIXES ── */
+[data-theme="light"] .ob-dot { background: rgba(0,0,0,0.12); }
+[data-theme="light"] .ob-dot.active { background: var(--accent); box-shadow: 0 0 8px var(--accent-glow); }
 [data-theme="dark"] #splash { background: #0c0c0e; }
 [data-theme="dark"] #logo-name { color: #f4f4f6; }
 [data-theme="dark"] #logo-tag { color: rgba(244,244,246,0.4); }
@@ -9698,7 +9708,7 @@ function renderObScreen(idx){
     const offset = circumference - (baseScore / 100) * circumference;
     wrap.innerHTML = `
     <div style="display:flex;flex-direction:column;align-items:center;justify-content:center;height:100%;padding:40px 28px;text-align:center;">
-      <div style="font-family:var(--fn);font-size:9px;font-weight:700;color:rgba(168,255,60,0.4);text-transform:uppercase;letter-spacing:0.2em;margin-bottom:32px;">Your baseline score</div>
+      <div style="font-family:var(--fn);font-size:9px;font-weight:700;color:var(--accent-dim);text-transform:uppercase;letter-spacing:0.2em;margin-bottom:32px;">Your baseline score</div>
 
       <!-- Score ring -->
       <div style="position:relative;width:200px;height:200px;margin-bottom:32px;">
@@ -9711,13 +9721,13 @@ function renderObScreen(idx){
             style="transition:stroke-dashoffset 1.4s cubic-bezier(0.34,1.1,0.64,1);filter:drop-shadow(0 0 10px rgba(168,255,60,0.6));"/>
         </svg>
         <div style="position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;">
-          <div id="ob-score-num" style="font-family:var(--fn);font-size:52px;font-weight:900;color:#a8ff3c;letter-spacing:-3px;line-height:1;">0</div>
-          <div style="font-family:var(--fn);font-size:9px;font-weight:700;color:rgba(168,255,60,0.4);text-transform:uppercase;letter-spacing:0.14em;margin-top:4px;">/ 100</div>
+          <div id="ob-score-num" style="font-family:var(--fn);font-size:52px;font-weight:900;color:var(--accent);letter-spacing:-3px;line-height:1;">0</div>
+          <div style="font-family:var(--fn);font-size:9px;font-weight:700;color:var(--accent-dim);text-transform:uppercase;letter-spacing:0.14em;margin-top:4px;">/ 100</div>
         </div>
       </div>
 
       <div style="font-family:var(--fn);font-size:26px;font-weight:800;color:var(--text);letter-spacing:-0.5px;line-height:1.2;margin-bottom:10px;">
-        Welcome to Hone,<br/><span style="color:#a8ff3c;">${name}.</span>
+        Welcome to Hone,<br/><span style="color:var(--accent);">${name}.</span>
       </div>
       <div style="font-family:var(--fn);font-size:13px;font-weight:500;color:var(--text3);line-height:1.7;margin-bottom:36px;max-width:280px;">
         Your baseline score is <strong style="color:var(--text);font-weight:800;">${baseScore}</strong>. Every habit you log moves this number. Let's build from here.
@@ -9726,13 +9736,13 @@ function renderObScreen(idx){
       <!-- Pillar preview pills -->
       <div style="display:flex;gap:8px;flex-wrap:wrap;justify-content:center;margin-bottom:40px;">
         ${[
-          {l:'Workout',c:'#a8ff3c'},
+          {l:'Workout',c:'var(--accent)'},
           {l:'Nutrition',c:'#ff6b35'},
-          {l:'Sleep',c:'#bb7fff'},
+          {l:'Sleep',c:'var(--purple)'},
           {l:'Hydration',c:'#4da8ff'},
-          {l:'Skin',c:'#e040fb'},
-          {l:'Mood',c:'#00e5a0'},
-        ].map(p=>`<div style="padding:5px 12px;border-radius:20px;background:rgba(255,255,255,0.04);border:0.5px solid rgba(255,255,255,0.08);">
+          {l:'Skin',c:'var(--pillar-skin)'},
+          {l:'Mood',c:'var(--pillar-mind)'},
+        ].map(p=>`<div style="padding:5px 12px;border-radius:20px;background:var(--ob-chip-bg);border:0.5px solid var(--ob-chip-border);">
           <span style="font-family:var(--fn);font-size:10px;font-weight:700;color:${p.c};">${p.l}</span>
         </div>`).join('')}
       </div>
@@ -9770,10 +9780,10 @@ function renderObScreen(idx){
   <div style="padding:calc(var(--safe-top,0px) + 16px) 22px 0;flex-shrink:0;">
     <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;">
       <div style="font-family:var(--fn);font-size:9px;font-weight:700;color:var(--text4);letter-spacing:0.14em;text-transform:uppercase;">${sc.cat}</div>
-      <div style="font-family:var(--fn);font-size:9px;font-weight:700;color:rgba(168,255,60,0.4);">${idx + 1} / ${total - 1}</div>
+      <div style="font-family:var(--fn);font-size:9px;font-weight:700;color:var(--accent-dim);">${idx + 1} / ${total - 1}</div>
     </div>
-    <div style="height:2px;background:rgba(255,255,255,0.06);border-radius:1px;overflow:hidden;">
-      <div style="height:100%;width:${progressPct}%;background:#a8ff3c;border-radius:1px;transition:width 0.4s cubic-bezier(0.22,1,0.36,1);box-shadow:0 0 6px rgba(168,255,60,0.5);"></div>
+    <div style="height:2px;background:var(--ob-chip-bg);border-radius:1px;overflow:hidden;">
+      <div style="height:100%;width:${progressPct}%;background:var(--accent);border-radius:1px;transition:width 0.4s cubic-bezier(0.22,1,0.36,1);box-shadow:0 0 6px rgba(168,255,60,0.5);"></div>
     </div>
   </div>`;
 
@@ -9828,21 +9838,21 @@ function obGetHeroIcon(sc){
       <svg width="32" height="32" fill="none" stroke="#a8ff3c" stroke-width="1.6" viewBox="0 0 24 24"><path d="M12 3l1.5 3h5.5l-4.5 3.5 1.5 4.5L12 11l-4 3 1.5-4.5L5 6h5.5z"/><path d="M5 20h14"/></svg>
     </div>`,
     goal: `<div style="display:flex;gap:8px;">
-      ${[{e:'🎯',c:'#a8ff3c'},{e:'💪',c:'#ff6b35'},{e:'⚡',c:'#bb7fff'}].map(i=>`<div style="width:52px;height:52px;border-radius:16px;background:rgba(255,255,255,0.04);border:0.5px solid rgba(255,255,255,0.08);display:flex;align-items:center;justify-content:center;font-size:22px;">${i.e}</div>`).join('')}
+      ${[{e:'🎯',c:'#a8ff3c'},{e:'💪',c:'#ff6b35'},{e:'⚡',c:'#bb7fff'}].map(i=>`<div style="width:52px;height:52px;border-radius:16px;background:var(--ob-chip-bg);border:0.5px solid var(--ob-chip-border);display:flex;align-items:center;justify-content:center;font-size:22px;">${i.e}</div>`).join('')}
     </div>`,
     experience: `<div style="display:flex;gap:6px;align-items:flex-end;">
       ${[20,32,44,56].map((h,i)=>`<div style="width:14px;height:${h}px;border-radius:4px;background:${i<2?'rgba(168,255,60,0.15)':'rgba(168,255,60,'+(0.4+i*0.2)+')'};">` ).join('')}
     </div>`,
     daysPerWeek: `<div style="display:flex;gap:6px;">
-      ${['M','T','W','T','F','S','S'].map((d,i)=>`<div style="width:30px;height:30px;border-radius:8px;background:${i<4?'rgba(168,255,60,0.15)':'rgba(255,255,255,0.04)'};border:0.5px solid ${i<4?'rgba(168,255,60,0.25)':'rgba(255,255,255,0.06)'};display:flex;align-items:center;justify-content:center;"><span style="font-family:var(--fn);font-size:9px;font-weight:700;color:${i<4?'#a8ff3c':'var(--text4)'};">${d}</span></div>`).join('')}
+      ${['M','T','W','T','F','S','S'].map((d,i)=>`<div style="width:30px;height:30px;border-radius:8px;background:${i<4?'rgba(168,255,60,0.15)':'var(--ob-chip-bg)'};border:0.5px solid ${i<4?'rgba(168,255,60,0.25)':'var(--ob-chip-border)'};display:flex;align-items:center;justify-content:center;"><span style="font-family:var(--fn);font-size:9px;font-weight:700;color:${i<4?'var(--accent)':'var(--text4)'};">${d}</span></div>`).join('')}
     </div>`,
     cardioPrefs: `<div style="width:72px;height:72px;border-radius:24px;background:rgba(255,107,53,0.08);border:0.5px solid rgba(255,107,53,0.2);display:flex;align-items:center;justify-content:center;font-size:32px;">🏃</div>`,
-    dietary: `<div style="display:flex;gap:8px;">${['🥩','🥦','🌾','💧'].map(e=>`<div style="width:48px;height:48px;border-radius:14px;background:rgba(255,255,255,0.04);border:0.5px solid rgba(255,255,255,0.08);display:flex;align-items:center;justify-content:center;font-size:20px;">${e}</div>`).join('')}</div>`,
+    dietary: `<div style="display:flex;gap:8px;">${['🥩','🥦','🌾','💧'].map(e=>`<div style="width:48px;height:48px;border-radius:14px;background:var(--ob-chip-bg);border:0.5px solid var(--ob-chip-border);display:flex;align-items:center;justify-content:center;font-size:20px;">${e}</div>`).join('')}</div>`,
     skinType: `<div style="width:72px;height:72px;border-radius:24px;background:rgba(224,64,251,0.08);border:0.5px solid rgba(224,64,251,0.2);display:flex;align-items:center;justify-content:center;">
       <svg width="32" height="32" fill="none" stroke="#e040fb" stroke-width="1.6" viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/></svg>
     </div>`,
     sleepQuality: `<div style="width:72px;height:72px;border-radius:24px;background:rgba(187,127,255,0.08);border:0.5px solid rgba(187,127,255,0.2);display:flex;align-items:center;justify-content:center;font-size:32px;">🌙</div>`,
-    bodyType: `<div style="display:flex;gap:8px;">${['🏋','🤸','🧘'].map(e=>`<div style="width:52px;height:52px;border-radius:16px;background:rgba(255,255,255,0.04);border:0.5px solid rgba(255,255,255,0.06);display:flex;align-items:center;justify-content:center;font-size:22px;">${e}</div>`).join('')}</div>`,
+    bodyType: `<div style="display:flex;gap:8px;">${['🏋','🤸','🧘'].map(e=>`<div style="width:52px;height:52px;border-radius:16px;background:var(--ob-chip-bg);border:0.5px solid var(--ob-chip-border);display:flex;align-items:center;justify-content:center;font-size:22px;">${e}</div>`).join('')}</div>`,
     notifications: `<div style="width:72px;height:72px;border-radius:24px;background:rgba(168,255,60,0.08);border:0.5px solid rgba(168,255,60,0.15);display:flex;align-items:center;justify-content:center;">
       <svg width="32" height="32" fill="none" stroke="#a8ff3c" stroke-width="1.6" viewBox="0 0 24 24"><path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 01-3.46 0"/></svg>
     </div>`,
@@ -9888,7 +9898,7 @@ function buildObScreen(sc){
     case 'options': return sc.options.map(o=>`
       <div onclick="obSelectOption('${sc.key}','${o.v}',this)" data-val="${o.v}"
         style="background:${(obData[sc.key]??sc.default)===o.v?'var(--accent-muted)':'var(--surface)'};
-        border:0.5px solid ${(obData[sc.key]??sc.default)===o.v?'rgba(168,255,60,0.4)':'var(--border)'};
+        border:0.5px solid ${(obData[sc.key]??sc.default)===o.v?'var(--ob-selected-border)':'var(--border)'};
         border-radius:12px;padding:11px 14px;margin-bottom:6px;display:flex;align-items:center;
         justify-content:space-between;cursor:pointer;-webkit-tap-highlight-color:transparent;">
         <div>
@@ -9909,7 +9919,7 @@ function buildObScreen(sc){
             data-val="${o.replace(/"/g,'&quot;')}"
             style="padding:7px 14px;border-radius:20px;
             background:${active?'var(--accent-muted)':'var(--surface)'};
-            border:0.5px solid ${active?'rgba(168,255,60,0.4)':'var(--border)'};cursor:pointer;-webkit-tap-highlight-color:transparent;">
+            border:0.5px solid ${active?'var(--ob-selected-border)':'var(--border)'};cursor:pointer;-webkit-tap-highlight-color:transparent;">
             <span style="font-family:var(--fn);font-size:11px;font-weight:700;
               color:${active?'var(--accent)':'var(--text4)'};">${o}</span>
           </div>`;
@@ -9993,12 +10003,12 @@ function buildDaysEquipment(sc){
   return `<div style="margin-bottom:14px;">
     <div style="font-family:var(--fn);font-size:9px;font-weight:700;color:var(--text4);text-transform:uppercase;letter-spacing:0.1em;margin-bottom:8px;">Days per week</div>
     <div style="display:flex;gap:6px;" id="ob-days-row">
-      ${sc.days.map(d=>`<div onclick="obSetDay(${d},this)" data-day="${d}" style="flex:1;padding:10px 0;border-radius:10px;background:${d===curDay?'var(--accent-muted)':'var(--surface)'};border:0.5px solid ${d===curDay?'rgba(168,255,60,0.4)':'var(--border)'};text-align:center;cursor:pointer;-webkit-tap-highlight-color:transparent;"><span style="font-family:var(--fn);font-size:14px;font-weight:800;color:${d===curDay?'var(--accent)':'var(--text3)'};">${d}</span></div>`).join('')}
+      ${sc.days.map(d=>`<div onclick="obSetDay(${d},this)" data-day="${d}" style="flex:1;padding:10px 0;border-radius:10px;background:${d===curDay?'var(--accent-muted)':'var(--surface)'};border:0.5px solid ${d===curDay?'var(--ob-selected-border)':'var(--border)'};text-align:center;cursor:pointer;-webkit-tap-highlight-color:transparent;"><span style="font-family:var(--fn);font-size:14px;font-weight:800;color:${d===curDay?'var(--accent)':'var(--text3)'};">${d}</span></div>`).join('')}
     </div>
   </div>
   <div style="font-family:var(--fn);font-size:9px;font-weight:700;color:var(--text4);text-transform:uppercase;letter-spacing:0.1em;margin-bottom:8px;">Equipment</div>
   <div id="ob-equip-list">
-  ${sc.equipment.map(e=>`<div onclick="obSetEquip('${e.v}',this)" data-equip="${e.v}" style="background:${curEquip===e.v?'var(--accent-muted)':'var(--surface)'};border:0.5px solid ${curEquip===e.v?'rgba(168,255,60,0.4)':'var(--border)'};border-radius:12px;padding:10px 14px;margin-bottom:6px;display:flex;align-items:center;justify-content:space-between;cursor:pointer;-webkit-tap-highlight-color:transparent;"><div><div class="ob-opt-label" style="font-family:var(--fn);font-size:13px;font-weight:700;color:${curEquip===e.v?'var(--text)':'var(--text2)'};">${e.l}</div><div class="ob-opt-sub" style="font-family:var(--fn);font-size:10px;color:${curEquip===e.v?'var(--accent-dim)':'var(--text4)'};margin-top:1px;">${e.s}</div></div><div class="ob-opt-dot" style="width:8px;height:8px;border-radius:50%;background:${curEquip===e.v?'var(--accent)':'var(--border)'};"></div></div>`).join('')}
+  ${sc.equipment.map(e=>`<div onclick="obSetEquip('${e.v}',this)" data-equip="${e.v}" style="background:${curEquip===e.v?'var(--accent-muted)':'var(--surface)'};border:0.5px solid ${curEquip===e.v?'var(--ob-selected-border)':'var(--border)'};border-radius:12px;padding:10px 14px;margin-bottom:6px;display:flex;align-items:center;justify-content:space-between;cursor:pointer;-webkit-tap-highlight-color:transparent;"><div><div class="ob-opt-label" style="font-family:var(--fn);font-size:13px;font-weight:700;color:${curEquip===e.v?'var(--text)':'var(--text2)'};">${e.l}</div><div class="ob-opt-sub" style="font-family:var(--fn);font-size:10px;color:${curEquip===e.v?'var(--accent-dim)':'var(--text4)'};margin-top:1px;">${e.s}</div></div><div class="ob-opt-dot" style="width:8px;height:8px;border-radius:50%;background:${curEquip===e.v?'var(--accent)':'var(--border)'};"></div></div>`).join('')}
   </div>`;
 }
 
@@ -10013,7 +10023,7 @@ function buildDiet(sc){
           data-val="${d.replace(/"/g,'&quot;')}"
           style="padding:6px 12px;border-radius:20px;cursor:pointer;-webkit-tap-highlight-color:transparent;
           background:${a?'var(--accent-muted)':'var(--surface)'};
-          border:0.5px solid ${a?'rgba(168,255,60,0.4)':'var(--border)'};">
+          border:0.5px solid ${a?'var(--ob-selected-border)':'var(--border)'};">
           <span style="font-family:var(--fn);font-size:10px;font-weight:700;
             color:${a?'var(--accent)':'var(--text4)'};">${d}</span>
         </div>`;
@@ -10029,7 +10039,7 @@ function buildDiet(sc){
         data-val="${c.replace(/"/g,'&quot;')}"
         style="padding:6px 12px;border-radius:20px;cursor:pointer;-webkit-tap-highlight-color:transparent;
         background:${a?'var(--accent-muted)':'var(--surface)'};
-        border:0.5px solid ${a?'rgba(168,255,60,0.4)':'var(--border)'};">
+        border:0.5px solid ${a?'var(--ob-selected-border)':'var(--border)'};">
         <span style="font-family:var(--fn);font-size:10px;font-weight:700;
           color:${a?'var(--accent)':'var(--text4)'};">${c}</span>
       </div>`;
@@ -10051,11 +10061,11 @@ function buildSkin(sc){
           <div class="ob-opt-label" style="font-family:var(--fn);font-size:13px;font-weight:700;
             color:${curSkin===t.v?'var(--text)':'var(--text2)'};">${t.l}</div>
           <div class="ob-opt-sub" style="font-family:var(--fn);font-size:10px;
-            color:${curSkin===t.v?'#bb7fff':'var(--text4)'};margin-top:2px;
+            color:${curSkin===t.v?'var(--purple)':'var(--text4)'};margin-top:2px;
             white-space:normal;display:block;">${t.s}</div>
         </div>
         <div class="ob-opt-dot" style="width:9px;height:9px;border-radius:50%;flex-shrink:0;margin-left:10px;
-          background:${curSkin===t.v?'#bb7fff':'var(--border)'};"></div>
+          background:${curSkin===t.v?'var(--purple)':'var(--border)'};"></div>
       </div>`).join('')}
   </div>
   <div style="font-family:var(--fn);font-size:9px;font-weight:700;color:var(--text4);
@@ -10069,7 +10079,7 @@ function buildSkin(sc){
         background:${a?'rgba(187,127,255,0.1)':'var(--surface)'};
         border:0.5px solid ${a?'rgba(187,127,255,0.4)':'var(--border)'};">
         <span style="font-family:var(--fn);font-size:10px;font-weight:700;
-          color:${a?'#bb7fff':'var(--text4)'};">${c}</span>
+          color:${a?'var(--purple)':'var(--text4)'};">${c}</span>
       </div>`;
     }).join('')}
   </div>`;
@@ -10085,9 +10095,9 @@ function buildMind(sc){
       <div onclick="obSetSleep('${s.v}',this)" data-sleep="${s.v}" style="background:${curSleep===s.v?'rgba(167,139,250,0.08)':'var(--surface)'};border:0.5px solid ${curSleep===s.v?'rgba(167,139,250,0.3)':'var(--border)'};border-radius:12px;padding:10px 14px;margin-bottom:5px;display:flex;align-items:center;justify-content:space-between;cursor:pointer;-webkit-tap-highlight-color:transparent;">
         <div>
           <div class="ob-opt-label" style="font-family:var(--fn);font-size:13px;font-weight:700;color:${curSleep===s.v?'var(--text)':'var(--text2)'};">${s.l}</div>
-          <div class="ob-opt-sub" style="font-family:var(--fn);font-size:10px;color:${curSleep===s.v?'#a78bfa':'var(--text4)'};margin-top:1px;">${s.s}</div>
+          <div class="ob-opt-sub" style="font-family:var(--fn);font-size:10px;color:${curSleep===s.v?'var(--lavender)':'var(--text4)'};margin-top:1px;">${s.s}</div>
         </div>
-        <div class="ob-opt-dot" style="width:8px;height:8px;border-radius:50%;background:${curSleep===s.v?'#a78bfa':'var(--border)'};"></div>
+        <div class="ob-opt-dot" style="width:8px;height:8px;border-radius:50%;background:${curSleep===s.v?'var(--lavender)':'var(--border)'};"></div>
       </div>`).join('')}
   </div>
   <div style="font-family:var(--fn);font-size:9px;font-weight:700;color:var(--text4);
@@ -10098,7 +10108,7 @@ function buildMind(sc){
       background:${n===curStress?'rgba(167,139,250,0.1)':'var(--surface)'};
       border:0.5px solid ${n===curStress?'rgba(167,139,250,0.35)':'var(--border)'};">
       <span style="font-family:var(--fn);font-size:14px;font-weight:800;
-        color:${n===curStress?'#a78bfa':'var(--text3)'};">${n}</span>
+        color:${n===curStress?'var(--lavender)':'var(--text3)'};">${n}</span>
     </div>`).join('')}
   </div>
   <div style="display:flex;justify-content:space-between;">
@@ -10112,7 +10122,7 @@ function buildNotifications(sc){
   return sc.options.map(o=>`
     <div onclick="obToggleSimpleChip('${sc.key}','${o.v}',this)" data-val="${o.v}" style="
       background:${cur.includes(o.v)?'var(--accent-muted)':'var(--surface)'};
-      border:0.5px solid ${cur.includes(o.v)?'rgba(168,255,60,0.4)':'var(--border)'};
+      border:0.5px solid ${cur.includes(o.v)?'var(--ob-selected-border)':'var(--border)'};
       border-radius:12px;padding:11px 14px;margin-bottom:6px;display:flex;
       align-items:center;justify-content:space-between;cursor:pointer;-webkit-tap-highlight-color:transparent;">
       <div>
@@ -10135,7 +10145,7 @@ function obSelectOption(key, val, el){
   allOpts.forEach(opt=>{
     const isActive = opt.dataset.val === val;
     opt.style.background = isActive ? 'var(--accent-muted)' : 'var(--surface)';
-    opt.style.borderColor = isActive ? 'rgba(168,255,60,0.4)' : 'var(--border)';
+    opt.style.borderColor = isActive ? 'var(--ob-selected-border)' : 'var(--border)';
     const label = opt.querySelector('.ob-opt-label');
     const sub = opt.querySelector('.ob-opt-sub');
     const dot = opt.querySelector('.ob-opt-dot');
@@ -10153,7 +10163,7 @@ function obToggleSimpleChip(key, val, el){
   if(isNowActive) arr.push(val); else arr.splice(i,1);
   // Surgical style update
   el.style.background = isNowActive ? 'var(--accent-muted)' : 'var(--surface)';
-  el.style.borderColor = isNowActive ? 'rgba(168,255,60,0.4)' : 'var(--border)';
+  el.style.borderColor = isNowActive ? 'var(--ob-selected-border)' : 'var(--border)';
   const span = el.querySelector('span');
   if(span) span.style.color = isNowActive ? 'var(--accent)' : 'var(--text4)';
   const dot = el.querySelector('.ob-opt-dot');
@@ -10167,7 +10177,7 @@ function obToggleDiet(key, val, el){
   const isNowActive = i === -1;
   if(isNowActive) arr.push(val); else arr.splice(i,1);
   el.style.background = isNowActive ? 'var(--accent-muted)' : 'var(--surface)';
-  el.style.borderColor = isNowActive ? 'rgba(168,255,60,0.4)' : 'var(--border)';
+  el.style.borderColor = isNowActive ? 'var(--ob-selected-border)' : 'var(--border)';
   const span = el.querySelector('span');
   if(span) span.style.color = isNowActive ? 'var(--accent)' : 'var(--text4)';
 }
@@ -10183,7 +10193,7 @@ function obToggleChip(key, val, el){
   if(isNowActive) arr.push(val); else arr.splice(i,1);
   // Surgical update — just restyle this chip
   el.style.background = isNowActive ? 'var(--accent-muted)' : 'var(--surface)';
-  el.style.borderColor = isNowActive ? 'rgba(168,255,60,0.4)' : 'var(--border)';
+  el.style.borderColor = isNowActive ? 'var(--ob-selected-border)' : 'var(--border)';
   const span = el.querySelector('span');
   if(span) span.style.color = isNowActive ? 'var(--accent)' : 'var(--text4)';
 }
@@ -10298,8 +10308,8 @@ function obSetSkinType(val, el){
     const sub = item.querySelector('.ob-opt-sub');
     const dot = item.querySelector('.ob-opt-dot');
     if(label) label.style.color = isActive ? 'var(--text)' : 'var(--text2)';
-    if(sub) sub.style.color = isActive ? '#bb7fff' : 'var(--text4)';
-    if(dot) dot.style.background = isActive ? '#bb7fff' : 'var(--border)';
+    if(sub) sub.style.color = isActive ? 'var(--purple)' : 'var(--text4)';
+    if(dot) dot.style.background = isActive ? 'var(--purple)' : 'var(--border)';
   });
 }
 
@@ -10314,8 +10324,8 @@ function obSetSleep(val, el){
     const sub = item.querySelector('.ob-opt-sub');
     const dot = item.querySelector('.ob-opt-dot');
     if(label) label.style.color = isActive ? 'var(--text)' : 'var(--text2)';
-    if(sub) sub.style.color = isActive ? '#a78bfa' : 'var(--text4)';
-    if(dot) dot.style.background = isActive ? '#a78bfa' : 'var(--border)';
+    if(sub) sub.style.color = isActive ? 'var(--lavender)' : 'var(--text4)';
+    if(dot) dot.style.background = isActive ? 'var(--lavender)' : 'var(--border)';
   });
 }
 
@@ -10327,7 +10337,7 @@ function obSetStress(val, el){
     item.style.background = isActive ? 'rgba(167,139,250,0.1)' : 'var(--surface)';
     item.style.borderColor = isActive ? 'rgba(167,139,250,0.35)' : 'var(--border)';
     const span = item.querySelector('span');
-    if(span) span.style.color = isActive ? '#a78bfa' : 'var(--text3)';
+    if(span) span.style.color = isActive ? 'var(--lavender)' : 'var(--text3)';
   });
 }
 
@@ -10339,7 +10349,7 @@ function obSetDay(val, el){
   if(row) row.querySelectorAll('[data-day]').forEach(btn=>{
     const isActive = parseInt(btn.dataset.day) === val;
     btn.style.background = isActive ? 'var(--accent-muted)' : 'var(--surface)';
-    btn.style.borderColor = isActive ? 'rgba(168,255,60,0.4)' : 'var(--border)';
+    btn.style.borderColor = isActive ? 'var(--ob-selected-border)' : 'var(--border)';
     const span = btn.querySelector('span');
     if(span) span.style.color = isActive ? 'var(--accent)' : 'var(--text3)';
   });
@@ -10353,7 +10363,7 @@ function obSetEquip(val, el){
   if(list) list.querySelectorAll('[data-equip]').forEach(item=>{
     const isActive = item.dataset.equip === val;
     item.style.background = isActive ? 'var(--accent-muted)' : 'var(--surface)';
-    item.style.borderColor = isActive ? 'rgba(168,255,60,0.4)' : 'var(--border)';
+    item.style.borderColor = isActive ? 'var(--ob-selected-border)' : 'var(--border)';
     const label = item.querySelector('.ob-opt-label');
     const sub = item.querySelector('.ob-opt-sub');
     const dot = item.querySelector('.ob-opt-dot');
