@@ -99,15 +99,15 @@
 
 /* ── LIGHT MODE OVERRIDE ── */
 [data-theme="light"] {
-  --bg:         #f5f5f7;
-  --bg2:        #ebebee;
-  --obs:        #ffffff;
+  --bg:         #f5f1eb;
+  --bg2:        #ece8e1;
+  --obs:        #faf7f3;
   --obs-skin:   #faf4ff;
-  --surface:    #ffffff;
-  --surface2:   #f8f8fa;
-  --surface3:   #efeff2;
-  --border:     #e0e0e8;
-  --border2:    #d0d0dc;
+  --surface:    #faf7f3;
+  --surface2:   #f3efe8;
+  --surface3:   #ebe7e0;
+  --border:     #ddd9d2;
+  --border2:    #d0cbc4;
   --accent:      #35a000;
   --accent-dim:  #267800;
   --accent-muted:#e0f5d8;
@@ -2822,11 +2822,11 @@ input:focus, select:focus, textarea:focus {
     <!-- Pillar sub-tabs — each pillar has its own colour -->
     <div style="overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none;flex-shrink:0;border-bottom:0.5px solid var(--border2);background:var(--bg);" id="elevate-pillar-tabs">
       <div style="display:flex;gap:8px;padding:12px 16px;min-width:max-content;">
-        <button onclick="setElevatePillar('skin')" id="eptab-skin" style="padding:8px 18px;border-radius:12px;font-family:var(--fn);font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.06em;background:rgba(224,64,251,0.12);border:0.5px solid rgba(224,64,251,0.3);cursor:pointer;color:#e040fb;white-space:nowrap;">🧴 Skin</button>
-        <button onclick="setElevatePillar('mind')" id="eptab-mind" style="padding:8px 18px;border-radius:12px;font-family:var(--fn);font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.06em;background:var(--surface2);border:0.5px solid var(--border);cursor:pointer;color:var(--text3);white-space:nowrap;">🧠 Mind</button>
-        <button onclick="setElevatePillar('body')" id="eptab-body" style="padding:8px 18px;border-radius:12px;font-family:var(--fn);font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.06em;background:var(--surface2);border:0.5px solid var(--border);cursor:pointer;color:var(--text3);white-space:nowrap;">💪 Body</button>
-        <button onclick="setElevatePillar('style')" id="eptab-style" style="padding:8px 18px;border-radius:12px;font-family:var(--fn);font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.06em;background:var(--surface2);border:0.5px solid var(--border);cursor:pointer;color:var(--text3);white-space:nowrap;">✨ Style</button>
-        <button onclick="setElevatePillar('learn')" id="eptab-learn" style="padding:8px 18px;border-radius:12px;font-family:var(--fn);font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.06em;background:var(--surface2);border:0.5px solid var(--border);cursor:pointer;color:var(--text3);white-space:nowrap;">📖 Learn</button>
+        <button onclick="setElevatePillar('skin')" id="eptab-skin" style="padding:8px 18px;border-radius:12px;font-family:var(--fn);font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.06em;background:rgba(224,64,251,0.12);border:0.5px solid rgba(224,64,251,0.3);cursor:pointer;color:#e040fb;white-space:nowrap;display:inline-flex;align-items:center;gap:5px;"><svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/></svg>Skin</button>
+        <button onclick="setElevatePillar('mind')" id="eptab-mind" style="padding:8px 18px;border-radius:12px;font-family:var(--fn);font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.06em;background:var(--surface2);border:0.5px solid var(--border);cursor:pointer;color:var(--text3);white-space:nowrap;display:inline-flex;align-items:center;gap:5px;"><svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>Mind</button>
+        <button onclick="setElevatePillar('body')" id="eptab-body" style="padding:8px 18px;border-radius:12px;font-family:var(--fn);font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.06em;background:var(--surface2);border:0.5px solid var(--border);cursor:pointer;color:var(--text3);white-space:nowrap;display:inline-flex;align-items:center;gap:5px;"><svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M6 4v16M18 4v16M4 8h4M16 8h4M4 16h4M16 16h4"/></svg>Body</button>
+        <button onclick="setElevatePillar('style')" id="eptab-style" style="padding:8px 18px;border-radius:12px;font-family:var(--fn);font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.06em;background:var(--surface2);border:0.5px solid var(--border);cursor:pointer;color:var(--text3);white-space:nowrap;display:inline-flex;align-items:center;gap:5px;"><svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7l-1.5-3h-5L8 7"/><circle cx="12" cy="14" r="3"/></svg>Style</button>
+        <button onclick="setElevatePillar('learn')" id="eptab-learn" style="padding:8px 18px;border-radius:12px;font-family:var(--fn);font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.06em;background:var(--surface2);border:0.5px solid var(--border);cursor:pointer;color:var(--text3);white-space:nowrap;display:inline-flex;align-items:center;gap:5px;"><svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M4 19.5A2.5 2.5 0 016.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 014 19.5v-15A2.5 2.5 0 016.5 2z"/></svg>Learn</button>
       </div>
     </div>
     <div id="glow-report"></div>
@@ -6362,7 +6362,7 @@ function renderElevateHero(){
 
   el.innerHTML = `
     <div class="elevate-hero">
-      <div class="elevate-streak-label">✨ Elevate streak</div>
+      <div class="elevate-streak-label">Elevate streak</div>
       <div class="elevate-streak-num">${streak} days</div>
       <div class="elevate-hero-sub">Feel good first. Look good follows.</div>
       <div class="elevate-mini-stats">
@@ -8014,10 +8014,10 @@ function renderMonthlyGlowReport(){
   glowScore = Math.min(100, glowScore);
 
   let glowGrade='',glowColor='';
-  if(glowScore>=88){glowGrade='Glowing ✨';glowColor='var(--purple)';}
-  else if(glowScore>=72){glowGrade='Radiant 💜';glowColor='var(--purple)';}
-  else if(glowScore>=58){glowGrade='Building 🌸';glowColor='var(--gold)';}
-  else{glowGrade='Getting Started 🌱';glowColor='var(--teal)';}
+  if(glowScore>=88){glowGrade='Glowing';glowColor='var(--purple)';}
+  else if(glowScore>=72){glowGrade='Radiant';glowColor='var(--purple)';}
+  else if(glowScore>=58){glowGrade='Building';glowColor='var(--gold)';}
+  else{glowGrade='Getting Started';glowColor='var(--teal)';}
 
   // Skin insight
   let skinInsight = '';
@@ -8050,7 +8050,7 @@ function renderMonthlyGlowReport(){
         <!-- Stats grid -->
         <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:0;">
           ${[
-            {label:'Elevate Streak',value:elevStreak+'🔥',sub:'days active',color:'var(--purple)'},
+            {label:'Elevate Streak',value:elevStreak,sub:'days active',color:'var(--purple)'},
             {label:'Avg Sleep',value:avgSleep30?avgSleep30+'h':'—',sub:goodSleepNights+' nights 7h+',color:'var(--blue)'},
             {label:'Avg Mood',value:avgMood?avgMood.toFixed(1)+'/5':'—',sub:moodTrend,color:'var(--gold)'},
             {label:'Skin Logs',value:skinPhotoCount,sub:'progress photos',color:'var(--purple)'},
