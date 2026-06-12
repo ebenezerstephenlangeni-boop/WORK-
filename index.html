@@ -39,7 +39,13 @@
   --accent-glow: rgba(168,255,60,0.15);
   --accent-glow2:rgba(168,255,60,0.07);
 
-  /* Pillar colours */
+  /* Pillar colours — use these vars for text; bright hex values are for SVG/decorative only */
+  --style-accent: #ffea00;
+  --pillar-skin:  #e040fb;
+  --pillar-mind:  #00e5a0;
+  --pillar-body:  #ff5722;
+  --pillar-style: #ffea00;
+  --pillar-learn: #00e5ff;
   --purple:     #bb7fff;
   --purple-bg:  #0a0810;
   --purple-border: rgba(187,127,255,0.15);
@@ -122,6 +128,13 @@
   --amber-bg:   #fff8e8;
   --teal-bg:    #e8faf8;
   --orange-bg:  #fff3ee;
+  /* Pillar accent text — darkened for readability on light backgrounds */
+  --style-accent: #7a6200;
+  --pillar-skin:  #8c00b5;
+  --pillar-mind:  #00704e;
+  --pillar-body:  #a02800;
+  --pillar-style: #7a6200;
+  --pillar-learn: #006680;
 }
 
 /* ── RESET ── */
@@ -6519,14 +6532,13 @@ function setElevatePillar(id){
   saveElevate(EV);
   // Update pill tab styles
   const colors = {skin:'224,64,251',mind:'0,229,160',body:'255,87,34',style:'255,234,0',learn:'0,229,255'};
-  const hexes = {skin:'#e040fb',mind:'#00e5a0',body:'#ff5722',style:'#ffea00',learn:'#00e5ff'};
   ['skin','mind','body','style','learn'].forEach(p=>{
     const btn = document.getElementById('eptab-'+p);
     if(!btn) return;
     const active = p===id;
     btn.style.background = active ? `rgba(${colors[p]},0.12)` : 'var(--surface2)';
     btn.style.borderColor = active ? `rgba(${colors[p]},0.3)` : 'var(--border)';
-    btn.style.color = active ? hexes[p] : 'var(--text3)';
+    btn.style.color = active ? `var(--pillar-${p})` : 'var(--text3)';
   });
   renderElevateContent();
   haptic('light');
@@ -6539,14 +6551,13 @@ function renderElevateContent(){
   EV.activePillar = p;
   // Sync pill tab styles
   const colors = {skin:'224,64,251',mind:'0,229,160',body:'255,87,34',style:'255,234,0',learn:'0,229,255'};
-  const hexes = {skin:'#e040fb',mind:'#00e5a0',body:'#ff5722',style:'#ffea00',learn:'#00e5ff'};
   ['skin','mind','body','style','learn'].forEach(pid=>{
     const btn = document.getElementById('eptab-'+pid);
     if(!btn) return;
     const active = pid===p;
     btn.style.background = active ? `rgba(${colors[pid]},0.12)` : 'var(--surface2)';
     btn.style.borderColor = active ? `rgba(${colors[pid]},0.3)` : 'var(--border)';
-    btn.style.color = active ? hexes[pid] : 'var(--text3)';
+    btn.style.color = active ? `var(--pillar-${pid})` : 'var(--text3)';
   });
   if(p==='skin') el.innerHTML = renderSkinPillar();
   else if(p==='mind') el.innerHTML = renderMindPillar();
@@ -6666,7 +6677,7 @@ function renderSkinPillar(){
     <div style="margin:0 16px 12px;background:var(--obs-skin);border:0.5px solid rgba(224,64,251,0.1);border-radius:14px;overflow:hidden;">
       ${['Oily','Dry','Combination','Sensitive','Normal'].map((t,i,arr)=>`
         <div onclick="setSkinType('${t}')" style="display:flex;align-items:center;justify-content:space-between;padding:10px 14px;${i<arr.length-1?'border-bottom:0.5px solid rgba(224,64,251,0.06);':''}cursor:pointer;background:${(EV.skinType||'')===t?'rgba(224,64,251,0.06)':'transparent'};">
-          <div style="font-family:var(--fn);font-size:13px;font-weight:700;color:${(EV.skinType||'')===t?'#f4f4f6':'#555'};">${t}</div>
+          <div style="font-family:var(--fn);font-size:13px;font-weight:700;color:${(EV.skinType||'')===t?'var(--text)':'var(--text3)'};">${t}</div>
           ${(EV.skinType||'')===t?'<div style="width:8px;height:8px;border-radius:50%;background:#e040fb;"></div>':''}
         </div>`).join('')}
     </div>
@@ -6733,8 +6744,8 @@ function renderMindPillar(){
         ${moods.map(m=>{
           const active = todayMood && todayMood.label===m.label;
           return `<div onclick="logMood('${m.val}','${m.label}')" style="flex:1;display:flex;flex-direction:column;align-items:center;gap:5px;padding:10px 4px;border-radius:12px;background:${active?`rgba(0,229,160,0.12)`:'transparent'};border:0.5px solid ${active?'rgba(0,229,160,0.3)':'transparent'};cursor:pointer;">
-            <div style="color:${active?m.color:'#333'};">${m.svg}</div>
-            <div style="font-family:var(--fn);font-size:9px;font-weight:700;color:${active?m.color:'#2a2a2a'};text-transform:uppercase;letter-spacing:0.06em;">${m.label}</div>
+            <div style="color:${active?m.color:'var(--text2)'};">${m.svg}</div>
+            <div style="font-family:var(--fn);font-size:9px;font-weight:700;color:${active?m.color:'var(--text3)'};text-transform:uppercase;letter-spacing:0.06em;">${m.label}</div>
           </div>`;
         }).join('')}
       </div>
@@ -6746,8 +6757,8 @@ function renderMindPillar(){
     <div style="background:var(--surface);border:0.5px solid var(--border);border-radius:14px;padding:14px;margin:0 16px 12px;">
       <div style="display:flex;align-items:flex-end;justify-content:space-between;margin-bottom:14px;">
         <div>
-          <div style="font-family:var(--fn);font-size:32px;font-weight:800;color:#00e5a0;letter-spacing:-2px;line-height:1;" id="sleep-hrs-display">${lastSleep?lastSleep.hours:'7'}</div>
-          <div style="font-family:var(--fn);font-size:9px;font-weight:700;color:rgba(0,229,160,0.5);text-transform:uppercase;letter-spacing:0.1em;margin-top:3px;">hours</div>
+          <div style="font-family:var(--fn);font-size:32px;font-weight:800;color:var(--pillar-mind);letter-spacing:-2px;line-height:1;" id="sleep-hrs-display">${lastSleep?lastSleep.hours:'7'}</div>
+          <div style="font-family:var(--fn);font-size:9px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:0.1em;margin-top:3px;">hours</div>
         </div>
         ${lastSleep?`<div style="text-align:right;"><div style="font-family:var(--fn);font-size:12px;font-weight:700;color:var(--text3);">${lastSleep.quality}</div><div style="font-family:var(--fn);font-size:10px;color:var(--text4);">Last night</div></div>`:''}
       </div>
@@ -6756,7 +6767,7 @@ function renderMindPillar(){
         style="width:100%;margin-bottom:14px;accent-color:#00e5a0;"/>
       <div style="display:flex;gap:6px;margin-bottom:12px;">
         ${['Poor','Fair','Good','Great','Perfect'].map(q=>`
-          <div class="sleep-q-btn ${lastSleep&&lastSleep.quality===q?'active':''}" id="sleepq-${q}" onclick="selectSleepQuality('${q}')" style="flex:1;text-align:center;padding:6px 4px;border-radius:8px;font-family:var(--fn);font-size:9px;font-weight:700;cursor:pointer;border:0.5px solid ${lastSleep&&lastSleep.quality===q?'rgba(0,229,160,0.4)':'var(--border)'};background:${lastSleep&&lastSleep.quality===q?'rgba(0,229,160,0.1)':'var(--surface2)'};color:${lastSleep&&lastSleep.quality===q?'#00e5a0':'var(--text4)'};">${q}</div>`).join('')}
+          <div class="sleep-q-btn ${lastSleep&&lastSleep.quality===q?'active':''}" id="sleepq-${q}" onclick="selectSleepQuality('${q}')" style="flex:1;text-align:center;padding:6px 4px;border-radius:8px;font-family:var(--fn);font-size:9px;font-weight:700;cursor:pointer;border:0.5px solid ${lastSleep&&lastSleep.quality===q?'rgba(0,229,160,0.4)':'var(--border)'};background:${lastSleep&&lastSleep.quality===q?'rgba(0,229,160,0.1)':'var(--surface2)'};color:${lastSleep&&lastSleep.quality===q?'var(--pillar-mind)':'var(--text4)'};">${q}</div>`).join('')}
       </div>
       <button onclick="logSleep()" style="width:100%;background:#00e5a0;border:none;border-radius:12px;padding:11px;color:#001a0e;font-family:var(--fn);font-size:13px;font-weight:800;cursor:pointer;">Log sleep</button>
     </div>
@@ -6766,7 +6777,7 @@ function renderMindPillar(){
     <div style="background:var(--surface);border:0.5px solid var(--border);border-left:2px solid #00e5a0;border-radius:14px;overflow:hidden;margin:0 16px 12px;">
       ${mhTips.map((tip,i)=>`
         <div style="padding:12px 14px;${i<mhTips.length-1?'border-bottom:0.5px solid var(--border2);':''}">
-          <div style="font-family:var(--fn);font-size:12px;font-weight:800;color:#00e5a0;margin-bottom:4px;">${tip.title}</div>
+          <div style="font-family:var(--fn);font-size:12px;font-weight:800;color:var(--pillar-mind);margin-bottom:4px;">${tip.title}</div>
           <div style="font-family:var(--fn);font-size:11px;color:var(--text3);line-height:1.65;">${tip.body}</div>
         </div>`).join('')}
     </div>
@@ -6774,23 +6785,23 @@ function renderMindPillar(){
     <!-- CONFIDENCE JOURNAL -->
     <div style="font-family:var(--fn);font-size:9px;font-weight:700;color:var(--text4);text-transform:uppercase;letter-spacing:0.14em;margin:0 16px 12px;">Confidence journal</div>
     <div style="background:var(--surface);border:0.5px solid var(--border);border-radius:14px;padding:14px;margin:0 16px 12px;">
-      <div style="font-family:var(--fn);font-size:11px;color:#00e5a0;font-weight:700;margin-bottom:6px;">Today's prompt</div>
+      <div style="font-family:var(--fn);font-size:11px;color:var(--pillar-mind);font-weight:700;margin-bottom:6px;">Today's prompt</div>
       <div style="font-family:var(--fn);font-size:13px;color:var(--text2);margin-bottom:12px;line-height:1.6;font-style:italic;">"${getDailyJournalPrompt()}"</div>
       <textarea id="journal-input" placeholder="Write your thoughts..." rows="3"
         style="width:100%;background:var(--surface2);border:0.5px solid var(--border);border-radius:10px;color:var(--text);font-family:var(--fn);font-size:13px;padding:10px 12px;outline:none;resize:none;"></textarea>
-      <button onclick="saveJournalEntry()" style="width:100%;background:rgba(0,229,160,0.1);border:0.5px solid rgba(0,229,160,0.25);border-radius:12px;padding:11px;color:#00e5a0;font-family:var(--fn);font-size:13px;font-weight:800;cursor:pointer;margin-top:8px;">Save entry</button>
+      <button onclick="saveJournalEntry()" style="width:100%;background:rgba(0,229,160,0.1);border:0.5px solid rgba(0,229,160,0.25);border-radius:12px;padding:11px;color:var(--pillar-mind);font-family:var(--fn);font-size:13px;font-weight:800;cursor:pointer;margin-top:8px;">Save entry</button>
     </div>
     ${EV.journal.length > 0 ? `
       <div style="margin:0 16px 12px;">
         <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;">
           <div style="font-family:var(--fn);font-size:9px;font-weight:700;color:var(--text4);text-transform:uppercase;letter-spacing:0.1em;">Past entries (${EV.journal.length})</div>
-          ${EV.journal.length > 3 ? `<button onclick="toggleJournalExpand()" id="journal-expand-btn" style="font-family:var(--fn);font-size:11px;font-weight:700;color:#00e5a0;background:none;border:none;cursor:pointer;">Show all</button>` : ''}
+          ${EV.journal.length > 3 ? `<button onclick="toggleJournalExpand()" id="journal-expand-btn" style="font-family:var(--fn);font-size:11px;font-weight:700;color:var(--pillar-mind);background:none;border:none;cursor:pointer;">Show all</button>` : ''}
         </div>
         <div style="background:var(--surface);border:0.5px solid var(--border);border-radius:14px;overflow:hidden;" id="journal-entries-list">
           ${[...EV.journal].reverse().slice(0, journalExpanded?999:3).map((j,i,arr)=>`
             <div style="padding:12px 14px;position:relative;${i<arr.length-1?'border-bottom:0.5px solid var(--border2);':''}">
               <div style="font-family:var(--fn);font-size:10px;font-weight:700;color:var(--text4);margin-bottom:3px;">${j.date}</div>
-              <div style="font-family:var(--fn);font-size:10px;color:rgba(0,229,160,0.4);margin-bottom:4px;font-style:italic;">${j.prompt||''}</div>
+              <div style="font-family:var(--fn);font-size:10px;color:var(--text4);margin-bottom:4px;font-style:italic;">${j.prompt||''}</div>
               <div style="font-family:var(--fn);font-size:12px;color:var(--text2);line-height:1.6;">${j.text}</div>
               <button onclick="delJournalEntry(${EV.journal.length-1-i})" style="position:absolute;top:10px;right:10px;background:none;border:none;color:var(--text4);cursor:pointer;padding:2px;">
                 <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
@@ -6847,7 +6858,7 @@ function renderBodyPillar(){
     <div style="font-family:var(--fn);font-size:9px;font-weight:700;color:var(--text4);text-transform:uppercase;letter-spacing:0.14em;margin:14px 16px 10px;">Measurements trend</div>
     <div style="background:var(--surface);border:0.5px solid var(--border);border-radius:14px;padding:14px;margin:0 16px 12px;">
       ${sorted.length >= 2 ? `
-        ${lastMeas?.chest ? measChart('chest','#ff5722','Chest') : ''}
+        ${lastMeas?.chest ? measChart('chest','var(--pillar-body)','Chest') : ''}
         ${lastMeas?.waist ? measChart('waist','var(--orange)','Waist') : ''}
         ${lastMeas?.arms ? measChart('arms','#60a5fa','Arms') : ''}
         ${lastMeas?.thighs ? measChart('thighs','#2dd4bf','Thighs') : ''}
@@ -6857,8 +6868,8 @@ function renderBodyPillar(){
     <div style="font-family:var(--fn);font-size:9px;font-weight:700;color:var(--text4);text-transform:uppercase;letter-spacing:0.14em;margin:0 16px 12px;">Current stats</div>
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:0 16px 12px;">
       ${[
-        ['Weight', lastWeight?lastWeight.kg+'kg':'—', '#ff5722'],
-        ['Chest', lastMeas&&lastMeas.chest?lastMeas.chest+'"':'—', '#ff5722'],
+        ['Weight', lastWeight?lastWeight.kg+'kg':'—', 'var(--pillar-body)'],
+        ['Chest', lastMeas&&lastMeas.chest?lastMeas.chest+'"':'—', 'var(--pillar-body)'],
         ['Waist', lastMeas&&lastMeas.waist?lastMeas.waist+'"':'—', 'var(--orange)'],
         ['Arms', lastMeas&&lastMeas.arms?lastMeas.arms+'"':'—', '#60a5fa'],
       ].map(([lbl,val,col])=>`
@@ -6939,11 +6950,11 @@ function renderStylePillar(){
       ${bodyTypes.map(bt=>`
         <div style="background:${EV.bodyType===bt.id?'rgba(255,234,0,0.08)':'var(--surface)'};border:0.5px solid ${EV.bodyType===bt.id?'rgba(255,234,0,0.3)':'var(--border)'};border-radius:14px;padding:12px 14px;margin-bottom:8px;cursor:pointer;" onclick="setBodyType('${bt.id}')">
           <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:4px;">
-            <div style="font-family:var(--fn);font-size:14px;font-weight:800;color:${EV.bodyType===bt.id?'#ffea00':'var(--text)'};">${bt.name}</div>
-            ${EV.bodyType===bt.id?'<div style="font-family:var(--fn);font-size:9px;font-weight:800;color:#ffea00;background:rgba(255,234,0,0.1);border:0.5px solid rgba(255,234,0,0.3);border-radius:20px;padding:2px 8px;">Selected</div>':''}
+            <div style="font-family:var(--fn);font-size:14px;font-weight:800;color:${EV.bodyType===bt.id?'var(--style-accent)':'var(--text)'};">${bt.name}</div>
+            ${EV.bodyType===bt.id?'<div style="font-family:var(--fn);font-size:9px;font-weight:800;color:var(--style-accent);background:rgba(255,234,0,0.1);border:0.5px solid rgba(255,234,0,0.3);border-radius:20px;padding:2px 8px;">Selected</div>':''}
           </div>
           <div style="font-family:var(--fn);font-size:12px;color:var(--text3);margin-bottom:${EV.bodyType===bt.id?8:0}px;">${bt.desc}</div>
-          ${EV.bodyType===bt.id?`<div>${bt.tips.map(t=>`<div style="font-family:var(--fn);font-size:11px;color:#ffea00;margin-top:4px;display:flex;align-items:flex-start;gap:6px;"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="flex-shrink:0;margin-top:2px;"><polyline points="20 6 9 17 4 12"/></svg>${t}</div>`).join('')}</div>`:''}
+          ${EV.bodyType===bt.id?`<div>${bt.tips.map(t=>`<div style="font-family:var(--fn);font-size:11px;color:var(--style-accent);margin-top:4px;display:flex;align-items:flex-start;gap:6px;"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="flex-shrink:0;margin-top:2px;"><polyline points="20 6 9 17 4 12"/></svg>${t}</div>`).join('')}</div>`:''}
         </div>`).join('')}
     </div>
 
@@ -6972,10 +6983,10 @@ function renderStylePillar(){
       <div style="padding:12px 14px;">
         <input type="file" id="outfit-input" accept="image/*" style="display:none;" onchange="analyseOutfit(event)"/>
         <button onclick="triggerOutfitPicker()" style="width:100%;background:rgba(255,234,0,0.08);border:0.5px solid rgba(255,234,0,0.25);border-radius:12px;padding:14px;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:10px;">
-          <svg width="20" height="20" fill="none" stroke="#ffea00" stroke-width="1.8" viewBox="0 0 24 24"><path d="M23 19a2 2 0 01-2 2H3a2 2 0 01-2-2V8a2 2 0 012-2h4l2-3h6l2 3h4a2 2 0 012 2z"/><circle cx="12" cy="13" r="4"/></svg>
+          <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24" style="color:var(--style-accent)"><path d="M23 19a2 2 0 01-2 2H3a2 2 0 01-2-2V8a2 2 0 012-2h4l2-3h6l2 3h4a2 2 0 012 2z"/><circle cx="12" cy="13" r="4"/></svg>
           <div style="text-align:left;">
-            <div style="font-family:var(--fn);font-size:12px;font-weight:800;color:#ffea00;">Photo my outfit</div>
-            <div style="font-family:var(--fn);font-size:10px;color:rgba(255,234,0,0.5);">Powered by Gemini Vision</div>
+            <div style="font-family:var(--fn);font-size:12px;font-weight:800;color:var(--style-accent);">Photo my outfit</div>
+            <div style="font-family:var(--fn);font-size:10px;color:var(--text3);">Powered by Gemini Vision</div>
           </div>
         </button>
         <div id="outfit-result" style="margin-top:12px;"></div>
@@ -6990,7 +7001,7 @@ function renderLearnPillar(){
   return `
     <div style="font-family:var(--fn);font-size:9px;font-weight:700;color:var(--text4);text-transform:uppercase;letter-spacing:0.14em;margin:14px 16px 10px;">Self-optimisation principles</div>
     <div style="background:var(--surface);border:0.5px solid var(--border);border-radius:14px;padding:14px;margin:0 16px 12px;">
-      <div style="font-family:var(--fn);font-size:14px;font-weight:800;color:#00e5ff;margin-bottom:8px;letter-spacing:-0.2px;">${edu.title}</div>
+      <div style="font-family:var(--fn);font-size:14px;font-weight:800;color:var(--pillar-learn);margin-bottom:8px;letter-spacing:-0.2px;">${edu.title}</div>
       <div style="font-family:var(--fn);font-size:12px;color:var(--text2);line-height:1.7;">${edu.body}</div>
       <div style="display:flex;align-items:center;justify-content:space-between;margin-top:12px;padding-top:10px;border-top:0.5px solid var(--border2);">
         <button onclick="prevElevateEdu('learn')" style="font-family:var(--fn);font-size:11px;font-weight:700;color:var(--text3);background:none;border:none;cursor:pointer;">← Prev</button>
@@ -7009,7 +7020,7 @@ function renderLearnPillar(){
       ['Complete self-improvement','Fitness, nutrition, skin, style, sleep, confidence. All connected. All tracked. All improving together.'],
     ].map(([title,body])=>`
       <div style="background:var(--surface);border:0.5px solid var(--border);border-left:2px solid #00e5ff;border-radius:14px;padding:14px;margin-bottom:8px;">
-        <div style="font-family:var(--fn);font-size:13px;font-weight:800;color:#00e5ff;margin-bottom:5px;">${title}</div>
+        <div style="font-family:var(--fn);font-size:13px;font-weight:800;color:var(--pillar-learn);margin-bottom:5px;">${title}</div>
         <div style="font-family:var(--fn);font-size:12px;color:var(--text2);line-height:1.65;">${body}</div>
       </div>`).join('')}
     </div>
