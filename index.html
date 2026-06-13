@@ -10437,8 +10437,8 @@ function goWithAnim(k, el){
 
   currentTabIdx = newIdx;
 
-  // Clear any pending animation cleanup
-  if(_slidingTimer){ clearTimeout(_slidingTimer); _slidingTimer = null; }
+  // Clear any pending animation cleanup and release the lock
+  if(_slidingTimer){ clearTimeout(_slidingTimer); _slidingTimer = null; _sliding = false; }
 
   const inEl = document.getElementById(SM[k]);
   if(!inEl){ return; }
