@@ -1010,7 +1010,7 @@ select option { background: var(--surface2); }
 .volt-hero-card .vh-label { color: #a8ff3c; }
 .volt-hero-card .vh-streak-pill { background: rgba(168,255,60,0.1); border: 0.5px solid rgba(168,255,60,0.2); }
 .volt-hero-card .vh-streak-num { color: #a8ff3c; }
-.volt-hero-card .vh-streak-lbl { color: rgba(168,255,60,0.5); }
+.volt-hero-card .vh-streak-lbl { color: var(--accent-dim); }
 .volt-hero-card .vh-share-btn { background: rgba(168,255,60,0.1); border: 0.5px solid rgba(168,255,60,0.25); }
 .volt-hero-card .vh-share-txt { color: #a8ff3c; }
 
@@ -2583,7 +2583,7 @@ input:focus, select:focus, textarea:focus {
       <!-- Obsidian macro banner — contained card -->
       <div class="obs-banner" style="margin:0 16px 12px;background:var(--obs);border:0.5px solid rgba(168,255,60,0.12);border-radius:20px;padding:16px 18px 18px;position:relative;overflow:hidden;">
         <div style="position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(168,255,60,0.1),transparent);"></div>
-        <div style="font-family:var(--fn);font-size:9px;font-weight:700;color:rgba(168,255,60,0.2);text-transform:uppercase;letter-spacing:0.16em;margin-bottom:12px;" id="nut-track-date">Today</div>
+        <div style="font-family:var(--fn);font-size:9px;font-weight:700;color:var(--accent-dim);text-transform:uppercase;letter-spacing:0.16em;margin-bottom:12px;" id="nut-track-date">Today</div>
         <!-- Remaining as hero -->
         <div style="display:flex;align-items:flex-end;justify-content:space-between;margin-bottom:14px;">
           <div>
@@ -2630,7 +2630,7 @@ input:focus, select:focus, textarea:focus {
           <button onclick="openScanner()" style="display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;background:var(--accent-muted);border:0.5px solid rgba(168,255,60,0.25);border-radius:14px;padding:14px 8px;cursor:pointer;">
             <svg width="20" height="20" fill="none" stroke="var(--accent)" stroke-width="1.8" viewBox="0 0 24 24"><path d="M23 19a2 2 0 01-2 2H3a2 2 0 01-2-2V8a2 2 0 012-2h4l2-3h6l2 3h4a2 2 0 012 2z"/><circle cx="12" cy="13" r="4"/></svg>
             <span style="font-family:var(--fn);font-size:10px;font-weight:800;color:var(--accent);text-transform:uppercase;letter-spacing:0.06em;">AI Scan</span>
-            <span style="font-family:var(--fn);font-size:9px;color:rgba(168,255,60,0.5);font-weight:600;">Gemini</span>
+            <span style="font-family:var(--fn);font-size:9px;color:var(--accent-dim);font-weight:600;">Gemini</span>
           </button>
           <button onclick="openBarcodeScanner()" style="display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;background:rgba(77,168,255,0.08);border:0.5px solid rgba(77,168,255,0.2);border-radius:14px;padding:14px 8px;cursor:pointer;">
             <svg width="20" height="20" fill="none" stroke="var(--blue)" stroke-width="1.8" viewBox="0 0 24 24"><path d="M3 5h2M3 8h2M3 11h2M19 5h2M19 8h2M19 11h2M7 3v18M12 3v18M17 3v18"/><rect x="1" y="1" width="22" height="22" rx="2" stroke-width="1.5"/></svg>
@@ -4822,7 +4822,7 @@ function renderProgHero(){
   heroEl.innerHTML=`
     <div style="background:var(--obs);border:0.5px solid rgba(168,255,60,0.12);border-radius:18px;padding:16px 18px 18px;position:relative;overflow:hidden;">
       <div style="position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(168,255,60,0.15),transparent);"></div>
-      <div style="font-family:var(--fn);font-size:9px;font-weight:700;color:rgba(168,255,60,0.22);text-transform:uppercase;letter-spacing:0.18em;margin-bottom:12px;">Weight trend</div>
+      <div style="font-family:var(--fn);font-size:9px;font-weight:700;color:var(--accent-dim);text-transform:uppercase;letter-spacing:0.18em;margin-bottom:12px;">Weight trend</div>
       <div style="display:flex;align-items:flex-end;justify-content:space-between;margin-bottom:12px;">
         <div>
           <div style="font-family:var(--fn);font-size:34px;font-weight:800;color:var(--obs-text);letter-spacing:-2px;line-height:1;">${currentW}<span style="font-size:14px;color:var(--obs-text-dim2);font-weight:600;">kg</span></div>
@@ -7832,12 +7832,12 @@ function renderWeeklyHealthReport(){
         <div style="padding:14px 16px 12px;border-bottom:0.5px solid rgba(168,255,60,0.08);">
           <div style="display:flex;justify-content:space-between;align-items:flex-start;">
             <div>
-              <div style="font-family:var(--fn);font-size:9px;font-weight:700;color:rgba(168,255,60,0.25);text-transform:uppercase;letter-spacing:0.18em;margin-bottom:4px;">Weekly health report</div>
+              <div style="font-family:var(--fn);font-size:9px;font-weight:700;color:var(--accent-dim);text-transform:uppercase;letter-spacing:0.18em;margin-bottom:4px;">Weekly health report</div>
               <div style="font-family:var(--fn);font-size:15px;font-weight:800;color:var(--obs-text);letter-spacing:-0.2px;">${days7[0].slice(5).replace('-','/')} – ${days7[6].slice(5).replace('-','/')}</div>
             </div>
             <div style="text-align:right;">
               <div style="font-family:var(--fn);font-size:38px;font-weight:800;color:${gradeColor};letter-spacing:-2px;line-height:1;">${grade}</div>
-              <div style="font-family:var(--fn);font-size:9px;color:rgba(168,255,60,0.25);font-weight:700;text-transform:uppercase;letter-spacing:0.1em;margin-top:2px;">Grade</div>
+              <div style="font-family:var(--fn);font-size:9px;color:var(--accent-dim);font-weight:700;text-transform:uppercase;letter-spacing:0.1em;margin-top:2px;">Grade</div>
             </div>
           </div>
         </div>
@@ -11066,7 +11066,7 @@ function showPreSessionPriming(){
 
     <!-- Coach cue -->
     <div style="background:rgba(168,255,60,0.06);border:0.5px solid rgba(168,255,60,0.15);border-radius:14px;padding:14px 16px;margin-bottom:28px;max-width:300px;margin-left:auto;margin-right:auto;">
-      <div style="font-family:var(--fn);font-size:9px;font-weight:700;color:rgba(168,255,60,0.5);text-transform:uppercase;letter-spacing:0.14em;margin-bottom:6px;">Coach FT says</div>
+      <div style="font-family:var(--fn);font-size:9px;font-weight:700;color:var(--accent-dim);text-transform:uppercase;letter-spacing:0.14em;margin-bottom:6px;">Coach FT says</div>
       <div style="font-family:var(--fn);font-size:13px;font-weight:600;color:#a8ff3c;line-height:1.6;">"${cue}"</div>
     </div>
 
