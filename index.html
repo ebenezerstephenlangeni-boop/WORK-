@@ -2363,6 +2363,12 @@ input:focus, select:focus, textarea:focus {
   color: var(--accent);
 }
 @keyframes blink { 0%,100%{opacity:1;} 50%{opacity:0;} }
+
+/* ── SKELETON LOADERS ── */
+@keyframes skelPulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.4; } }
+.skel { background: var(--surface2); border-radius: 8px; animation: skelPulse 1.4s ease-in-out infinite; }
+.skel-text { height: 11px; border-radius: 4px; margin-bottom: 8px; }
+.skel-card { height: 64px; border-radius: 14px; margin-bottom: 10px; }
 </style>
 </head>
 <body>
@@ -4509,7 +4515,7 @@ async function aiParseMacros(){
 
   // Disable button to prevent double-tap freeze
   if(parseBtn){ parseBtn.disabled=true; parseBtn.textContent='...'; }
-  if(statusEl){ statusEl.style.display='block'; statusEl.textContent='Analysing...'; statusEl.style.color='var(--accent)'; }
+  if(statusEl){ statusEl.style.display='block'; statusEl.style.color=''; statusEl.innerHTML='<div class="skel skel-card" style="width:100%;"></div><div class="skel skel-card" style="width:100%;"></div><div class="skel skel-text" style="width:80%;"></div><div class="skel skel-text" style="width:60%;margin-bottom:0;"></div>'; }
 
   if(!key){
     localParseMacros(text);
@@ -5753,7 +5759,7 @@ function showCoachTyping(){
   const typing = document.createElement('div');
   typing.className = 'coach-msg bot';
   typing.id = 'coach-typing';
-  typing.innerHTML = '<div class="coach-avatar" style="width:28px;height:28px;border-radius:8px;background:var(--accent-muted);border:0.5px solid rgba(168,255,60,0.2);display:flex;align-items:center;justify-content:center;flex-shrink:0;"><svg width="14" height="14" fill="none" stroke="var(--accent)" stroke-width="1.8" viewBox="0 0 24 24"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg></div><div class="coach-typing"><span></span><span></span><span></span></div>';
+  typing.innerHTML = '<div class="coach-avatar" style="width:28px;height:28px;border-radius:8px;background:var(--accent-muted);border:0.5px solid rgba(168,255,60,0.2);display:flex;align-items:center;justify-content:center;flex-shrink:0;"><svg width="14" height="14" fill="none" stroke="var(--accent)" stroke-width="1.8" viewBox="0 0 24 24"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg></div><div style="display:flex;flex-direction:column;padding:12px 14px;background:var(--surface2);border:0.5px solid var(--border);border-radius:16px;border-bottom-left-radius:4px;width:220px;"><div class="skel skel-text" style="width:90%;"></div><div class="skel skel-text" style="width:75%;"></div><div class="skel skel-text" style="width:60%;margin-bottom:0;"></div></div>';
   el.appendChild(typing);
   el.scrollTop = el.scrollHeight;
 }
