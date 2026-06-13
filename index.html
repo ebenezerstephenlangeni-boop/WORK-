@@ -7918,8 +7918,8 @@ function renderMonthlyGlowReport(){
   // Confidence journal entries this month
   const confEntries = (EV2.confLog||[]).filter(e=>days30.includes(e.date)).length;
 
-  // Glow score (0–100)
-  let glowScore = 50;
+  // Glow score (0–100); practical max is 60 from additive signals
+  let glowScore = 0;
   if(elevStreak>=7) glowScore+=15; else if(elevStreak>=3) glowScore+=8; else if(elevStreak>=1) glowScore+=3;
   if(avgSleep30>=8) glowScore+=15; else if(avgSleep30>=7) glowScore+=10; else if(avgSleep30>=6) glowScore+=4;
   if(avgMood>=4) glowScore+=12; else if(avgMood>=3) glowScore+=6; else if(avgMood>0) glowScore+=2;
@@ -7929,10 +7929,11 @@ function renderMonthlyGlowReport(){
   glowScore = Math.min(100, glowScore);
 
   let glowGrade='',glowColor='';
-  if(glowScore>=88){glowGrade='Glowing';glowColor='var(--purple)';}
-  else if(glowScore>=72){glowGrade='Radiant';glowColor='var(--purple)';}
-  else if(glowScore>=58){glowGrade='Building';glowColor='var(--gold)';}
-  else{glowGrade='Getting Started';glowColor='var(--teal)';}
+  if(glowScore===0){glowGrade='No data yet';glowColor='var(--text3)';}
+  else if(glowScore>=46){glowGrade='Glowing';glowColor='var(--purple)';}
+  else if(glowScore>=31){glowGrade='Getting there';glowColor='var(--gold)';}
+  else if(glowScore>=16){glowGrade='Building habits';glowColor='var(--teal)';}
+  else{glowGrade='Getting started';glowColor='var(--text3)';}
 
   // Skin insight
   let skinInsight = '';
