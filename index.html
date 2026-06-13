@@ -10421,6 +10421,9 @@ function goWithAnim(k, el){
   const direction = newIdx >= oldIdx ? 1 : -1;
   const sameTab = newIdx === oldIdx;
 
+  // Drop rapid inter-tab taps while the slide animation is running
+  if(_sliding && !sameTab) return;
+
   // Update tab active state immediately
   document.querySelectorAll('.tb').forEach(b => b.classList.remove('active'));
   if(el) el.classList.add('active');
@@ -10455,11 +10458,14 @@ function goWithAnim(k, el){
   inEl.classList.remove('gone');
   inEl.style.display = 'flex';
 
-  // Render its content
-  _triggerRender(k);
+  // Defer render so the slide animation can start painting before the main thread is blocked
+  requestAnimationFrame(() => _triggerRender(k));
 
-  // Same tab — no slide animation needed
+  // Same tab — no slide animation needed, no lock required
   if(sameTab) return;
+
+  // Lock against rapid taps for the duration of the slide
+  _sliding = true;
 
   // Animate the new screen in
   const inClass = direction === 1 ? 'screen-slide-in-right' : 'screen-slide-in-left';
@@ -10467,6 +10473,7 @@ function goWithAnim(k, el){
   inEl.classList.add(inClass);
   _slidingTimer = setTimeout(()=>{
     inEl.classList.remove(inClass);
+    _sliding = false;
     _slidingTimer = null;
   }, 220);
 }
