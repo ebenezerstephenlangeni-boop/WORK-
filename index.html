@@ -1005,8 +1005,8 @@ select option { background: var(--surface2); }
 }
 .volt-hero-card .vh-topline { background: linear-gradient(90deg,transparent,rgba(168,255,60,0.3),transparent); }
 .volt-hero-card .vh-score { color: #a8ff3c; }
-.volt-hero-card .vh-score-sub { color: rgba(168,255,60,0.4); }
-.volt-hero-card .vh-eyebrow { color: rgba(168,255,60,0.4); }
+.volt-hero-card .vh-score-sub { color: var(--accent-dim); }
+.volt-hero-card .vh-eyebrow { color: var(--accent-dim); }
 .volt-hero-card .vh-label { color: #a8ff3c; }
 .volt-hero-card .vh-streak-pill { background: rgba(168,255,60,0.1); border: 0.5px solid rgba(168,255,60,0.2); }
 .volt-hero-card .vh-streak-num { color: #a8ff3c; }
@@ -2588,7 +2588,7 @@ input:focus, select:focus, textarea:focus {
         <div style="display:flex;align-items:flex-end;justify-content:space-between;margin-bottom:14px;">
           <div>
             <div style="font-family:var(--fn);font-size:36px;font-weight:800;color:var(--obs-text);letter-spacing:-2px;line-height:1;" id="rkcal-remaining">0</div>
-            <div style="font-family:var(--fn);font-size:9px;font-weight:700;color:rgba(168,255,60,0.4);text-transform:uppercase;letter-spacing:0.1em;margin-top:4px;">kcal remaining</div>
+            <div style="font-family:var(--fn);font-size:9px;font-weight:700;color:var(--accent-dim);text-transform:uppercase;letter-spacing:0.1em;margin-top:4px;">kcal remaining</div>
           </div>
           <div style="text-align:right;">
             <div style="font-family:var(--fn);font-size:14px;font-weight:800;color:var(--obs-text-dim2);" id="rkcal">0</div>
@@ -7487,7 +7487,7 @@ function renderNutMeals(){
     <!-- Goal filter -->
     <div style="display:flex;gap:6px;margin-bottom:10px;flex-wrap:wrap;">
       ${['all','cut','aggressive-cut','bulk','maintain'].map(g=>`
-        <button onclick="setMealGoalFilter('${g}')" style="padding:6px 12px;border-radius:20px;border:0.5px solid ${activeMealGoal===g?'rgba(168,255,60,0.4)':'var(--border)'};background:${activeMealGoal===g?'var(--accent-muted)':'var(--surface2)'};color:${activeMealGoal===g?'var(--accent)':'var(--text4)'};font-family:var(--fn);font-size:10px;font-weight:700;cursor:pointer;">
+        <button onclick="setMealGoalFilter('${g}')" style="padding:6px 12px;border-radius:20px;border:0.5px solid ${activeMealGoal===g?'var(--ob-selected-border)':'var(--border)'};background:${activeMealGoal===g?'var(--accent-muted)':'var(--surface2)'};color:${activeMealGoal===g?'var(--accent)':'var(--text4)'};font-family:var(--fn);font-size:10px;font-weight:700;cursor:pointer;">
           ${goalLabels[g]}
         </button>`).join('')}
     </div>
@@ -7495,7 +7495,7 @@ function renderNutMeals(){
     <!-- Region filter pills -->
     <div style="display:flex;gap:6px;overflow-x:auto;scrollbar-width:none;padding-bottom:2px;margin-bottom:14px;">
       ${['all','East Africa','West Africa','South Asian','Middle East','American','European','Mediterranean','Japanese'].map(r=>`
-        <button onclick="setMealRegionFilter('${r}')" style="flex-shrink:0;padding:6px 12px;border-radius:20px;border:0.5px solid ${activeMealRegion===r?'rgba(168,255,60,0.4)':'var(--border)'};background:${activeMealRegion===r?'var(--accent-muted)':'var(--surface2)'};color:${activeMealRegion===r?'var(--accent)':'var(--text4)'};font-family:var(--fn);font-size:10px;font-weight:700;cursor:pointer;white-space:nowrap;">${r==='all'?'All regions':r}</button>`).join('')}
+        <button onclick="setMealRegionFilter('${r}')" style="flex-shrink:0;padding:6px 12px;border-radius:20px;border:0.5px solid ${activeMealRegion===r?'var(--ob-selected-border)':'var(--border)'};background:${activeMealRegion===r?'var(--accent-muted)':'var(--surface2)'};color:${activeMealRegion===r?'var(--accent)':'var(--text4)'};font-family:var(--fn);font-size:10px;font-weight:700;cursor:pointer;white-space:nowrap;">${r==='all'?'All regions':r}</button>`).join('')}
     </div>
 
     <!-- Count -->
@@ -7845,7 +7845,7 @@ function renderWeeklyHealthReport(){
         <!-- Stats row -->
         <div style="display:flex;border-bottom:0.5px solid rgba(168,255,60,0.06);">
           <div style="flex:1;padding:12px 10px;text-align:center;border-right:0.5px solid rgba(168,255,60,0.06);">
-            <div style="font-family:var(--fn);font-size:18px;font-weight:800;color:var(--accent);letter-spacing:-0.5px;">${totalActive}<span style="font-size:11px;color:rgba(168,255,60,0.4);">/7</span></div>
+            <div style="font-family:var(--fn);font-size:18px;font-weight:800;color:var(--accent);letter-spacing:-0.5px;">${totalActive}<span style="font-size:11px;color:var(--accent-dim);">/7</span></div>
             <div style="font-family:var(--fn);font-size:9px;color:var(--obs-text-dim2);text-transform:uppercase;letter-spacing:0.08em;margin-top:3px;">Active days</div>
           </div>
           <div style="flex:1;padding:12px 10px;text-align:center;border-right:0.5px solid rgba(168,255,60,0.06);">
@@ -10817,7 +10817,7 @@ function shareWeeklyScore(){
     ctx.fill();
     // Score above bar
     if(s2 > 0){
-      ctx.fillStyle = isToday ? '#a8ff3c' : 'rgba(168,255,60,0.4)';
+      ctx.fillStyle = isToday ? '#a8ff3c' : 'rgba(168,255,60,0.6)';
       ctx.font = `${isToday?'700':'500'} 9px "Helvetica Neue", Arial, sans-serif`;
       ctx.textAlign = 'center';
       ctx.fillText(s2, bx + barW/2, by - 5);
@@ -11048,7 +11048,7 @@ function showPreSessionPriming(){
   const cue = cues[Math.floor(Math.random()*cues.length)];
 
   content.innerHTML = `
-    <div style="font-family:var(--fn);font-size:9px;font-weight:700;color:rgba(168,255,60,0.4);text-transform:uppercase;letter-spacing:0.2em;margin-bottom:24px;">Pre-session priming</div>
+    <div style="font-family:var(--fn);font-size:9px;font-weight:700;color:var(--accent-dim);text-transform:uppercase;letter-spacing:0.2em;margin-bottom:24px;">Pre-session priming</div>
 
     <!-- Recovery badge -->
     <div style="display:inline-flex;align-items:center;gap:8px;background:rgba(255,255,255,0.04);border:0.5px solid rgba(255,255,255,0.08);border-radius:20px;padding:8px 16px;margin-bottom:20px;">
